@@ -88,7 +88,7 @@
 <meta property="og:description" content="功能显示当前系统正在执行的进程的相关信息，包括进程ID、 内存占用率 、CPU占用率等 option 使用参数-b 进入批处理模式  相当于不停地执行top命令显示信息-c 显示完整的command 位于信息的最后一列-i &amp;lt;时间&amp;gt; 设置间隔时间 -u &amp;lt;用户名&amp;gt; 显示指定用户的信息 -p &amp;lt;进程号&amp;gt; 显示指定进程的信息 -n &amp;lt;次数&amp;gt; 循环显示的次">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://raw.githubusercontent.com/yunchangwang/blogs/master/top/top.jpg">
-<meta property="og:updated_time" content="2018-01-26T04:23:46.000Z">
+<meta property="og:updated_time" content="2018-01-26T04:45:56.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="微服务问题定位——top">
 <meta name="twitter:description" content="功能显示当前系统正在执行的进程的相关信息，包括进程ID、 内存占用率 、CPU占用率等 option 使用参数-b 进入批处理模式  相当于不停地执行top命令显示信息-c 显示完整的command 位于信息的最后一列-i &amp;lt;时间&amp;gt; 设置间隔时间 -u &amp;lt;用户名&amp;gt; 显示指定用户的信息 -p &amp;lt;进程号&amp;gt; 显示指定进程的信息 -n &amp;lt;次数&amp;gt; 循环显示的次">
@@ -415,6 +415,13 @@
 <blockquote>
 <p>PID — 进程id<br><br>USER — 进程所有者<br><br>PR — 进程优先级<br><br>NI — nice值。负值表示高优先级，正值表示低优先级<br><br>VIRT — 进程使用的虚拟内存总量，单位kb。VIRT=SWAP+RES<br><br>RES — 进程使用的、未被换出的物理内存大小，单位kb。RES=CODE+DATA<br><br>SHR — 共享内存大小，单位kb<br><br>S — 进程状态。D=不可中断的睡眠状态 R=运行 S=睡眠 T=跟踪/停止 Z=僵尸进程<br><br>%CPU — 上次更新到现在的CPU时间占用百分比<br><br>%MEM — 进程使用的物理内存百分比<br><br>TIME+ — 进程使用的CPU时间总计，单位1/100秒<br><br>COMMAND — 进程名称（命令名/命令行）<br></p>
 </blockquote>
+<h3 id="top交互"><a href="#top交互" class="headerlink" title="top交互"></a>top交互</h3><p>执行top命令之后即进入top信心展示界面，可以使用命令行进行交互<br></p>
+<ul>
+<li>top界面 按1显示多核cpu的使用情况</li>
+<li>top界面默认按cpu的使用降序排序<br>  使用shift+&gt;和shift+&lt;来改变排序的指标</li>
+<li>top界面 按x高亮排序的指标</li>
+<li>top其他使用技巧<br>  h 显示帮助画面，给出一些简短的命令总结说明<br><br>  k 终止一个进程 <br><br>  i 忽略闲置和僵死进程。这是一个开关式命令 <br><br>  q 退出程序 <br><br>  r 重新安排一个进程的优先级别 <br><br>  S 切换到累计模式 <br><br>  s 改变两次刷新之间的延迟时间（单位为s），如果有小数，就换算成m          s。输入0值则系统将不断刷新，默认值是5 s <br><br>  f或者F 从当前显示中添加或者删除项目 <br><br>  o或者O 改变显示项目的顺序 <br><br>  l 切换显示平均负载和启动时间信息 <br><br>  m 切换显示内存信息 <br><br>  t 切换显示进程和CPU状态信息 <br><br>  c 切换显示命令名称和完整命令行 <br><br>  M 根据驻留内存大小进行排序 <br><br>  P 根据CPU使用百分比大小进行排序 <br><br>  T 根据时间/累计时间进行排序 <br><br>  W 将当前设置写入~/.toprc文件中 <br></li>
+</ul>
 
       
     </div>
@@ -608,7 +615,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#功能"><span class="nav-number">1.</span> <span class="nav-text">功能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#option-使用参数"><span class="nav-number">2.</span> <span class="nav-text">option 使用参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#说明"><span class="nav-number">3.</span> <span class="nav-text">说明</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#功能"><span class="nav-number">1.</span> <span class="nav-text">功能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#option-使用参数"><span class="nav-number">2.</span> <span class="nav-text">option 使用参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#说明"><span class="nav-number">3.</span> <span class="nav-text">说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#top交互"><span class="nav-number">4.</span> <span class="nav-text">top交互</span></a></li></ol></div>
             
 
           </div>
