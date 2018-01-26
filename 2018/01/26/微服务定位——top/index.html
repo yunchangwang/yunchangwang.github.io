@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="linux命令,微服务," />
 
 
 
@@ -79,16 +79,20 @@
 
 
 
-<meta name="description" content="君埋泉下泥销骨 我寄人间朝与暮 沧海桑田 也输 一纸流年 我曾 把那 蒹葭 叹几遍 才留得 风花雪月几更天">
-<meta property="og:type" content="website">
-<meta property="og:title" content="wyc-blog">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta name="description" content="功能显示当前系统正在执行的进程的相关信息，包括进程ID、 内存占用率 、CPU占用率等 option 使用参数-b 进入批处理模式  相当于不停地执行top命令显示信息-c 显示完整的command 位于信息的最后一列-i &amp;lt;时间&amp;gt; 设置间隔时间 -u &amp;lt;用户名&amp;gt; 显示指定用户的信息 -p &amp;lt;进程号&amp;gt; 显示指定进程的信息 -n &amp;lt;次数&amp;gt; 循环显示的次">
+<meta name="keywords" content="linux命令,微服务">
+<meta property="og:type" content="article">
+<meta property="og:title" content="微服务问题定位——top">
+<meta property="og:url" content="http://yoursite.com/2018/01/26/微服务定位——top/index.html">
 <meta property="og:site_name" content="wyc-blog">
-<meta property="og:description" content="君埋泉下泥销骨 我寄人间朝与暮 沧海桑田 也输 一纸流年 我曾 把那 蒹葭 叹几遍 才留得 风花雪月几更天">
+<meta property="og:description" content="功能显示当前系统正在执行的进程的相关信息，包括进程ID、 内存占用率 、CPU占用率等 option 使用参数-b 进入批处理模式  相当于不停地执行top命令显示信息-c 显示完整的command 位于信息的最后一列-i &amp;lt;时间&amp;gt; 设置间隔时间 -u &amp;lt;用户名&amp;gt; 显示指定用户的信息 -p &amp;lt;进程号&amp;gt; 显示指定进程的信息 -n &amp;lt;次数&amp;gt; 循环显示的次">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/yunchangwang/blogs/master/top/top.jpg">
+<meta property="og:updated_time" content="2018-01-26T04:23:46.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="wyc-blog">
-<meta name="twitter:description" content="君埋泉下泥销骨 我寄人间朝与暮 沧海桑田 也输 一纸流年 我曾 把那 蒹葭 叹几遍 才留得 风花雪月几更天">
+<meta name="twitter:title" content="微服务问题定位——top">
+<meta name="twitter:description" content="功能显示当前系统正在执行的进程的相关信息，包括进程ID、 内存占用率 、CPU占用率等 option 使用参数-b 进入批处理模式  相当于不停地执行top命令显示信息-c 显示完整的command 位于信息的最后一列-i &amp;lt;时间&amp;gt; 设置间隔时间 -u &amp;lt;用户名&amp;gt; 显示指定用户的信息 -p &amp;lt;进程号&amp;gt; 显示指定进程的信息 -n &amp;lt;次数&amp;gt; 循环显示的次">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/yunchangwang/blogs/master/top/top.jpg">
 
 
 
@@ -118,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/01/26/微服务定位——top/"/>
 
 
 
 
 
-  <title>wyc-blog</title>
+  <title>微服务问题定位——top | wyc-blog</title>
   
 
 
@@ -143,8 +147,7 @@
     
   
 
-  <div class="container sidebar-position-right 
-  page-home">
+  <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -281,9 +284,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -313,9 +316,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/01/26/微服务定位——top/" itemprop="url">微服务问题定位——top</a></h1>
+          <h1 class="post-title" itemprop="name headline">微服务问题定位——top</h1>
         
 
         <div class="post-meta">
@@ -387,9 +388,7 @@
       
 
       
-        
-          
-            <h3 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h3><p>显示当前系统正在执行的进程的相关信息，包括进程ID、 内存占用率 、CPU占用率等</p>
+        <h3 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h3><p>显示当前系统正在执行的进程的相关信息，包括进程ID、 内存占用率 、CPU占用率等</p>
 <h3 id="option-使用参数"><a href="#option-使用参数" class="headerlink" title="option 使用参数"></a>option 使用参数</h3><p>-b 进入批处理模式  <strong>相当于不停地执行top命令显示信息</strong><br><br>-c 显示完整的command <strong>位于信息的最后一列</strong><br><br>-i &lt;时间&gt; 设置间隔时间 <br><br>-u &lt;用户名&gt; 显示指定用户的信息 <br><br>-p &lt;进程号&gt; 显示指定进程的信息 <br><br>-n &lt;次数&gt; 循环显示的次数 <br></p>
 <p>###例图<br><img src="https://raw.githubusercontent.com/yunchangwang/blogs/master/top/top.jpg" alt="top信息截图"></p>
 <h3 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h3><p>  *第一行:</p>
@@ -417,8 +416,6 @@
 <p>PID — 进程id<br><br>USER — 进程所有者<br><br>PR — 进程优先级<br><br>NI — nice值。负值表示高优先级，正值表示低优先级<br><br>VIRT — 进程使用的虚拟内存总量，单位kb。VIRT=SWAP+RES<br><br>RES — 进程使用的、未被换出的物理内存大小，单位kb。RES=CODE+DATA<br><br>SHR — 共享内存大小，单位kb<br><br>S — 进程状态。D=不可中断的睡眠状态 R=运行 S=睡眠 T=跟踪/停止 Z=僵尸进程<br><br>%CPU — 上次更新到现在的CPU时间占用百分比<br><br>%MEM — 进程使用的物理内存百分比<br><br>TIME+ — 进程使用的CPU时间总计，单位1/100秒<br><br>COMMAND — 进程名称（命令名/命令行）<br></p>
 </blockquote>
 
-          
-        
       
     </div>
     
@@ -433,164 +430,38 @@
 
     <footer class="post-footer">
       
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/24/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="wyc">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/yunchangwang/blogs/master/admin/head.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="wyc-blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/01/24/hello-world/" itemprop="url">Hello World</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-24T10:25:12+08:00">
-                2018-01-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
+        <div class="post-tags">
           
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/迎新/" itemprop="url" rel="index">
-                    <span itemprop="name">迎新</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
+            <a href="/tags/linux命令/" rel="tag"># linux命令</a>
           
-
+            <a href="/tags/微服务/" rel="tag"># 微服务</a>
           
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
       
 
       
       
-        <div class="post-eof"></div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/24/hello-world/" rel="next" title="Hello World">
+                <i class="fa fa-chevron-left"></i> Hello World
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
       
     </footer>
   </div>
@@ -600,10 +471,11 @@
   </article>
 
 
-    
-  </section>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -611,6 +483,17 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+      
+        <div onclick="showGitment()" id="gitment-display-button">显示 Gitment 评论</div>
+        <div id="gitment-container" style="display:none"></div>
+      
+    </div>
+
+  
+
 
         </div>
         
@@ -631,8 +514,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -706,6 +598,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#功能"><span class="nav-number">1.</span> <span class="nav-text">功能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#option-使用参数"><span class="nav-number">2.</span> <span class="nav-text">option 使用参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#说明"><span class="nav-number">3.</span> <span class="nav-text">说明</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -839,6 +747,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 

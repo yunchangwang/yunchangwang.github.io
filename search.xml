@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[微服务问题定位——top]]></title>
+    <url>%2F2018%2F01%2F26%2F%E5%BE%AE%E6%9C%8D%E5%8A%A1%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94top%2F</url>
+    <content type="text"><![CDATA[功能显示当前系统正在执行的进程的相关信息，包括进程ID、 内存占用率 、CPU占用率等 option 使用参数-b 进入批处理模式 相当于不停地执行top命令显示信息-c 显示完整的command 位于信息的最后一列-i &lt;时间&gt; 设置间隔时间 -u &lt;用户名&gt; 显示指定用户的信息 -p &lt;进程号&gt; 显示指定进程的信息 -n &lt;次数&gt; 循环显示的次数 ###例图 说明 *第一行: 13:40:29 — 当前系统时间10 day,2:32 — 机器从开机到目前为止运行的时长20 users — 登陆的用户有20个load average — 分别对应1mins,5mins,15mins的负载情况(根据一定的算法得到的值，load average／cpu数量&gt;=5说明系统超负荷) *第二行 Tasks total — 当前系统进程269个running — 正在运行的1个sleeping — 睡眠的268个stopped — 停止的0个zombie — 僵尸进程0个 *第三行 0.1%us — 用户空间占用CPU的百分比。0.0% sy — 内核空间占用CPU的百分比。0.0% ni — 改变过优先级的进程占用CPU的百分比99.9% id — 空闲CPU百分比0.0% wa — IO等待占用CPU的百分比0.0% hi — 硬中断（Hardware IRQ）占用CPU的百分比0.0% si — 软中断（Software Interrupts）占用CPU的百分比 *第四行 Mem total — 物理内存总量 8GBfree — 空闲的内存 used — 正在使用的内存buff/cache — 缓存的内存(used表示现在系统内核控制的内存数，free表示还未进入内核控制的内存数，used还包括了停止使用但可能被重用的内存，所以used使用完的内存不会返还给free，所以free的内存数一定越来越少) *第五行 Swap total — 交换区总量used — 使用的交换区总量free — 空闲交换区总量cached — 缓冲的交换区总量(swap used经常变化的话说明内存已经不够使用了)参考链接(系统可使用的内存近似为第四行的free+buff/cache+第五行的cache) *进程状态监控各项指标 PID — 进程idUSER — 进程所有者PR — 进程优先级NI — nice值。负值表示高优先级，正值表示低优先级VIRT — 进程使用的虚拟内存总量，单位kb。VIRT=SWAP+RESRES — 进程使用的、未被换出的物理内存大小，单位kb。RES=CODE+DATASHR — 共享内存大小，单位kbS — 进程状态。D=不可中断的睡眠状态 R=运行 S=睡眠 T=跟踪/停止 Z=僵尸进程%CPU — 上次更新到现在的CPU时间占用百分比%MEM — 进程使用的物理内存百分比TIME+ — 进程使用的CPU时间总计，单位1/100秒COMMAND — 进程名称（命令名/命令行）]]></content>
+      <categories>
+        <category>微服务问题定位</category>
+      </categories>
+      <tags>
+        <tag>linux命令</tag>
+        <tag>微服务</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Hello World]]></title>
     <url>%2F2018%2F01%2F24%2Fhello-world%2F</url>
     <content type="text"><![CDATA[Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick StartCreate a new post1$ hexo new "My New Post" More info: Writing Run server1$ hexo server More info: Server Generate static files1$ hexo generate More info: Generating Deploy to remote sites1$ hexo deploy More info: Deployment]]></content>
