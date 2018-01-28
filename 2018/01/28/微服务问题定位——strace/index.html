@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="linux命令,微服务,进程,线程," />
 
 
 
@@ -79,16 +79,18 @@
 
 
 
-<meta name="description" content="君埋泉下泥销骨 我寄人间朝与暮 沧海桑田 也输 一纸流年 我曾 把那 蒹葭 叹几遍 才留得 风花雪月几更天">
-<meta property="og:type" content="website">
-<meta property="og:title" content="wyc-blog">
-<meta property="og:url" content="http://yoursite.com/tags/welcome/index.html">
+<meta name="description" content="strace以下说明都是基于docker系统机器实验 功能   系统调用和信号传递的跟踪 option参数   -c  统计每一系统调用的所执行的时间,次数和出错的次数等   -d  输出strace关于标准错误的调试信息   -f  跟踪由fork调用所产生的子进程   -tt  在输出中的每一行前加上时间信息,微秒级， 时间格式：17:22:58.345879   -p pid 跟踪指定的进程">
+<meta name="keywords" content="linux命令,微服务,进程,线程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="微服务问题定位——strace">
+<meta property="og:url" content="http://yoursite.com/2018/01/28/微服务问题定位——strace/index.html">
 <meta property="og:site_name" content="wyc-blog">
-<meta property="og:description" content="君埋泉下泥销骨 我寄人间朝与暮 沧海桑田 也输 一纸流年 我曾 把那 蒹葭 叹几遍 才留得 风花雪月几更天">
+<meta property="og:description" content="strace以下说明都是基于docker系统机器实验 功能   系统调用和信号传递的跟踪 option参数   -c  统计每一系统调用的所执行的时间,次数和出错的次数等   -d  输出strace关于标准错误的调试信息   -f  跟踪由fork调用所产生的子进程   -tt  在输出中的每一行前加上时间信息,微秒级， 时间格式：17:22:58.345879   -p pid 跟踪指定的进程">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-01-28T08:13:59.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="wyc-blog">
-<meta name="twitter:description" content="君埋泉下泥销骨 我寄人间朝与暮 沧海桑田 也输 一纸流年 我曾 把那 蒹葭 叹几遍 才留得 风花雪月几更天">
+<meta name="twitter:title" content="微服务问题定位——strace">
+<meta name="twitter:description" content="strace以下说明都是基于docker系统机器实验 功能   系统调用和信号传递的跟踪 option参数   -c  统计每一系统调用的所执行的时间,次数和出错的次数等   -d  输出strace关于标准错误的调试信息   -f  跟踪由fork调用所产生的子进程   -tt  在输出中的每一行前加上时间信息,微秒级， 时间格式：17:22:58.345879   -p pid 跟踪指定的进程">
 
 
 
@@ -118,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/tags/welcome/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/01/28/微服务问题定位——strace/"/>
 
 
 
 
 
-  <title>标签: welcome | wyc-blog</title>
+  <title>微服务问题定位——strace | wyc-blog</title>
   
 
 
@@ -143,7 +145,7 @@
     
   
 
-  <div class="container sidebar-position-right ">
+  <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -281,54 +283,181 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block tag">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>welcome<small>标签</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/28/微服务问题定位——strace/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wyc">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/yunchangwang/blogs/master/admin/head.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="wyc-blog">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2018/01/24/hello-world/" itemprop="url">
-              
-                <span itemprop="name">Hello World</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">微服务问题定位——strace</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-01-24T10:25:12+08:00"
-              content="2018-01-24" >
-          01-24
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-28T15:24:47+08:00">
+                2018-01-28
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/微服务问题定位/" itemprop="url" rel="index">
+                    <span itemprop="name">微服务问题定位</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="strace"><a href="#strace" class="headerlink" title="strace"></a>strace</h2><p><strong>以下说明都是基于docker系统机器实验</strong></p>
+<h3 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h3><p>   系统调用和信号传递的跟踪</p>
+<h3 id="option参数"><a href="#option参数" class="headerlink" title="option参数"></a>option参数</h3><p>   -c  统计每一系统调用的所执行的时间,次数和出错的次数等<br><br>   -d  输出strace关于标准错误的调试信息<br><br>   -f  跟踪由fork调用所产生的子进程<br><br>   -tt  在输出中的每一行前加上时间信息,微秒级， 时间格式：17:22:58.345879<br><br>   -p pid 跟踪指定的进程pid<br><br>   <strong><em>以上命令一般都是与-p联用</em></strong></p>
+<h3 id="strace的命令使用比较复杂，不做详细说明"><a href="#strace的命令使用比较复杂，不做详细说明" class="headerlink" title="strace的命令使用比较复杂，不做详细说明"></a>strace的命令使用比较复杂，不做详细说明</h3><p>   在此贴出网上的一些参考链接<br><br>   <a href="https://leokongwq.github.io/2016/10/15/strace-learn.html" target="_blank" rel="noopener">strace实例</a><br><br>   <a href="http://www.cnblogs.com/kongzhongqijing/articles/4913192.html" target="_blank" rel="noopener">strace实例2</a><br></p>
+<h3 id="样例贴图"><a href="#样例贴图" class="headerlink" title="样例贴图"></a>样例贴图</h3><p>   <strong>从缺</strong></p>
 
       
     </div>
+    
+    
+    
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/linux命令/" rel="tag"># linux命令</a>
+          
+            <a href="/tags/微服务/" rel="tag"># 微服务</a>
+          
+            <a href="/tags/进程-线程/" rel="tag"># 进程,线程</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/26/微服务定位——top/" rel="next" title="微服务问题定位——top">
+                <i class="fa fa-chevron-left"></i> 微服务问题定位——top
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/01/28/微服务问题定位——free/" rel="prev" title="微服务问题定位——free">
+                微服务问题定位——free <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -336,6 +465,17 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+      
+        <div onclick="showGitment()" id="gitment-display-button">显示 Gitment 评论</div>
+        <div id="gitment-container" style="display:none"></div>
+      
+    </div>
+
+  
+
 
         </div>
         
@@ -356,8 +496,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -431,6 +580,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#strace"><span class="nav-number">1.</span> <span class="nav-text">strace</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#功能"><span class="nav-number">1.1.</span> <span class="nav-text">功能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#option参数"><span class="nav-number">1.2.</span> <span class="nav-text">option参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#strace的命令使用比较复杂，不做详细说明"><span class="nav-number">1.3.</span> <span class="nav-text">strace的命令使用比较复杂，不做详细说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#样例贴图"><span class="nav-number">1.4.</span> <span class="nav-text">样例贴图</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -564,6 +729,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 

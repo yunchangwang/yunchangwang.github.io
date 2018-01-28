@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="linux命令,微服务,磁盘," />
 
 
 
@@ -79,16 +79,18 @@
 
 
 
-<meta name="description" content="君埋泉下泥销骨 我寄人间朝与暮 沧海桑田 也输 一纸流年 我曾 把那 蒹葭 叹几遍 才留得 风花雪月几更天">
-<meta property="og:type" content="website">
-<meta property="og:title" content="wyc-blog">
-<meta property="og:url" content="http://yoursite.com/tags/welcome/index.html">
+<meta name="description" content="du功能du命令也是查看使用空间的，但是与df命令不同的是 du命令是对文件和目录磁盘使用的空间的查看 option参数-a或-all  显示目录中个别文件的大小-b或-bytes  显示目录或文件大小时，以byte为单位-c或–total  除了显示个别目录或文件的大小外，同时也显示所有目录或文件的总和-k或–kilobytes  以KB(1024bytes)为单位输出-m或–megabytes">
+<meta name="keywords" content="linux命令,微服务,磁盘">
+<meta property="og:type" content="article">
+<meta property="og:title" content="微服务问题定位——du">
+<meta property="og:url" content="http://yoursite.com/2018/01/28/微服务问题定位——du/index.html">
 <meta property="og:site_name" content="wyc-blog">
-<meta property="og:description" content="君埋泉下泥销骨 我寄人间朝与暮 沧海桑田 也输 一纸流年 我曾 把那 蒹葭 叹几遍 才留得 风花雪月几更天">
+<meta property="og:description" content="du功能du命令也是查看使用空间的，但是与df命令不同的是 du命令是对文件和目录磁盘使用的空间的查看 option参数-a或-all  显示目录中个别文件的大小-b或-bytes  显示目录或文件大小时，以byte为单位-c或–total  除了显示个别目录或文件的大小外，同时也显示所有目录或文件的总和-k或–kilobytes  以KB(1024bytes)为单位输出-m或–megabytes">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-01-28T08:27:35.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="wyc-blog">
-<meta name="twitter:description" content="君埋泉下泥销骨 我寄人间朝与暮 沧海桑田 也输 一纸流年 我曾 把那 蒹葭 叹几遍 才留得 风花雪月几更天">
+<meta name="twitter:title" content="微服务问题定位——du">
+<meta name="twitter:description" content="du功能du命令也是查看使用空间的，但是与df命令不同的是 du命令是对文件和目录磁盘使用的空间的查看 option参数-a或-all  显示目录中个别文件的大小-b或-bytes  显示目录或文件大小时，以byte为单位-c或–total  除了显示个别目录或文件的大小外，同时也显示所有目录或文件的总和-k或–kilobytes  以KB(1024bytes)为单位输出-m或–megabytes">
 
 
 
@@ -118,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/tags/welcome/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/01/28/微服务问题定位——du/"/>
 
 
 
 
 
-  <title>标签: welcome | wyc-blog</title>
+  <title>微服务问题定位——du | wyc-blog</title>
   
 
 
@@ -143,7 +145,7 @@
     
   
 
-  <div class="container sidebar-position-right ">
+  <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -281,54 +283,179 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block tag">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>welcome<small>标签</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/28/微服务问题定位——du/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wyc">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/yunchangwang/blogs/master/admin/head.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="wyc-blog">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2018/01/24/hello-world/" itemprop="url">
-              
-                <span itemprop="name">Hello World</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">微服务问题定位——du</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-01-24T10:25:12+08:00"
-              content="2018-01-24" >
-          01-24
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-28T16:25:21+08:00">
+                2018-01-28
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/微服务问题定位/" itemprop="url" rel="index">
+                    <span itemprop="name">微服务问题定位</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="du"><a href="#du" class="headerlink" title="du"></a>du</h2><h3 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h3><p>du命令也是查看使用空间的，但是与df命令不同的是 du命令是对文件和目录磁盘使用的空间的查看</p>
+<h3 id="option参数"><a href="#option参数" class="headerlink" title="option参数"></a>option参数</h3><p>-a或-all  显示目录中个别文件的大小<br><br>-b或-bytes  显示目录或文件大小时，以byte为单位<br><br>-c或–total  除了显示个别目录或文件的大小外，同时也显示所有目录或文件的总和<br><br>-k或–kilobytes  以KB(1024bytes)为单位输出<br><br>-m或–megabytes  以MB为单位输出<br><br>-s或–summarize  仅显示总计，只列出最后加总的值<br><br>-h或–human-readable  以K，M，G为单位，提高信息的可读性<br><br>-x或–one-file-xystem  以一开始处理时的文件系统为准，若遇上其它不同的文件系统目录则略过<br><br>-L&lt;符号链接&gt;或–dereference&lt;符号链接&gt; 显示选项中所指定符号链接的源文件大小<br><br>-S或–separate-dirs   显示个别目录的大小时，并不含其子目录的大小<br><br>-X&lt;文件&gt;或–exclude-from=&lt;文件&gt;  在&lt;文件&gt;指定目录或文件<br><br>–exclude=&lt;目录或文件&gt;         略过指定的目录或文件<br><br>-D或–dereference-args   显示指定符号链接的源文件大小<br><br>-H或–si  与-h参数相同，但是K，M，G是以1000为换算单位<br><br>-l或–count-links   重复计算硬件链接的文件<br></p>
+<h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><p>$du 显示当前目录下面子目录的目录大小和总和<br><br>$du dir/filename 显示指定目录或者文件<br><br>$du #1 #2 同时显示多个，空格隔开<br></p>
 
       
     </div>
+    
+    
+    
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/linux命令/" rel="tag"># linux命令</a>
+          
+            <a href="/tags/微服务/" rel="tag"># 微服务</a>
+          
+            <a href="/tags/磁盘/" rel="tag"># 磁盘</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/28/微服务问题定位——df/" rel="next" title="微服务问题定位——df">
+                <i class="fa fa-chevron-left"></i> 微服务问题定位——df
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/01/28/如何在本地搭建gitbook/" rel="prev" title="如何在本地搭建gitbook">
+                如何在本地搭建gitbook <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -336,6 +463,17 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+      
+        <div onclick="showGitment()" id="gitment-display-button">显示 Gitment 评论</div>
+        <div id="gitment-container" style="display:none"></div>
+      
+    </div>
+
+  
+
 
         </div>
         
@@ -356,8 +494,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -431,6 +578,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#du"><span class="nav-number">1.</span> <span class="nav-text">du</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#功能"><span class="nav-number">1.1.</span> <span class="nav-text">功能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#option参数"><span class="nav-number">1.2.</span> <span class="nav-text">option参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实例"><span class="nav-number">1.3.</span> <span class="nav-text">实例</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -564,6 +727,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 

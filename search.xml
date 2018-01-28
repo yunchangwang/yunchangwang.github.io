@@ -1,94 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
-<search> 
-  
-    
-    <entry>
-      <title><![CDATA[微服务问题定位——top]]></title>
-      <url>/2018/01/26/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94top/</url>
-      <content type="html"><![CDATA[<h3 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h3><p>显示当前系统正在执行的进程的相关信息，包括进程ID、 内存占用率 、CPU占用率等</p>
-<h3 id="option-使用参数"><a href="#option-使用参数" class="headerlink" title="option 使用参数"></a>option 使用参数</h3><p>-b 进入批处理模式  <strong>相当于不停地执行top命令显示信息</strong><br><br>-c 显示完整的command <strong>位于信息的最后一列</strong><br><br>-i &lt;时间&gt; 设置间隔时间 <br><br>-u &lt;用户名&gt; 显示指定用户的信息 <br><br>-p &lt;进程号&gt; 显示指定进程的信息 <br><br>-n &lt;次数&gt; 循环显示的次数 <br></p>
-<p>###例图<br><img src="https://raw.githubusercontent.com/yunchangwang/blogs/master/top/top.jpg" alt="top信息截图"></p>
-<h3 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h3><p>  *第一行:</p>
-<blockquote>
-<p>13:40:29 — 当前系统时间<br><br>10 day,2:32 — 机器从开机到目前为止运行的时长<br><br>20 users — 登陆的用户有20个<br><br>load average — 分别对应1mins,5mins,15mins的负载情况(<strong>根据一定的算法得到的值，load average／cpu数量&gt;=5说明系统超负荷</strong>)</p>
-</blockquote>
-<p>  *第二行</p>
-<blockquote>
-<p>Tasks total — 当前系统进程269个<br><br>running — 正在运行的1个<br><br>sleeping — 睡眠的268个<br><br>stopped — 停止的0个<br><br>zombie — 僵尸进程0个<br></p>
-</blockquote>
-<p>  *第三行</p>
-<blockquote>
-<p>0.1%us — 用户空间占用CPU的百分比。<br><br>0.0% sy — 内核空间占用CPU的百分比。<br><br>0.0% ni — 改变过优先级的进程占用CPU的百分比<br><br>99.9% id — 空闲CPU百分比<br><br>0.0% wa — IO等待占用CPU的百分比<br><br>0.0% hi — 硬中断（Hardware IRQ）占用CPU的百分比<br><br>0.0% si — 软中断（Software Interrupts）占用CPU的百分比<br></p>
-</blockquote>
-<p>  *第四行</p>
-<blockquote>
-<p>Mem total — 物理内存总量 8GB<br><br>free — 空闲的内存 <br><br>used — 正在使用的内存<br><br>buff/cache — 缓存的内存<br><br>(<strong>used表示现在系统内核控制的内存数，free表示还未进入内核控制的内存数，used还包括了停止使用但可能被重用的内存，所以used使用完的内存不会返还给free，所以free的内存数一定越来越少</strong>)</p>
-</blockquote>
-<p>  *第五行</p>
-<blockquote>
-<p>Swap total — 交换区总量<br><br>used — 使用的交换区总量<br><br>free — 空闲交换区总量<br><br>cached — 缓冲的交换区总量<br><br>(<strong>swap used经常变化的话说明内存已经不够使用了</strong>)<br><a href="http://www.cnblogs.com/kerrycode/p/5246383.html" target="_blank" rel="noopener">参考链接</a><br>(<strong>系统可使用的内存近似为第四行的free+buff/cache+第五行的cache</strong>)</p>
-</blockquote>
-<p>  *进程状态监控各项指标</p>
-<blockquote>
-<p>PID — 进程id<br><br>USER — 进程所有者<br><br>PR — 进程优先级<br><br>NI — nice值。负值表示高优先级，正值表示低优先级<br><br>VIRT — 进程使用的虚拟内存总量，单位kb。VIRT=SWAP+RES<br><br>RES — 进程使用的、未被换出的物理内存大小，单位kb。RES=CODE+DATA<br><br>SHR — 共享内存大小，单位kb<br><br>S — 进程状态。D=不可中断的睡眠状态 R=运行 S=睡眠 T=跟踪/停止 Z=僵尸进程<br><br>%CPU — 上次更新到现在的CPU时间占用百分比<br><br>%MEM — 进程使用的物理内存百分比<br><br>TIME+ — 进程使用的CPU时间总计，单位1/100秒<br><br>COMMAND — 进程名称（命令名/命令行）<br></p>
-</blockquote>
-<h3 id="top交互"><a href="#top交互" class="headerlink" title="top交互"></a>top交互</h3><p>执行top命令之后即进入top信心展示界面，可以使用命令行进行交互<br></p>
-<ul>
-<li>top界面 按1显示多核cpu的使用情况</li>
-<li>top界面默认按cpu的使用降序排序<br>  使用shift+&gt;和shift+&lt;来改变排序的指标</li>
-<li>top界面 按x高亮排序的指标</li>
-<li>top其他使用技巧<br>  h 显示帮助画面，给出一些简短的命令总结说明<br><br>  k 终止一个进程 <br><br>  i 忽略闲置和僵死进程。这是一个开关式命令 <br><br>  q 退出程序 <br><br>  r 重新安排一个进程的优先级别 <br><br>  S 切换到累计模式 <br><br>  s 改变两次刷新之间的延迟时间（单位为s），如果有小数，就换算成m          s。输入0值则系统将不断刷新，默认值是5 s <br><br>  f或者F 从当前显示中添加或者删除项目 <br><br>  o或者O 改变显示项目的顺序 <br><br>  l 切换显示平均负载和启动时间信息 <br><br>  m 切换显示内存信息 <br><br>  t 切换显示进程和CPU状态信息 <br><br>  c 切换显示命令名称和完整命令行 <br><br>  M 根据驻留内存大小进行排序 <br><br>  P 根据CPU使用百分比大小进行排序 <br><br>  T 根据时间/累计时间进行排序 <br><br>  W 将当前设置写入~/.toprc文件中 <br></li>
-</ul>
-]]></content>
-      
-        <categories>
-            
-            <category> 微服务问题定位 </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> linux命令 </tag>
-            
-            <tag> 微服务 </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[Hello World]]></title>
-      <url>/2018/01/24/hello-world/</url>
-      <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-]]></content>
-      
-        <categories>
-            
-            <category> 迎新 </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> welcome </tag>
-            
-            <tag> hello </tag>
-            
-        </tags>
-        
-    </entry>
-    
-  
-  
+<search>
+  <entry>
+    <title><![CDATA[gitbook目录折叠]]></title>
+    <url>%2F2018%2F01%2F28%2Fgitbook%E7%9B%AE%E5%BD%95%E6%8A%98%E5%8F%A0%2F</url>
+    <content type="text"><![CDATA[gitbook目录折叠背景在编写gitbook的时候发现目录的数量比较庞大的时候显得杂乱无章因为章节比较多的时候全展开，很难有目的地寻找所以笔者去寻求了解决之道，用来折叠目录，笔者在网上找到了一个插件可以解决这个问题 插件插件网站上面还有其他gitbook使用的插件 使用参考个性化配置gitbook，同理你可以在里面添加需要使用的插件，如图book.json在根目录下，即与SUMMARY.md同级$ cd到gitbook目录$ npm install gitbook-plugin-toggle-chapters重新build serve即可]]></content>
+      <categories>
+        <category>gitbook</category>
+      </categories>
+      <tags>
+        <tag>gitbook</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[如何在本地搭建gitbook]]></title>
+    <url>%2F2018%2F01%2F28%2F%E5%A6%82%E4%BD%95%E5%9C%A8%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BAgitbook%2F</url>
+    <content type="text"><![CDATA[本地搭建gitbook介绍gitbook更加适用于书写使用手册，不太适合书写一些博客和总结，所以笔者最近在做一些迁移的工作，将之前gitbook上的内容迁移到当前的博客上但是gitbook对于我们的工作还是有适用的地方的 先决条件安装nodejs是先决条件，因为我们需要npm去下载gitbook在mac电脑上，有brew工具的可以直接下载:$brew search nodejs 搜索包仓库中是否有nodejs$brew install nodejs 有就可以直接下载你也可以选择去官网上下载最新的nodejs压缩包，解压配置环境变量后即可使用 搭建这里默认大家的电脑上已经安装好了nodejs按照步骤执行以下命令:$npm install gitbook-cli -g 下载gitbook客户端包$gitbook –version 查看gitbook的版本，测试是否可以使用命令$cd /users/Desktop 切换到一个目录，这里笔者切换到了桌面$mkdir gitbook 创建gitbook目录，这个目录就是用来初始化的其实上面的两步读者可以手动完成$gitbook init 初始化gitbook$gitbook build 构建，一般有内容更新时要构建$gitbook serve 开启服务，默认在4000端口监听http://localhost:4000 开启你的访问之路吧！ 问题笔者之前在windows上搭建过，出现了一些问题，build的时候总是报错在github官方issues中，官方表示这个是已知的gitbook的bug，高版本的gitbook会出现这个bug如果你遇到相同的问题，请参考:解决方法解决方法是点赞和喝彩最多的]]></content>
+      <categories>
+        <category>gitbook</category>
+      </categories>
+      <tags>
+        <tag>gitbook</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[微服务问题定位——du]]></title>
+    <url>%2F2018%2F01%2F28%2F%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94du%2F</url>
+    <content type="text"><![CDATA[du功能du命令也是查看使用空间的，但是与df命令不同的是 du命令是对文件和目录磁盘使用的空间的查看 option参数-a或-all 显示目录中个别文件的大小-b或-bytes 显示目录或文件大小时，以byte为单位-c或–total 除了显示个别目录或文件的大小外，同时也显示所有目录或文件的总和-k或–kilobytes 以KB(1024bytes)为单位输出-m或–megabytes 以MB为单位输出-s或–summarize 仅显示总计，只列出最后加总的值-h或–human-readable 以K，M，G为单位，提高信息的可读性-x或–one-file-xystem 以一开始处理时的文件系统为准，若遇上其它不同的文件系统目录则略过-L&lt;符号链接&gt;或–dereference&lt;符号链接&gt; 显示选项中所指定符号链接的源文件大小-S或–separate-dirs 显示个别目录的大小时，并不含其子目录的大小-X&lt;文件&gt;或–exclude-from=&lt;文件&gt; 在&lt;文件&gt;指定目录或文件–exclude=&lt;目录或文件&gt; 略过指定的目录或文件-D或–dereference-args 显示指定符号链接的源文件大小-H或–si 与-h参数相同，但是K，M，G是以1000为换算单位-l或–count-links 重复计算硬件链接的文件 实例$du 显示当前目录下面子目录的目录大小和总和$du dir/filename 显示指定目录或者文件$du #1 #2 同时显示多个，空格隔开]]></content>
+      <categories>
+        <category>微服务问题定位</category>
+      </categories>
+      <tags>
+        <tag>linux命令</tag>
+        <tag>微服务</tag>
+        <tag>磁盘</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[微服务问题定位——df]]></title>
+    <url>%2F2018%2F01%2F28%2F%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94df%2F</url>
+    <content type="text"><![CDATA[df功能用来检查服务器文件系统的磁盘空间占用情况，可以获取硬盘被占了多少空间，目前还剩下多少空间等信息 option参数-a 全部文件系统列表-h 方便查阅方式显示-H 等-h，但是计数方式变更，1k=1000-i 显示node信息-k 区块为1024字节-l 只显示本地文件系统-m 区块为1048576字节–no-sync 忽略sync命令-P 输出格式为POSIX–sync 在取得磁盘信息前先执行sync命令-T 文件系统类型 选择参数–block-size=&lt;区块大小&gt; 指定区块的大小-t &lt;文件系统类型&gt; 只显示选定文件系统的磁盘信息-x &lt;文件系统类型&gt; 不显示选定文件系统的磁盘信息 使用实例第一列 显示各文件系统第二列 显示文件系统的块数 这里以512B为一块第三列 显示已经使用的磁盘第四列 显示可用的磁盘其他这边需要说明：已使用的+可使用的 != 总块数，因为缺省的每个分区都预留了少量空间供管理员使用，所以即使普通用户的空间已满，管理员依然可以登录系统解决相关问题]]></content>
+      <categories>
+        <category>微服务问题定位</category>
+      </categories>
+      <tags>
+        <tag>linux命令</tag>
+        <tag>微服务</tag>
+        <tag>磁盘</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[微服务问题定位——ifstat]]></title>
+    <url>%2F2018%2F01%2F28%2F%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94ifstat%2F</url>
+    <content type="text"><![CDATA[ifstat功能监控系统的流量问题 安装ifstat不是系统自带的命令，所以需要进行安装，笔者这里只介绍mac上如何安装$brew install ifstat当然这边brew要自行安装 参数-l 监测环路网络接口(lo)，缺省情况下不会显示，所谓的环路网络可认为是localhost(127.0.0.1)参考-a 监测系统所有的网络，比加上-l参数还多一个plip0的接口信息(所谓的并口)-z 隐藏流量是无的接口，排查问题时排除无用端口-i 指定要监测的接口,后面跟网络接口名-s 等于加-d snmp:[comm@][#]host[/nn]] 参数，通过SNMP查询一个远程主机-t 在每一行的开头加一个时间 戳,，告诉我们具体的时间-T 报告所有监测接口的全部带宽，和-i联用来指定端口-S 在同一行更新流量状态，不喜欢屏幕滚动的可以使用其他命令 扩展如何只查看网卡的流量情况，ifstat足矣详细的流量情况需使用iftop命令，系统依旧不会自带需要下载，mac下载方式与ifstat一致可以查看恶意请求流量的ip地址，并进行相关防护措施实例参考]]></content>
+      <categories>
+        <category>微服务问题定位</category>
+      </categories>
+      <tags>
+        <tag>linux命令</tag>
+        <tag>微服务</tag>
+        <tag>网络</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[微服务问题定位——free]]></title>
+    <url>%2F2018%2F01%2F28%2F%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94free%2F</url>
+    <content type="text"><![CDATA[free功能 显示系统使用和空闲的内存情况，包括物理内存和交互区内存(swap)和内核缓冲区内存 option参数 -b 以Byte为单位显示内存使用情况 -k 以KB为单位显示内存使用情况 -m 以MB为单位显示内存使用情况 -g 以GB为单位显示内存使用情况 -o 不显示缓冲区调节列 -s&lt;间隔秒数&gt; 持续观察内存使用状况 -t 显示内存总和列 -V 显示版本信息 样例 这边关注第二行的swap的used指标，如果使用的值较大，则表示系统的内存处于不够使用的情况 为何swap used是一个指标 swap又称为交换分区，当系统的内存小于额定值的时候，内核(OS)会将系统的一部分物理内存释放出来用于当前线程的使用，一般是很久没有操作过的程序会被释放，释放的物理内存被放入到交换区，然后等当前线程执行完毕，内存富余时重新放入物理内存]]></content>
+      <categories>
+        <category>微服务问题定位</category>
+      </categories>
+      <tags>
+        <tag>linux命令</tag>
+        <tag>微服务</tag>
+        <tag>内存相关</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[微服务问题定位——strace]]></title>
+    <url>%2F2018%2F01%2F28%2F%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94strace%2F</url>
+    <content type="text"><![CDATA[strace以下说明都是基于docker系统机器实验 功能 系统调用和信号传递的跟踪 option参数 -c 统计每一系统调用的所执行的时间,次数和出错的次数等 -d 输出strace关于标准错误的调试信息 -f 跟踪由fork调用所产生的子进程 -tt 在输出中的每一行前加上时间信息,微秒级， 时间格式：17:22:58.345879 -p pid 跟踪指定的进程pid 以上命令一般都是与-p联用 strace的命令使用比较复杂，不做详细说明 在此贴出网上的一些参考链接 strace实例 strace实例2 样例贴图 从缺]]></content>
+      <categories>
+        <category>微服务问题定位</category>
+      </categories>
+      <tags>
+        <tag>linux命令</tag>
+        <tag>微服务</tag>
+        <tag>进程,线程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[微服务问题定位——top]]></title>
+    <url>%2F2018%2F01%2F26%2F%E5%BE%AE%E6%9C%8D%E5%8A%A1%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94top%2F</url>
+    <content type="text"><![CDATA[功能显示当前系统正在执行的进程的相关信息，包括进程ID、 内存占用率 、CPU占用率等 option 使用参数-b 进入批处理模式 相当于不停地执行top命令显示信息-c 显示完整的command 位于信息的最后一列-i &lt;时间&gt; 设置间隔时间 -u &lt;用户名&gt; 显示指定用户的信息 -p &lt;进程号&gt; 显示指定进程的信息 -n &lt;次数&gt; 循环显示的次数 … 例图 说明 *第一行: 13:40:29 — 当前系统时间10 day,2:32 — 机器从开机到目前为止运行的时长20 users — 登陆的用户有20个load average — 分别对应1mins,5mins,15mins的负载情况(根据一定的算法得到的值，load average／cpu数量&gt;=5说明系统超负荷) *第二行 Tasks total — 当前系统进程269个running — 正在运行的1个sleeping — 睡眠的268个stopped — 停止的0个zombie — 僵尸进程0个 *第三行 0.1%us — 用户空间占用CPU的百分比。0.0% sy — 内核空间占用CPU的百分比。0.0% ni — 改变过优先级的进程占用CPU的百分比99.9% id — 空闲CPU百分比0.0% wa — IO等待占用CPU的百分比0.0% hi — 硬中断（Hardware IRQ）占用CPU的百分比0.0% si — 软中断（Software Interrupts）占用CPU的百分比 *第四行 Mem total — 物理内存总量 8GBfree — 空闲的内存 used — 正在使用的内存buff/cache — 缓存的内存(used表示现在系统内核控制的内存数，free表示还未进入内核控制的内存数，used还包括了停止使用但可能被重用的内存，所以used使用完的内存不会返还给free，所以free的内存数一定越来越少) *第五行 Swap total — 交换区总量used — 使用的交换区总量free — 空闲交换区总量cached — 缓冲的交换区总量(swap used经常变化的话说明内存已经不够使用了)参考链接(系统可使用的内存近似为第四行的free+buff/cache+第五行的cache) *进程状态监控各项指标 PID — 进程idUSER — 进程所有者PR — 进程优先级NI — nice值。负值表示高优先级，正值表示低优先级VIRT — 进程使用的虚拟内存总量，单位kb。VIRT=SWAP+RESRES — 进程使用的、未被换出的物理内存大小，单位kb。RES=CODE+DATASHR — 共享内存大小，单位kbS — 进程状态。D=不可中断的睡眠状态 R=运行 S=睡眠 T=跟踪/停止 Z=僵尸进程%CPU — 上次更新到现在的CPU时间占用百分比%MEM — 进程使用的物理内存百分比TIME+ — 进程使用的CPU时间总计，单位1/100秒COMMAND — 进程名称（命令名/命令行） top交互执行top命令之后即进入top信心展示界面，可以使用命令行进行交互 top界面 按1显示多核cpu的使用情况 top界面默认按cpu的使用降序排序 使用shift+&gt;和shift+&lt;来改变排序的指标 top界面 按x高亮排序的指标 top其他使用技巧 h 显示帮助画面，给出一些简短的命令总结说明 k 终止一个进程 i 忽略闲置和僵死进程。这是一个开关式命令 q 退出程序 r 重新安排一个进程的优先级别 S 切换到累计模式 s 改变两次刷新之间的延迟时间（单位为s），如果有小数，就换算成m s。输入0值则系统将不断刷新，默认值是5 s f或者F 从当前显示中添加或者删除项目 o或者O 改变显示项目的顺序 l 切换显示平均负载和启动时间信息 m 切换显示内存信息 t 切换显示进程和CPU状态信息 c 切换显示命令名称和完整命令行 M 根据驻留内存大小进行排序 P 根据CPU使用百分比大小进行排序 T 根据时间/累计时间进行排序 W 将当前设置写入~/.toprc文件中]]></content>
+      <categories>
+        <category>微服务问题定位</category>
+      </categories>
+      <tags>
+        <tag>linux命令</tag>
+        <tag>微服务</tag>
+        <tag>进程,线程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Hello World]]></title>
+    <url>%2F2018%2F01%2F24%2Fhello-world%2F</url>
+    <content type="text"><![CDATA[Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick StartCreate a new post1$ hexo new "My New Post" More info: Writing Run server1$ hexo server More info: Server Generate static files1$ hexo generate More info: Generating Deploy to remote sites1$ hexo deploy More info: Deployment]]></content>
+      <categories>
+        <category>迎新</category>
+      </categories>
+      <tags>
+        <tag>welcome</tag>
+        <tag>hello</tag>
+      </tags>
+  </entry>
 </search>
