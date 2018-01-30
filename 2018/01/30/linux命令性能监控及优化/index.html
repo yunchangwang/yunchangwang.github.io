@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="linux命令," />
 
 
 
@@ -79,17 +79,20 @@
 
 
 
-<meta name="description" content="君埋泉下泥销骨 我寄人间朝与暮 沧海桑田 也输 一纸流年 我曾 把那 蒹葭 叹几遍 才留得 风花雪月几更天">
-<meta property="og:type" content="website">
-<meta property="og:title" content="文章标签">
-<meta property="og:url" content="http://yoursite.com/tags/index.html">
+<meta name="description" content="性能监控和优化toptop freefree vmstat用来统计虚拟内存的使用情况，这边涉及到linux物理内存和虚拟内存的知识点，其实之前我们也提到过，虚拟内存即交换区 option参数-a：显示活跃和非活跃内存-f：显示从系统启动至今的fork数量-m：显示slabinfo-n：只在开始时显示一次各字段名称-s：显示内存相关统计信息及多种系统活动数量delay：刷新时间间隔。如果不指定，只显">
+<meta name="keywords" content="linux命令">
+<meta property="og:type" content="article">
+<meta property="og:title" content="linux命令性能监控及优化">
+<meta property="og:url" content="http://yoursite.com/2018/01/30/linux命令性能监控及优化/index.html">
 <meta property="og:site_name" content="wyc-blog">
-<meta property="og:description" content="君埋泉下泥销骨 我寄人间朝与暮 沧海桑田 也输 一纸流年 我曾 把那 蒹葭 叹几遍 才留得 风花雪月几更天">
+<meta property="og:description" content="性能监控和优化toptop freefree vmstat用来统计虚拟内存的使用情况，这边涉及到linux物理内存和虚拟内存的知识点，其实之前我们也提到过，虚拟内存即交换区 option参数-a：显示活跃和非活跃内存-f：显示从系统启动至今的fork数量-m：显示slabinfo-n：只在开始时显示一次各字段名称-s：显示内存相关统计信息及多种系统活动数量delay：刷新时间间隔。如果不指定，只显">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-01-25T13:49:06.000Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/yunchangwang/blogs/master/vmstat/vmstat.png">
+<meta property="og:updated_time" content="2018-01-30T10:21:04.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="文章标签">
-<meta name="twitter:description" content="君埋泉下泥销骨 我寄人间朝与暮 沧海桑田 也输 一纸流年 我曾 把那 蒹葭 叹几遍 才留得 风花雪月几更天">
+<meta name="twitter:title" content="linux命令性能监控及优化">
+<meta name="twitter:description" content="性能监控和优化toptop freefree vmstat用来统计虚拟内存的使用情况，这边涉及到linux物理内存和虚拟内存的知识点，其实之前我们也提到过，虚拟内存即交换区 option参数-a：显示活跃和非活跃内存-f：显示从系统启动至今的fork数量-m：显示slabinfo-n：只在开始时显示一次各字段名称-s：显示内存相关统计信息及多种系统活动数量delay：刷新时间间隔。如果不指定，只显">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/yunchangwang/blogs/master/vmstat/vmstat.png">
 
 
 
@@ -119,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/tags/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/01/30/linux命令性能监控及优化/"/>
 
 
 
 
 
-  <title>文章标签 | wyc-blog</title>
+  <title>linux命令性能监控及优化 | wyc-blog</title>
   
 
 
@@ -284,40 +287,172 @@
 
   <div id="posts" class="posts-expand">
     
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/30/linux命令性能监控及优化/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wyc">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/yunchangwang/blogs/master/admin/head.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="wyc-blog">
+    </span>
+
     
-    
-    <div class="post-block page">
       <header class="post-header">
 
-	<h1 class="post-title" itemprop="name headline">文章标签</h1>
-
-
-
-</header>
-
-      
-      
-      
-      <div class="post-body">
         
         
-          <div class="tag-cloud">
-            <div class="tag-cloud-title">
-                目前共计 10 个标签
-            </div>
-            <div class="tag-cloud-tags">
-              <a href="/tags/gitbook/" style="font-size: 21px; color: #6f6f6f">gitbook</a> <a href="/tags/hello/" style="font-size: 12px; color: #ccc">hello</a> <a href="/tags/jvm/" style="font-size: 21px; color: #6f6f6f">jvm</a> <a href="/tags/linux命令/" style="font-size: 30px; color: #111">linux命令</a> <a href="/tags/welcome/" style="font-size: 12px; color: #ccc">welcome</a> <a href="/tags/内存相关/" style="font-size: 12px; color: #ccc">内存相关</a> <a href="/tags/微服务/" style="font-size: 30px; color: #111">微服务</a> <a href="/tags/磁盘/" style="font-size: 21px; color: #6f6f6f">磁盘</a> <a href="/tags/网络/" style="font-size: 12px; color: #ccc">网络</a> <a href="/tags/进程-线程/" style="font-size: 21px; color: #6f6f6f">进程,线程</a>
-            </div>
-          </div>
+          <h1 class="post-title" itemprop="name headline">linux命令性能监控及优化</h1>
         
-      </div>
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-30T12:31:38+08:00">
+                2018-01-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux命令/" itemprop="url" rel="index">
+                    <span itemprop="name">linux命令</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
       
       
+
+      
+        <h1 id="性能监控和优化"><a href="#性能监控和优化" class="headerlink" title="性能监控和优化"></a>性能监控和优化</h1><h2 id="top"><a href="#top" class="headerlink" title="top"></a>top</h2><p><a href="https://yunchangwang.github.io/2018/01/26/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94top/" target="_blank" rel="noopener">top</a></p>
+<h2 id="free"><a href="#free" class="headerlink" title="free"></a>free</h2><p><a href="https://yunchangwang.github.io/2018/01/28/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94free/" target="_blank" rel="noopener">free</a></p>
+<h2 id="vmstat"><a href="#vmstat" class="headerlink" title="vmstat"></a>vmstat</h2><p>用来统计虚拟内存的使用情况，这边涉及到linux物理内存和虚拟内存的<a href="http://www.cnblogs.com/peida/archive/2012/12/25/2833108.html" target="_blank" rel="noopener">知识点</a>，其实之前我们也提到过，虚拟内存即交换区</p>
+<h3 id="option参数"><a href="#option参数" class="headerlink" title="option参数"></a>option参数</h3><p>-a：显示活跃和非活跃内存<br><br>-f：显示从系统启动至今的fork数量<br><br>-m：显示slabinfo<br><br>-n：只在开始时显示一次各字段名称<br><br>-s：显示内存相关统计信息及多种系统活动数量<br><br>delay：刷新时间间隔。如果不指定，只显示一条结果<br><br>count：刷新次数。如果不指定刷新次数，但指定了刷新时间间隔，这时刷新次数为无穷<br><br>-d：显示磁盘相关统计信息<br><br>-p：显示指定磁盘分区统计信息<br><br>-S：使用指定单位显示。参数有 k 、K 、m 、M ，分别代表1000、1024、1000000、1048576字节（byte）默认单位为K（1024 bytes）<br><br>-V：显示vmstat版本信息</p>
+<h3 id="使用实例"><a href="#使用实例" class="headerlink" title="使用实例"></a>使用实例</h3><p>$vmstat 5 6   在docker上进行试验，在6秒内采集5次数据<br><img src="https://raw.githubusercontent.com/yunchangwang/blogs/master/vmstat/vmstat.png" alt="例图"></p>
+<h3 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h3><p>Procs（进程）：<br><br>r: 运行队列中进程数量<br><br>b: 等待IO的进程数量<br><br>Memory（内存）：<br><br>swpd: 使用虚拟内存大小<br><br>free: 可用内存大小<br><br>buff: 用作缓冲的内存大小<br><br>cache: 用作缓存的内存大小<br><br>Swap：<br><br>si: 每秒从交换区写到内存的大小<br><br>so: 每秒写入交换区的内存大小<br><br>IO：（现在的Linux版本块的大小为1024bytes）<br><br>bi: 每秒读取的块数<br><br>bo: 每秒写入的块数<br><br>系统：<br><br>in: 每秒中断数，包括时钟中断<br><br>cs: 每秒上下文切换数<br><br>CPU（以百分比表示）：<br><br>us: 用户进程执行时间(user time)<br><br>sy: 系统进程执行时间(system time)<br><br>id: 空闲时间(包括IO等待时间),中央处理器的空闲时间  以百分比表示<br><br>wa: 等待IO时间</p>
+<h3 id="需要关注的指标"><a href="#需要关注的指标" class="headerlink" title="需要关注的指标"></a>需要关注的指标</h3><p>如果 r经常大于 4 ，且id经常少于40，表示cpu的负荷很重<br><br>如果bi，bo 长期不等于0，表示内存不足<br><br>如果disk 经常不等于0， 且在 b中的队列 大于3， 表示 io性能不好<br></p>
+
       
     </div>
     
     
     
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/linux命令/" rel="tag"># linux命令</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/30/linux常用命令/" rel="next" title="linux常用命令">
+                <i class="fa fa-chevron-left"></i> linux常用命令
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
   </div>
 
 
@@ -326,6 +461,17 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+      
+        <div onclick="showGitment()" id="gitment-display-button">显示 Gitment 评论</div>
+        <div id="gitment-container" style="display:none"></div>
+      
+    </div>
+
+  
+
 
         </div>
         
@@ -346,8 +492,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -421,6 +576,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#性能监控和优化"><span class="nav-number">1.</span> <span class="nav-text">性能监控和优化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#top"><span class="nav-number">1.1.</span> <span class="nav-text">top</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#free"><span class="nav-number">1.2.</span> <span class="nav-text">free</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vmstat"><span class="nav-number">1.3.</span> <span class="nav-text">vmstat</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#option参数"><span class="nav-number">1.3.1.</span> <span class="nav-text">option参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用实例"><span class="nav-number">1.3.2.</span> <span class="nav-text">使用实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#说明"><span class="nav-number">1.3.3.</span> <span class="nav-text">说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#需要关注的指标"><span class="nav-number">1.3.4.</span> <span class="nav-text">需要关注的指标</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
