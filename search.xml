@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[微服务问题定位——jmap]]></title>
+    <url>%2F2018%2F01%2F29%2F%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94jmap%2F</url>
+    <content type="text"><![CDATA[jmap使用场景 内存溢出，线上程序运行时内存越来越大，用jmap dump出堆内存的信息，然后进行相关分析 内存的真实使用大于预期，这是因为设计不合理导致冗余的对象存在内存中，用jmap来查看内存中的对象，分析是否有存在的必要 jvm优化，利用jmap来查看整个堆的使用情况，根据老年代和新生代的使用比例来划分jvm的各个区域 使用实例在使用jmap连接进程时，启动的jvm版本和jdk版本要一一对应，毕竟jmap是jdk下的命令包$ps -ef | grep java 查找系统的java进程$jmap -heap pid 打印指定进程堆的摘要信息，包括gc算法 参数说明 Heap Configuration: 堆配置信息 MinHeapFreeRatio 在堆的使用率小于MinHeapFreeRatio(%)的时候进行收缩，当Xmx=Xms的时候此配置无效MaxHeapFreeRatio 在堆使用率大于MaxHeapFreeRatio(%)的时候进行扩展，当Xmx=Xms的时候此配置无效MaxHeapSize 堆的最大空间NewSize 新生代的大小MaxNewSize 最大的新生代的大小OldSize 老年代的大小NewRatio 新生代中Eden和Survivor区的比例SurvivorRatio 新生代中Eden和和Survivor区的比例PermSize 永久代的大小MaxPermSize 久代的最大内存G1HeapRegionSize 使用G1垃圾收集的区间 Heap Usage: 堆的使用信息 New Generation (Eden + 1 Survivor Space): 新生代的大小（Eden区加一个Survivor区的空间信息 capacity 总内存used 已使用内存free 剩余内存13.823827124993642% used 使用内存占比 Eden Space: Eden区的大小 capacityusedfree15.178337946947952% used From Space: 第一个Surivivor区的空间信息 capacityusedfree2.984432830624237% used To Space: 第二个Survivor区的空间信息 capacityusedfree0.0% used concurrent mark-sweep generation: CMS垃圾收集占用的空间信息 capacityusedfree75.36470666527748% used Perm Generation: 永久代的空间信息 capacityusedfree47.5915253162384% used 其他功能参考链接]]></content>
+      <categories>
+        <category>微服务问题定位</category>
+      </categories>
+      <tags>
+        <tag>微服务</tag>
+        <tag>jvm</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[微服务问题定位——jstack]]></title>
     <url>%2F2018%2F01%2F29%2F%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94jstack%2F</url>
     <content type="text"><![CDATA[jstack功能查看运用程序jvm的堆栈情况，可以找出线程的运行情况，从而排查一些隐患或者服务卡顿的问题 具体说明jstack用于打印出给定的java进程id或者core file或者远程调试服务的java堆栈信息，如果是在64位机器上，需要指定选项-J-d64如果java程序崩溃会生成core文件，jstack工具可以用来获得core文件的java stack和native stack的信息，从而可以轻松知道java程序是如何崩溃和在程序何处发生问题。 option参数-F 当jstack -l pid 没有响应的时候强制打印栈信息-l 长队列，打印关于锁的附加信息-m 打印java和native c/c++框架的所有栈信息 命令格式jstack [option] pidjstack [option] executable corejstack [option] [server-id@]remote-hostname-or-IP 命令格式说明executable core 产生core dump的java可执行文件remote-hostname-or-IP 远程debug服务的主机名或ipserver-id 唯一id,假如一台主机上多个远程debug服务 使用实例一般需要与top命令联用，使用top命令找出异常的进程(一般是cpu使用异常的进程)通过top -Hp pid来定位该进程下各线程的cpu使用情况再通过jstack pid命令打印该线程对应的堆栈情况 扩展 在top命令中，已经获取到了占用cpu资源较高的线程pid，将该pid转成16进制的值(在线转换)，在thread dump中每个线程都有一个nid，找到对应的nid即可 什么是java core和heap dump文件，参考]]></content>
