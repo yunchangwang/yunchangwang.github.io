@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="linux命令," />
+  <meta name="keywords" content="linux命令,vim," />
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="sed系统mac系统用的是原生的bsd系列，而一般的linux系统用的是gnu系统，所以两者在某些命令是有区别的，sed命令位列其中 区别mac上sed的添加和插入文本比较奇葩，需要如此:$sed “$line a\ (在\后要加一个空格，然后另起一行，再写需要添加的那一行新的)&amp;gt;$value（需要添加新一行的内容）&amp;gt;“ $filename(文件名)同上，sed i的使用方式亦然 gnu-sed如">
-<meta name="keywords" content="linux命令">
+<meta name="description" content="VIM编辑器背景vi在mac下严格意义上讲不是一个简单的命令，而是unix系列下的自带的编译器，笔者没记错发明这编译器的家伙是个大胡子，一直致力于软件开源的维护和倡导$vi filename 这是开始编译一个文件，有时候需要switch user 即sudo 简介这边笔者不做过多的介绍请看维基百科这里的vim编辑器是vi的一种升级版 编辑文件之前说过基本用法:$vim filename，这边还有其">
+<meta name="keywords" content="linux命令,vim">
 <meta property="og:type" content="article">
-<meta property="og:title" content="linux命令——sed">
-<meta property="og:url" content="http://yoursite.com/2018/01/31/linux命令——sed/index.html">
+<meta property="og:title" content="linux编辑器——vim">
+<meta property="og:url" content="http://yoursite.com/2018/01/31/linux编辑器——vim/index.html">
 <meta property="og:site_name" content="wyc-blog">
-<meta property="og:description" content="sed系统mac系统用的是原生的bsd系列，而一般的linux系统用的是gnu系统，所以两者在某些命令是有区别的，sed命令位列其中 区别mac上sed的添加和插入文本比较奇葩，需要如此:$sed “$line a\ (在\后要加一个空格，然后另起一行，再写需要添加的那一行新的)&amp;gt;$value（需要添加新一行的内容）&amp;gt;“ $filename(文件名)同上，sed i的使用方式亦然 gnu-sed如">
+<meta property="og:description" content="VIM编辑器背景vi在mac下严格意义上讲不是一个简单的命令，而是unix系列下的自带的编译器，笔者没记错发明这编译器的家伙是个大胡子，一直致力于软件开源的维护和倡导$vi filename 这是开始编译一个文件，有时候需要switch user 即sudo 简介这边笔者不做过多的介绍请看维基百科这里的vim编辑器是vi的一种升级版 编辑文件之前说过基本用法:$vim filename，这边还有其">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-01-31T08:33:37.000Z">
+<meta property="og:updated_time" content="2018-01-31T11:04:49.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="linux命令——sed">
-<meta name="twitter:description" content="sed系统mac系统用的是原生的bsd系列，而一般的linux系统用的是gnu系统，所以两者在某些命令是有区别的，sed命令位列其中 区别mac上sed的添加和插入文本比较奇葩，需要如此:$sed “$line a\ (在\后要加一个空格，然后另起一行，再写需要添加的那一行新的)&amp;gt;$value（需要添加新一行的内容）&amp;gt;“ $filename(文件名)同上，sed i的使用方式亦然 gnu-sed如">
+<meta name="twitter:title" content="linux编辑器——vim">
+<meta name="twitter:description" content="VIM编辑器背景vi在mac下严格意义上讲不是一个简单的命令，而是unix系列下的自带的编译器，笔者没记错发明这编译器的家伙是个大胡子，一直致力于软件开源的维护和倡导$vi filename 这是开始编译一个文件，有时候需要switch user 即sudo 简介这边笔者不做过多的介绍请看维基百科这里的vim编辑器是vi的一种升级版 编辑文件之前说过基本用法:$vim filename，这边还有其">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/01/31/linux命令——sed/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/01/31/linux编辑器——vim/"/>
 
 
 
 
 
-  <title>linux命令——sed | wyc-blog</title>
+  <title>linux编辑器——vim | wyc-blog</title>
   
 
 
@@ -297,7 +297,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/31/linux命令——sed/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/31/linux编辑器——vim/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="wyc">
@@ -314,7 +314,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">linux命令——sed</h1>
+          <h1 class="post-title" itemprop="name headline">linux编辑器——vim</h1>
         
 
         <div class="post-meta">
@@ -326,7 +326,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-31T16:30:16+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-31T18:59:31+08:00">
                 2018-01-31
               </time>
             
@@ -349,8 +349,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/linux命令/" itemprop="url" rel="index">
-                    <span itemprop="name">linux命令</span>
+                  <a href="/categories/vim/" itemprop="url" rel="index">
+                    <span itemprop="name">vim</span>
                   </a>
                 </span>
 
@@ -386,12 +386,24 @@
       
 
       
-        <h2 id="sed"><a href="#sed" class="headerlink" title="sed"></a>sed</h2><h3 id="系统"><a href="#系统" class="headerlink" title="系统"></a>系统</h3><p>mac系统用的是原生的bsd系列，而一般的linux系统用的是gnu系统，所以两者在某些命令是有区别的，sed命令位列其中</p>
-<h3 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h3><p>mac上sed的添加和插入文本比较奇葩，需要如此:<br><br>$sed “$line a\ (在\后要加一个空格，然后另起一行，再写需要添加的那一行新的)<br><br>>$value（需要添加新一行的内容）<br><br>>“ $filename(文件名)<br><br>同上，sed i的使用方式亦然</p>
-<h3 id="gnu-sed"><a href="#gnu-sed" class="headerlink" title="gnu-sed"></a>gnu-sed</h3><p>如果无法适应原生bsd系列，可以下载gnu-sed，这个时候brew神器又用到了，直接下载然后配置环境变量即可:<br><br>$brew install gnu-sed<br><br>之后的叙述都是基于gnu-sed说明</p>
-<h3 id="option参数"><a href="#option参数" class="headerlink" title="option参数"></a>option参数</h3><p>-n ：使用安静(silent)模式，在一般 sed 的用法中，所有来自 STDIN 的数据一般都会被列出到终端上，但如果加上 -n 参数后，则只有经过sed 特殊处理的那一行(或者动作)才会被列出来<br><br>-e ：直接在命令列模式上进行 sed 的动作编辑<br><br>-f ：直接将 sed 的动作写在一个文件内， -f filename 则可以运行 filename 内的 sed 动作<br><br>-r ：sed 的动作支持的是延伸型正规表示法的语法。(默认是基础正规表示法语法)<br><br>-i ：直接修改读取的文件内容，而不是输出到终端</p>
-<h3 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h3><p>a ：新增， a 的后面可以接字串，而这些字串会在新的一行出现(目前的下一行)<br><br>c ：取代， c 的后面可以接字串，这些字串可以取代 n1,n2 之间的行<br><br>d ：删除，因为是删除啊，所以 d 后面通常不接任何咚咚<br><br>i ：插入， i 的后面可以接字串，而这些字串会在新的一行出现(目前的上一行)<br><br>p ：列印，亦即将某个选择的数据印出。通常 p 会与参数 sed -n 一起运行<br><br>s ：取代，可以直接进行取代的工作哩！通常这个 s 的动作可以搭配正规表示法</p>
-<h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><p>$sed ‘2a 字符串’ filename —— 第二行下一行添加字符串<br><br>$sed ‘2i 字符串’ filename —— 第二行上一行添加字符串<br><br>以上的命令只能作用在缓存的文件中，其实真实的文件内容并没有被改变<br><br>$sed ‘2a 字符串’ -i  filename —— 这样可以直接修改文件了<br><br>$sed ‘1,2d’ -i filename —— 删除文件1-2行的内容<br><br>sed与nl联合使用可以进行关键字查找:<br><br>$nl filename | sed -n ‘/关键字/p’<br><br>sed支持正则表达的搜索和替换:<br><br>$sed ‘s/正则表达式 or 普通字符串/新字符串/g’ -i filename<br><br>[其他用法:]<a href="https://www.cnblogs.com/ggjucheng/archive/2013/01/13/2856901.html" target="_blank" rel="noopener">https://www.cnblogs.com/ggjucheng/archive/2013/01/13/2856901.html</a></p>
+        <h1 id="VIM编辑器"><a href="#VIM编辑器" class="headerlink" title="VIM编辑器"></a>VIM编辑器</h1><h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>vi在mac下严格意义上讲不是一个简单的命令，而是unix系列下的自带的<strong>编译器</strong>，笔者没记错发明这编译器的家伙是个<strong>大胡子</strong>，一直致力于软件开源的维护和倡导<br><br>$vi filename 这是开始编译一个文件，有时候需要switch user 即sudo<br></p>
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>这边笔者不做过多的介绍<br><br>请看<a href="https://zh.wikipedia.org/wiki/Vi" target="_blank" rel="noopener">维基百科</a><br><br>这里的vim编辑器是vi的一种升级版</p>
+<h2 id="编辑文件"><a href="#编辑文件" class="headerlink" title="编辑文件"></a>编辑文件</h2><p>之前说过基本用法:$vim filename，这边还有其他的用法<br><br>$vim +line filename 编辑文件，并定位到第line行<br><br>$vim + filename 编辑文件，并定位到最后一行<br><br>$vim +/pattern filename 编辑文件，并定位到第一个匹配的位置<br></p>
+<h2 id="关闭文件"><a href="#关闭文件" class="headerlink" title="关闭文件"></a>关闭文件</h2><p>这边需要提及vim的模式(之后补充，这边提及)，打开文件后需要进入输入模式或者其他模式，才能使用一些命令，退出模式后才能关闭文件<br><br>一般按esc按钮来推出vim的模式，然后输入<strong>:</strong>来选择退出的方式<br><br>:q  退出<br><br>:wq 保存并退出<br><br>:q! 不保存并退出<br><br>:w 保存但没有退出，可以继续编辑<br><br>:w! 强行保存<br><br>退出后就回到命令窗口界面了，当然也可以直接编辑模式退出<br><br>如：编辑模式按ZZ即可</p>
+<h2 id="模式"><a href="#模式" class="headerlink" title="模式"></a>模式</h2><p>i 在当前光标所在的字符前面转为输入模式<br><br>a 在当前光标所在的字符后面转为输入模式<br><br>o 在当前光标所在行的下方新建一行，并转为输入模式<br><br>I 在当前光标所在行的行首转为输入模式<br><br>A 在当前光标所在的行尾转为输入模式<br><br>O 在当前光标所在的上方新建一行，并转为输入模式<br><br>以上的命令必须是非编辑状态或者非其他的状态，然后按下相应的按键进入编辑模式</p>
+<h2 id="相关命令"><a href="#相关命令" class="headerlink" title="相关命令"></a>相关命令</h2><h3 id="移动"><a href="#移动" class="headerlink" title="移动"></a>移动</h3><p>很简单，就是键盘上的上下左右键<br><br>w 移至下一个单词词首，中文一般以标点为准跳动<br><br>e 移至当前或下一个单词词尾<br><br>b 移至当前或者前一个单词词首<b><br>nw 移动n个单词</b></p>
+<h3 id="跳转"><a href="#跳转" class="headerlink" title="跳转"></a>跳转</h3><p>0 跳转到光标所在的行首<br><br>^ 跳转到行首的第一个非空白字符<br><br>$ 绝对的行尾<br><br>nG 跳转到第#行<br><br>gg 跳转到第一行行首<br><br>G 跳转到最后一行行首</p>
+<h3 id="翻页"><a href="#翻页" class="headerlink" title="翻页"></a>翻页</h3><p>ctrl+f 向下翻一屏<br><br>ctrl+b 向上翻一屏<br><br>ctrl+d 向下翻半屏<br><br>ctrl+u 向上翻半屏</p>
+<h3 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h3><p>x 删除光标所在处的单个字符<br><br>nx 删除光标所在处及后面共n个单词<br><br>dd 删除光标所在的行<br><br>ndd 删除光标所在行及后面共n行</p>
+<h3 id="粘贴"><a href="#粘贴" class="headerlink" title="粘贴"></a>粘贴</h3><p>p: 如果删除或复制为整行内容，则粘贴至光标所在行的下方，如果复制或删除的内容为非整行，则粘贴至光标所在字符的后面<br><br>P: 如果删除或复制为整行内容，则粘贴至光标所在行的上方，如果复制或删除的内容为非整行，则粘贴至光标所在字符的前面<br><br><strong>以上命令只作用于vim编辑器内部，外面复制的内容不行</strong></p>
+<h3 id="复制"><a href="#复制" class="headerlink" title="复制"></a>复制</h3><p>用法和d命令的用法相同，将d替换成y</p>
+<h3 id="替换"><a href="#替换" class="headerlink" title="替换"></a>替换</h3><p>r 替换单个字符，但是好像不支持中文<br><br>nr 光标后n个字符全部替换<br><br>R 进入替换模式，可直接替换光标所在的字符</p>
+<h3 id="撤销编辑操作"><a href="#撤销编辑操作" class="headerlink" title="撤销编辑操作"></a>撤销编辑操作</h3><p>u 在非模式状态下，撤销前一次的编辑操作<br><br>nu 直接撤销最近的n次编辑操作</p>
+<h3 id="选取"><a href="#选取" class="headerlink" title="选取"></a>选取</h3><p>v 进入选取模式，按字符选取，最多到光标所在的行<br><br>V 进入选取模式，但是按矩形进行选取</p>
+<h3 id="查找"><a href="#查找" class="headerlink" title="查找"></a>查找</h3><p>:/pattern 根据匹配的字符查找<br><br>:?pattern 同上<br><br>n 下一个<br><br>N 上一个</p>
+<h3 id="查找并替换"><a href="#查找并替换" class="headerlink" title="查找并替换"></a>查找并替换</h3><p>headline,footline s#PATTERN#string#g<br><br>n,$s#wyc#王鋆昌#g 替换第n行开始到最后一行中每一行所有wyc为王鋆昌<br><br><a href="https://www.cnblogs.com/jianyungsun/archive/2011/03/20/1989276.html" target="_blank" rel="noopener">参考</a></p>
+<h3 id="编辑多个文件"><a href="#编辑多个文件" class="headerlink" title="编辑多个文件"></a>编辑多个文件</h3><p>vim file1 file2<br><br>:next 切换到下一个文件<br><br>:prev 切换到上一个文件<br><br>:last 切换到最后一个文件<br><br>:first 切换到第一个文件<br><br>:q 退出当前文件<br><br>:qa 全部退出</p>
+<h2 id="未完待续"><a href="#未完待续" class="headerlink" title="未完待续"></a>未完待续</h2><p>vim的使用远非及此，之后还有有涉及会及时补充</p>
 
       
     </div>
@@ -411,6 +423,8 @@
           
             <a href="/tags/linux命令/" rel="tag"># linux命令</a>
           
+            <a href="/tags/vim/" rel="tag"># vim</a>
+          
         </div>
       
 
@@ -422,8 +436,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/01/31/linux常用命令——补充/" rel="next" title="linux常用命令——补充">
-                <i class="fa fa-chevron-left"></i> linux常用命令——补充
+              <a href="/2018/01/31/linux命令——crontab/" rel="next" title="linux命令——crontab">
+                <i class="fa fa-chevron-left"></i> linux命令——crontab
               </a>
             
           </div>
@@ -431,10 +445,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/01/31/linux命令——awk/" rel="prev" title="linux命令——awk">
-                linux命令——awk <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -587,7 +597,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#sed"><span class="nav-number">1.</span> <span class="nav-text">sed</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#系统"><span class="nav-number">1.1.</span> <span class="nav-text">系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#区别"><span class="nav-number">1.2.</span> <span class="nav-text">区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gnu-sed"><span class="nav-number">1.3.</span> <span class="nav-text">gnu-sed</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#option参数"><span class="nav-number">1.4.</span> <span class="nav-text">option参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方法"><span class="nav-number">1.5.</span> <span class="nav-text">方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实例"><span class="nav-number">1.6.</span> <span class="nav-text">实例</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#VIM编辑器"><span class="nav-number">1.</span> <span class="nav-text">VIM编辑器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#背景"><span class="nav-number">1.1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">1.2.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编辑文件"><span class="nav-number">1.3.</span> <span class="nav-text">编辑文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关闭文件"><span class="nav-number">1.4.</span> <span class="nav-text">关闭文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模式"><span class="nav-number">1.5.</span> <span class="nav-text">模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相关命令"><span class="nav-number">1.6.</span> <span class="nav-text">相关命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#移动"><span class="nav-number">1.6.1.</span> <span class="nav-text">移动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#跳转"><span class="nav-number">1.6.2.</span> <span class="nav-text">跳转</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#翻页"><span class="nav-number">1.6.3.</span> <span class="nav-text">翻页</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除"><span class="nav-number">1.6.4.</span> <span class="nav-text">删除</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#粘贴"><span class="nav-number">1.6.5.</span> <span class="nav-text">粘贴</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#复制"><span class="nav-number">1.6.6.</span> <span class="nav-text">复制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#替换"><span class="nav-number">1.6.7.</span> <span class="nav-text">替换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#撤销编辑操作"><span class="nav-number">1.6.8.</span> <span class="nav-text">撤销编辑操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#选取"><span class="nav-number">1.6.9.</span> <span class="nav-text">选取</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查找"><span class="nav-number">1.6.10.</span> <span class="nav-text">查找</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查找并替换"><span class="nav-number">1.6.11.</span> <span class="nav-text">查找并替换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编辑多个文件"><span class="nav-number">1.6.12.</span> <span class="nav-text">编辑多个文件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#未完待续"><span class="nav-number">1.7.</span> <span class="nav-text">未完待续</span></a></li></ol></li></ol></div>
             
 
           </div>
