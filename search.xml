@@ -1,217 +1,551 @@
 <?xml version="1.0" encoding="utf-8"?>
-<search>
-  <entry>
-    <title><![CDATA[linux命令——awk]]></title>
-    <url>%2F2018%2F01%2F31%2Flinux%E5%91%BD%E4%BB%A4%E2%80%94%E2%80%94awk%2F</url>
-    <content type="text"><![CDATA[awk当中涉及到xqy的日志业务和图片，所以不部署到github 用法awk ‘{pattern + action}’ {filenames} 使用方式awk -F 分隔符 ‘{command操作}’awk -f awk-script-file input-file(s)上面的命令比较有意思，awk-script-file是脚本文件，一般比较复杂的awk命令可以写成一个脚本，然后操作到input-file(s)文件上 内置变量ARGC 命令行参数个数ARGV 命令行参数排列ENVIRON 支持队列中系统环境变量的使用FILENAME awk浏览的文件名FNR 浏览文件的记录数FS 设置输入域分隔符，等价于命令行 -F选项NF 浏览记录的域的个数NR 已读的记录数OFS 输出域分隔符ORS 输出记录分隔符RS 控制记录分隔符 使用实例在xqy的日志使用手册中，有统计所有抛出非业务异常的服务的命令，相信很多开发不知道运行的原理，在此我做一下说明：cat common-service-digest.log | grep ‘N,’ | awk -F ( ‘{print $2}’ | awk -F ) ‘{print $1}’ | awk -F , ‘{!a[$1”.”$2”.”$3]++;}END {for (j in a) print j,a[j]}’这个命令比较长，你可以分开进行执行，比如:1.cat common-service-digest.log | grep ‘N,’ 查看调用失败的日志2.awk -F ( ‘{print $2}’ 以 （作为分隔符分割日志行，并打印分隔片区2比如:日志记录:[(tax,ICustomerSettingManageService,getAreaCodeBatch,Y,12ms)] (traceId=84ec429fbff64c5bbc43347c8cc72257)被分隔为:[(tax,ICustomerSettingManageService,getAreaCodeBatch,Y,12ms)](traceId=84ec429fbff64c5bbc43347c8cc72257)最后输出:tax,ICustomerSettingManageService,getAreaCodeBatch,Y,24ms)]3.awk -F ) ‘{print $1}’ 以 ）作为分隔符分割日志行，并打印分隔片区1最后输出:tax,ICustomerSettingManageService,getAreaCodeBatch,Y,12ms4.awk -F , ‘{!a[$1”.”$2”.”$3]++;} 以 ,作为分隔符分割日志行，并以$1”.”$2”.”$3为键统计5.最后end进行循环输出参考]]></content>
-      <categories>
-        <category>linux命令</category>
-      </categories>
-      <tags>
-        <tag>linux命令</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[linux命令——sed]]></title>
-    <url>%2F2018%2F01%2F31%2Flinux%E5%91%BD%E4%BB%A4%E2%80%94%E2%80%94sed%2F</url>
-    <content type="text"><![CDATA[sed系统mac系统用的是原生的bsd系列，而一般的linux系统用的是gnu系统，所以两者在某些命令是有区别的，sed命令位列其中 区别mac上sed的添加和插入文本比较奇葩，需要如此:$sed “$line a\ (在\后要加一个空格，然后另起一行，再写需要添加的那一行新的)>$value（需要添加新一行的内容）>“ $filename(文件名)同上，sed i的使用方式亦然 gnu-sed如果无法适应原生bsd系列，可以下载gnu-sed，这个时候brew神器又用到了，直接下载然后配置环境变量即可:$brew install gnu-sed之后的叙述都是基于gnu-sed说明 option参数-n ：使用安静(silent)模式，在一般 sed 的用法中，所有来自 STDIN 的数据一般都会被列出到终端上，但如果加上 -n 参数后，则只有经过sed 特殊处理的那一行(或者动作)才会被列出来-e ：直接在命令列模式上进行 sed 的动作编辑-f ：直接将 sed 的动作写在一个文件内， -f filename 则可以运行 filename 内的 sed 动作-r ：sed 的动作支持的是延伸型正规表示法的语法。(默认是基础正规表示法语法)-i ：直接修改读取的文件内容，而不是输出到终端 方法a ：新增， a 的后面可以接字串，而这些字串会在新的一行出现(目前的下一行)c ：取代， c 的后面可以接字串，这些字串可以取代 n1,n2 之间的行d ：删除，因为是删除啊，所以 d 后面通常不接任何咚咚i ：插入， i 的后面可以接字串，而这些字串会在新的一行出现(目前的上一行)p ：列印，亦即将某个选择的数据印出。通常 p 会与参数 sed -n 一起运行s ：取代，可以直接进行取代的工作哩！通常这个 s 的动作可以搭配正规表示法 实例$sed ‘2a 字符串’ filename —— 第二行下一行添加字符串$sed ‘2i 字符串’ filename —— 第二行上一行添加字符串以上的命令只能作用在缓存的文件中，其实真实的文件内容并没有被改变$sed ‘2a 字符串’ -i filename —— 这样可以直接修改文件了$sed ‘1,2d’ -i filename —— 删除文件1-2行的内容sed与nl联合使用可以进行关键字查找:$nl filename | sed -n ‘/关键字/p’sed支持正则表达的搜索和替换:$sed ‘s/正则表达式 or 普通字符串/新字符串/g’ -i filename[其他用法:]https://www.cnblogs.com/ggjucheng/archive/2013/01/13/2856901.html]]></content>
-      <categories>
-        <category>linux命令</category>
-      </categories>
-      <tags>
-        <tag>linux命令</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[linux常用命令——补充]]></title>
-    <url>%2F2018%2F01%2F31%2Flinux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E2%80%94%E2%80%94%E8%A1%A5%E5%85%85%2F</url>
-    <content type="text"><![CDATA[常用命令(补充)grep用法grep [-acinv][–color=auto] ‘查找字符串’ filename option参数-c 统计查找字符在文件中出现的次数-i 忽略大小写-v 反向查找，即显示不在查找内的行，但是根据记录日志的习惯，很少会使用–color=auto 对查找的字符进行颜色显示 联合使用ls -l |grep -i filename 列出指定文件/文件夹的属性ps -ef|grep tomcat/java 列出指定的进程信息 find用法find [PATH] [option] [action] option参数-mtime n 其中n为数字，表示n天以前，查找n天之前修改过的文件-user name 查找指定所有者的文件-size [+-size] 查重比size大/小的文件 使用$find . -mtime 0 来查找当天修改过的文件，一般可以筛选当天有记录的日志 taroption参数-c ：新建打包文件-t ：查看打包文件的内容含有哪些文件名-x ：解打包或解压缩的功能，可以搭配-C（大写）指定解压的目录，注意-c,-t,-x不能同时出现在同一条命令中-j ：通过bzip2的支持进行压缩/解压缩-z ：通过gzip的支持进行压缩/解压缩-v ：在压缩/解压缩过程中，将正在处理的文件名显示出来-f filename ：filename为要处理的文件-C dir ：指定压缩/解压缩的目录dir 使用实例$tar -tzvf xxx.zip 查看指定压缩文件里面的文件内容$tar -zxvf xxx.zip 解压缩指定文件$tar -cvf xxx.tar dir 压缩指定文件夹$tar -czvf xxx.tar.gz dir 以gzip的格式进行压缩如何使用解压缩命令的option操作，最终还是要看压缩文件的格式的，如-z一般用来支持.gz结尾的压缩包 kill用法kill [选项] [参数] option参数-a：当处理当前进程时，不限制命令名和进程号的对应关系-l &lt;信息编号&gt;：若不加&lt;信息编号&gt;选项，则-l参数会列出全部的信息名称 -p：指定kill 命令只打印相关进程的进程号，而不发送任何信号-s &lt;信息名称或编号&gt;：指定要送出的信息-u：指定用户 常用的信号编号HUP 1 终端断线 INT 2 中断（同 Ctrl + C） QUIT 3 退出（同 Ctrl + \） TERM 15 终止 KILL 9 强制终止 CONT 18 继续（与STOP相反， fg/bg命令） STOP 19 暂停（同 Ctrl + Z）在mac中18是STOP，19是CONT]]></content>
-      <categories>
-        <category>linux命令</category>
-      </categories>
-      <tags>
-        <tag>linux命令</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[linux命令文件上传与下载]]></title>
-    <url>%2F2018%2F01%2F31%2Flinux%E5%91%BD%E4%BB%A4%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E4%B8%8E%E4%B8%8B%E8%BD%BD%2F</url>
-    <content type="text"><![CDATA[文件上传下载搭建实践环境这边使用笔者自己的电脑和windows电脑进行实践。 利用ssh打通windows和mac打开mac的系统偏好设置中的共享，一般情况下没有界面展示的，需要使用搜索查找共享， 然后勾选远程登陆，选择全部用户可访问 在windows上使用ssh连接mac，填写相应的用户名和密码即可 安装要支持sz，rz两个命令，系统需要安装lrzsz，一般的linux系统是自带的，这里使用mac进行实验，需要安装。参考 使用sz filename，即从系统上下载文件到本地，filename是系统中你选择下载的文件rz -b，将本地的文件以二进制的传递方式上传到系统服务器，一般推荐使用二进制传输方式其他参考]]></content>
-      <categories>
-        <category>linux命令</category>
-      </categories>
-      <tags>
-        <tag>linux命令</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[hexo防止敏感数据部署]]></title>
-    <url>%2F2018%2F01%2F30%2Fhexo%E9%98%B2%E6%AD%A2%E6%95%8F%E6%84%9F%E6%95%B0%E6%8D%AE%E9%83%A8%E7%BD%B2%2F</url>
-    <content type="text"><![CDATA[hexo防止敏感数据部署原理熟悉hexo的读者都知道，hexo的部署一般执行如下:$hexo clean$hexo g$hexo d如果不按照顺序执行这三步，读者会发现即使增添了page，部署时git也不会显示增添文件的记录，github上也没有提交的代码记录其实这涉及到hexo的部署原理，hexo clean 会清除之前构建的代码，具体就是public文件夹；hexo g 会重新生成，这样读者添加的page也就构建在其中，此时新的public文件夹会生成；hexo d 就是将hexo g 改变的文件提交到github上所以不执行clean和generate是不会真正意义上修改remote上的代码 敏感数据敏感数据这里指的就是涉及公司业务的文章，因为hexo d 会将文章直接部署到github上，这样就全部公开化了这边最好是本地可以访问，github无法访问你的敏感数据，这篇文章的目的就在此 利用.gitignore熟悉git的读者，应该都知道可以使用.gitignore文件忽略一些提交网上有些说修改.npmignore文件配置(hexo的根目录下)可以起到效果，经过测试发现没有起到作用，所以转而到git寻求解决方案一般执行如下(当前目录为hexo根目录):$cd .deploy_git git push的代码都在此文件夹下$vim .gitignore增加如下配置:page name/ page的名称，hexo n page创建命令中你定义的文章名，如:linux命令性能监控及优化/.gitignore 自己本身但是笔者发现代码虽然没有提交到github上，但是hexo博客上有这个新建的标题，点击访问也是github默认的404页面(因为hexo g过程中一定会将文章标题写入hexo中，.gitignore只能做到忽略提交) 自定义404上面的问题引入了这个小结，github默认的404页面会让读者误以为是网站的问题，其实是不想公开化，所以你可以自定义404页面具体的步骤如下(hexo的根目录下):$hexo n page 404 source目录下生成404目录index.md中增加配置: layout: false //是否使用布局文件 comments: false //是否有评论 permalink: /404 //设置链接然后按照hexo部署步骤上传到github上，然后再访问敏感文章链接会跳转到自定义的404页面其实根本问题是github上没有代码，但是hexo在generate时将目录还是写入了导致，但是笔者找不到解决忽略写入的方法]]></content>
-      <categories>
-        <category>hexo部署</category>
-      </categories>
-      <tags>
-        <tag>hexo</tag>
-        <tag>git</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[linux命令性能监控及优化]]></title>
-    <url>%2F2018%2F01%2F30%2Flinux%E5%91%BD%E4%BB%A4%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7%E5%8F%8A%E4%BC%98%E5%8C%96%2F</url>
-    <content type="text"><![CDATA[性能监控和优化toptop freefree vmstat用来统计虚拟内存的使用情况，这边涉及到linux物理内存和虚拟内存的知识点，其实之前我们也提到过，虚拟内存即交换区 option参数-a：显示活跃和非活跃内存-f：显示从系统启动至今的fork数量-m：显示slabinfo-n：只在开始时显示一次各字段名称-s：显示内存相关统计信息及多种系统活动数量delay：刷新时间间隔。如果不指定，只显示一条结果count：刷新次数。如果不指定刷新次数，但指定了刷新时间间隔，这时刷新次数为无穷-d：显示磁盘相关统计信息-p：显示指定磁盘分区统计信息-S：使用指定单位显示。参数有 k 、K 、m 、M ，分别代表1000、1024、1000000、1048576字节（byte）默认单位为K（1024 bytes）-V：显示vmstat版本信息 使用实例$vmstat 5 6 在docker上进行试验，在6秒内采集5次数据 说明Procs（进程）：r: 运行队列中进程数量b: 等待IO的进程数量Memory（内存）：swpd: 使用虚拟内存大小free: 可用内存大小buff: 用作缓冲的内存大小cache: 用作缓存的内存大小Swap：si: 每秒从交换区写到内存的大小so: 每秒写入交换区的内存大小IO：（现在的Linux版本块的大小为1024bytes）bi: 每秒读取的块数bo: 每秒写入的块数系统：in: 每秒中断数，包括时钟中断cs: 每秒上下文切换数CPU（以百分比表示）：us: 用户进程执行时间(user time)sy: 系统进程执行时间(system time)id: 空闲时间(包括IO等待时间),中央处理器的空闲时间 以百分比表示wa: 等待IO时间 需要关注的指标如果 r经常大于 4 ，且id经常少于40，表示cpu的负荷很重如果bi，bo 长期不等于0，表示内存不足如果disk 经常不等于0， 且在 b中的队列 大于3， 表示 io性能不好]]></content>
-      <categories>
-        <category>linux命令</category>
-      </categories>
-      <tags>
-        <tag>linux命令</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[linux常用命令]]></title>
-    <url>%2F2018%2F01%2F30%2Flinux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%2F</url>
-    <content type="text"><![CDATA[常用命令pwd没什么可说的，当前不知道处于那个目录下时，pwd即可 mvmv命令是将一个文件移动到指定的目录，但是在linux可以用来重命名文件 moremore是具有翻页功能的cat命令 lessless是一个可以前后分页浏览文件的命令，相比more更加具有弹性 whichwhich用于查找命令包所在的路径，没有配置在环境变量中的命令是搜索不到的，因为which只会搜索path下的命令，echo $PATH可以查看 lsls命令还是很常用的，不做过多描述ls g* 模糊列出文件列表，即将g开头的文件列出 unzip和gzipunzip主要用于解压.zip压缩文件 unzip xxx.zipgzip file1 file2 … 文件打包压缩为.gz的形式对于文件夹的打包或者其他的压缩格式请使用tar命令 whatis和man$whatis command 用于显示命令使用的描述$man command 以使用手册的形式显示]]></content>
-      <categories>
-        <category>linux命令</category>
-      </categories>
-      <tags>
-        <tag>linux命令</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[微服务问题定位——jmap]]></title>
-    <url>%2F2018%2F01%2F29%2F%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94jmap%2F</url>
-    <content type="text"><![CDATA[jmap使用场景 内存溢出，线上程序运行时内存越来越大，用jmap dump出堆内存的信息，然后进行相关分析 内存的真实使用大于预期，这是因为设计不合理导致冗余的对象存在内存中，用jmap来查看内存中的对象，分析是否有存在的必要 jvm优化，利用jmap来查看整个堆的使用情况，根据老年代和新生代的使用比例来划分jvm的各个区域 使用实例在使用jmap连接进程时，启动的jvm版本和jdk版本要一一对应，毕竟jmap是jdk下的命令包$ps -ef | grep java 查找系统的java进程$jmap -heap pid 打印指定进程堆的摘要信息，包括gc算法 参数说明 Heap Configuration: 堆配置信息 MinHeapFreeRatio 在堆的使用率小于MinHeapFreeRatio(%)的时候进行收缩，当Xmx=Xms的时候此配置无效MaxHeapFreeRatio 在堆使用率大于MaxHeapFreeRatio(%)的时候进行扩展，当Xmx=Xms的时候此配置无效MaxHeapSize 堆的最大空间NewSize 新生代的大小MaxNewSize 最大的新生代的大小OldSize 老年代的大小NewRatio 新生代中Eden和Survivor区的比例SurvivorRatio 新生代中Eden和和Survivor区的比例PermSize 永久代的大小MaxPermSize 久代的最大内存G1HeapRegionSize 使用G1垃圾收集的区间 Heap Usage: 堆的使用信息 New Generation (Eden + 1 Survivor Space): 新生代的大小（Eden区加一个Survivor区的空间信息 capacity 总内存used 已使用内存free 剩余内存13.823827124993642% used 使用内存占比 Eden Space: Eden区的大小 capacityusedfree15.178337946947952% used From Space: 第一个Surivivor区的空间信息 capacityusedfree2.984432830624237% used To Space: 第二个Survivor区的空间信息 capacityusedfree0.0% used concurrent mark-sweep generation: CMS垃圾收集占用的空间信息 capacityusedfree75.36470666527748% used Perm Generation: 永久代的空间信息 capacityusedfree47.5915253162384% used 其他功能参考链接]]></content>
-      <categories>
-        <category>微服务问题定位</category>
-      </categories>
-      <tags>
-        <tag>微服务</tag>
-        <tag>jvm</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[微服务问题定位——jstack]]></title>
-    <url>%2F2018%2F01%2F29%2F%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94jstack%2F</url>
-    <content type="text"><![CDATA[jstack功能查看运用程序jvm的堆栈情况，可以找出线程的运行情况，从而排查一些隐患或者服务卡顿的问题 具体说明jstack用于打印出给定的java进程id或者core file或者远程调试服务的java堆栈信息，如果是在64位机器上，需要指定选项-J-d64如果java程序崩溃会生成core文件，jstack工具可以用来获得core文件的java stack和native stack的信息，从而可以轻松知道java程序是如何崩溃和在程序何处发生问题。 option参数-F 当jstack -l pid 没有响应的时候强制打印栈信息-l 长队列，打印关于锁的附加信息-m 打印java和native c/c++框架的所有栈信息 命令格式jstack [option] pidjstack [option] executable corejstack [option] [server-id@]remote-hostname-or-IP 命令格式说明executable core 产生core dump的java可执行文件remote-hostname-or-IP 远程debug服务的主机名或ipserver-id 唯一id,假如一台主机上多个远程debug服务 使用实例一般需要与top命令联用，使用top命令找出异常的进程(一般是cpu使用异常的进程)通过top -Hp pid来定位该进程下各线程的cpu使用情况再通过jstack pid命令打印该线程对应的堆栈情况 扩展 在top命令中，已经获取到了占用cpu资源较高的线程pid，将该pid转成16进制的值(在线转换)，在thread dump中每个线程都有一个nid，找到对应的nid即可 什么是java core和heap dump文件，参考]]></content>
-      <categories>
-        <category>微服务问题定位</category>
-      </categories>
-      <tags>
-        <tag>微服务</tag>
-        <tag>jvm</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[gitbook目录折叠]]></title>
-    <url>%2F2018%2F01%2F28%2Fgitbook%E7%9B%AE%E5%BD%95%E6%8A%98%E5%8F%A0%2F</url>
-    <content type="text"><![CDATA[gitbook目录折叠背景在编写gitbook的时候发现目录的数量比较庞大的时候显得杂乱无章因为章节比较多的时候全展开，很难有目的地寻找所以笔者去寻求了解决之道，用来折叠目录，笔者在网上找到了一个插件可以解决这个问题 插件插件网站上面还有其他gitbook使用的插件 使用参考个性化配置gitbook，同理你可以在里面添加需要使用的插件，如图book.json在根目录下，即与SUMMARY.md同级$ cd到gitbook目录$ npm install gitbook-plugin-toggle-chapters重新build serve即可]]></content>
-      <categories>
-        <category>gitbook</category>
-      </categories>
-      <tags>
-        <tag>gitbook</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[如何在本地搭建gitbook]]></title>
-    <url>%2F2018%2F01%2F28%2F%E5%A6%82%E4%BD%95%E5%9C%A8%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BAgitbook%2F</url>
-    <content type="text"><![CDATA[本地搭建gitbook介绍gitbook更加适用于书写使用手册，不太适合书写一些博客和总结，所以笔者最近在做一些迁移的工作，将之前gitbook上的内容迁移到当前的博客上但是gitbook对于我们的工作还是有适用的地方的 先决条件安装nodejs是先决条件，因为我们需要npm去下载gitbook在mac电脑上，有brew工具的可以直接下载:$brew search nodejs 搜索包仓库中是否有nodejs$brew install nodejs 有就可以直接下载你也可以选择去官网上下载最新的nodejs压缩包，解压配置环境变量后即可使用 搭建这里默认大家的电脑上已经安装好了nodejs按照步骤执行以下命令:$npm install gitbook-cli -g 下载gitbook客户端包$gitbook –version 查看gitbook的版本，测试是否可以使用命令$cd /users/Desktop 切换到一个目录，这里笔者切换到了桌面$mkdir gitbook 创建gitbook目录，这个目录就是用来初始化的其实上面的两步读者可以手动完成$gitbook init 初始化gitbook$gitbook build 构建，一般有内容更新时要构建$gitbook serve 开启服务，默认在4000端口监听http://localhost:4000 开启你的访问之路吧！ 问题笔者之前在windows上搭建过，出现了一些问题，build的时候总是报错在github官方issues中，官方表示这个是已知的gitbook的bug，高版本的gitbook会出现这个bug如果你遇到相同的问题，请参考:解决方法解决方法是点赞和喝彩最多的]]></content>
-      <categories>
-        <category>gitbook</category>
-      </categories>
-      <tags>
-        <tag>gitbook</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[微服务问题定位——du]]></title>
-    <url>%2F2018%2F01%2F28%2F%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94du%2F</url>
-    <content type="text"><![CDATA[du功能du命令也是查看使用空间的，但是与df命令不同的是 du命令是对文件和目录磁盘使用的空间的查看 option参数-a或-all 显示目录中个别文件的大小-b或-bytes 显示目录或文件大小时，以byte为单位-c或–total 除了显示个别目录或文件的大小外，同时也显示所有目录或文件的总和-k或–kilobytes 以KB(1024bytes)为单位输出-m或–megabytes 以MB为单位输出-s或–summarize 仅显示总计，只列出最后加总的值-h或–human-readable 以K，M，G为单位，提高信息的可读性-x或–one-file-xystem 以一开始处理时的文件系统为准，若遇上其它不同的文件系统目录则略过-L&lt;符号链接&gt;或–dereference&lt;符号链接&gt; 显示选项中所指定符号链接的源文件大小-S或–separate-dirs 显示个别目录的大小时，并不含其子目录的大小-X&lt;文件&gt;或–exclude-from=&lt;文件&gt; 在&lt;文件&gt;指定目录或文件–exclude=&lt;目录或文件&gt; 略过指定的目录或文件-D或–dereference-args 显示指定符号链接的源文件大小-H或–si 与-h参数相同，但是K，M，G是以1000为换算单位-l或–count-links 重复计算硬件链接的文件 实例$du 显示当前目录下面子目录的目录大小和总和$du dir/filename 显示指定目录或者文件$du #1 #2 同时显示多个，空格隔开]]></content>
-      <categories>
-        <category>微服务问题定位</category>
-      </categories>
-      <tags>
-        <tag>linux命令</tag>
-        <tag>微服务</tag>
-        <tag>磁盘</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[微服务问题定位——df]]></title>
-    <url>%2F2018%2F01%2F28%2F%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94df%2F</url>
-    <content type="text"><![CDATA[df功能用来检查服务器文件系统的磁盘空间占用情况，可以获取硬盘被占了多少空间，目前还剩下多少空间等信息 option参数-a 全部文件系统列表-h 方便查阅方式显示-H 等-h，但是计数方式变更，1k=1000-i 显示node信息-k 区块为1024字节-l 只显示本地文件系统-m 区块为1048576字节–no-sync 忽略sync命令-P 输出格式为POSIX–sync 在取得磁盘信息前先执行sync命令-T 文件系统类型 选择参数–block-size=&lt;区块大小&gt; 指定区块的大小-t &lt;文件系统类型&gt; 只显示选定文件系统的磁盘信息-x &lt;文件系统类型&gt; 不显示选定文件系统的磁盘信息 使用实例第一列 显示各文件系统第二列 显示文件系统的块数 这里以512B为一块第三列 显示已经使用的磁盘第四列 显示可用的磁盘其他这边需要说明：已使用的+可使用的 != 总块数，因为缺省的每个分区都预留了少量空间供管理员使用，所以即使普通用户的空间已满，管理员依然可以登录系统解决相关问题]]></content>
-      <categories>
-        <category>微服务问题定位</category>
-      </categories>
-      <tags>
-        <tag>linux命令</tag>
-        <tag>微服务</tag>
-        <tag>磁盘</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[微服务问题定位——ifstat]]></title>
-    <url>%2F2018%2F01%2F28%2F%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94ifstat%2F</url>
-    <content type="text"><![CDATA[ifstat功能监控系统的流量问题 安装ifstat不是系统自带的命令，所以需要进行安装，笔者这里只介绍mac上如何安装$brew install ifstat当然这边brew要自行安装 参数-l 监测环路网络接口(lo)，缺省情况下不会显示，所谓的环路网络可认为是localhost(127.0.0.1)参考-a 监测系统所有的网络，比加上-l参数还多一个plip0的接口信息(所谓的并口)-z 隐藏流量是无的接口，排查问题时排除无用端口-i 指定要监测的接口,后面跟网络接口名-s 等于加-d snmp:[comm@][#]host[/nn]] 参数，通过SNMP查询一个远程主机-t 在每一行的开头加一个时间 戳,，告诉我们具体的时间-T 报告所有监测接口的全部带宽，和-i联用来指定端口-S 在同一行更新流量状态，不喜欢屏幕滚动的可以使用其他命令 扩展如何只查看网卡的流量情况，ifstat足矣详细的流量情况需使用iftop命令，系统依旧不会自带需要下载，mac下载方式与ifstat一致可以查看恶意请求流量的ip地址，并进行相关防护措施实例参考]]></content>
-      <categories>
-        <category>微服务问题定位</category>
-      </categories>
-      <tags>
-        <tag>linux命令</tag>
-        <tag>微服务</tag>
-        <tag>网络</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[微服务问题定位——free]]></title>
-    <url>%2F2018%2F01%2F28%2F%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94free%2F</url>
-    <content type="text"><![CDATA[free功能 显示系统使用和空闲的内存情况，包括物理内存和交互区内存(swap)和内核缓冲区内存 option参数 -b 以Byte为单位显示内存使用情况 -k 以KB为单位显示内存使用情况 -m 以MB为单位显示内存使用情况 -g 以GB为单位显示内存使用情况 -o 不显示缓冲区调节列 -s&lt;间隔秒数&gt; 持续观察内存使用状况 -t 显示内存总和列 -V 显示版本信息 样例 这边关注第二行的swap的used指标，如果使用的值较大，则表示系统的内存处于不够使用的情况 为何swap used是一个指标 swap又称为交换分区，当系统的内存小于额定值的时候，内核(OS)会将系统的一部分物理内存释放出来用于当前线程的使用，一般是很久没有操作过的程序会被释放，释放的物理内存被放入到交换区，然后等当前线程执行完毕，内存富余时重新放入物理内存]]></content>
-      <categories>
-        <category>微服务问题定位</category>
-      </categories>
-      <tags>
-        <tag>linux命令</tag>
-        <tag>微服务</tag>
-        <tag>内存相关</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[微服务问题定位——strace]]></title>
-    <url>%2F2018%2F01%2F28%2F%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94strace%2F</url>
-    <content type="text"><![CDATA[strace以下说明都是基于docker系统机器实验 功能 系统调用和信号传递的跟踪 option参数 -c 统计每一系统调用的所执行的时间,次数和出错的次数等 -d 输出strace关于标准错误的调试信息 -f 跟踪由fork调用所产生的子进程 -tt 在输出中的每一行前加上时间信息,微秒级， 时间格式：17:22:58.345879 -p pid 跟踪指定的进程pid 以上命令一般都是与-p联用 strace的命令使用比较复杂，不做详细说明 在此贴出网上的一些参考链接 strace实例 strace实例2 样例贴图 从缺]]></content>
-      <categories>
-        <category>微服务问题定位</category>
-      </categories>
-      <tags>
-        <tag>linux命令</tag>
-        <tag>微服务</tag>
-        <tag>进程,线程</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[微服务问题定位——top]]></title>
-    <url>%2F2018%2F01%2F26%2F%E5%BE%AE%E6%9C%8D%E5%8A%A1%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94top%2F</url>
-    <content type="text"><![CDATA[功能显示当前系统正在执行的进程的相关信息，包括进程ID、 内存占用率 、CPU占用率等 option 使用参数-b 进入批处理模式 相当于不停地执行top命令显示信息-c 显示完整的command 位于信息的最后一列-i &lt;时间&gt; 设置间隔时间 -u &lt;用户名&gt; 显示指定用户的信息 -p &lt;进程号&gt; 显示指定进程的信息 -n &lt;次数&gt; 循环显示的次数 … 例图 说明 *第一行: 13:40:29 — 当前系统时间10 day,2:32 — 机器从开机到目前为止运行的时长20 users — 登陆的用户有20个load average — 分别对应1mins,5mins,15mins的负载情况(根据一定的算法得到的值，load average／cpu数量&gt;=5说明系统超负荷) *第二行 Tasks total — 当前系统进程269个running — 正在运行的1个sleeping — 睡眠的268个stopped — 停止的0个zombie — 僵尸进程0个 *第三行 0.1%us — 用户空间占用CPU的百分比。0.0% sy — 内核空间占用CPU的百分比。0.0% ni — 改变过优先级的进程占用CPU的百分比99.9% id — 空闲CPU百分比0.0% wa — IO等待占用CPU的百分比0.0% hi — 硬中断（Hardware IRQ）占用CPU的百分比0.0% si — 软中断（Software Interrupts）占用CPU的百分比 *第四行 Mem total — 物理内存总量 8GBfree — 空闲的内存 used — 正在使用的内存buff/cache — 缓存的内存(used表示现在系统内核控制的内存数，free表示还未进入内核控制的内存数，used还包括了停止使用但可能被重用的内存，所以used使用完的内存不会返还给free，所以free的内存数一定越来越少) *第五行 Swap total — 交换区总量used — 使用的交换区总量free — 空闲交换区总量cached — 缓冲的交换区总量(swap used经常变化的话说明内存已经不够使用了)参考链接(系统可使用的内存近似为第四行的free+buff/cache+第五行的cache) *进程状态监控各项指标 PID — 进程idUSER — 进程所有者PR — 进程优先级NI — nice值。负值表示高优先级，正值表示低优先级VIRT — 进程使用的虚拟内存总量，单位kb。VIRT=SWAP+RESRES — 进程使用的、未被换出的物理内存大小，单位kb。RES=CODE+DATASHR — 共享内存大小，单位kbS — 进程状态。D=不可中断的睡眠状态 R=运行 S=睡眠 T=跟踪/停止 Z=僵尸进程%CPU — 上次更新到现在的CPU时间占用百分比%MEM — 进程使用的物理内存百分比TIME+ — 进程使用的CPU时间总计，单位1/100秒COMMAND — 进程名称（命令名/命令行） top交互执行top命令之后即进入top信心展示界面，可以使用命令行进行交互 top界面 按1显示多核cpu的使用情况 top界面默认按cpu的使用降序排序 使用shift+&gt;和shift+&lt;来改变排序的指标 top界面 按x高亮排序的指标 top其他使用技巧 h 显示帮助画面，给出一些简短的命令总结说明 k 终止一个进程 i 忽略闲置和僵死进程。这是一个开关式命令 q 退出程序 r 重新安排一个进程的优先级别 S 切换到累计模式 s 改变两次刷新之间的延迟时间（单位为s），如果有小数，就换算成m s。输入0值则系统将不断刷新，默认值是5 s f或者F 从当前显示中添加或者删除项目 o或者O 改变显示项目的顺序 l 切换显示平均负载和启动时间信息 m 切换显示内存信息 t 切换显示进程和CPU状态信息 c 切换显示命令名称和完整命令行 M 根据驻留内存大小进行排序 P 根据CPU使用百分比大小进行排序 T 根据时间/累计时间进行排序 W 将当前设置写入~/.toprc文件中]]></content>
-      <categories>
-        <category>微服务问题定位</category>
-      </categories>
-      <tags>
-        <tag>linux命令</tag>
-        <tag>微服务</tag>
-        <tag>进程,线程</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[Hello World]]></title>
-    <url>%2F2018%2F01%2F24%2Fhello-world%2F</url>
-    <content type="text"><![CDATA[Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick StartCreate a new post1$ hexo new "My New Post" More info: Writing Run server1$ hexo server More info: Server Generate static files1$ hexo generate More info: Generating Deploy to remote sites1$ hexo deploy More info: Deployment]]></content>
-      <categories>
-        <category>迎新</category>
-      </categories>
-      <tags>
-        <tag>welcome</tag>
-        <tag>hello</tag>
-      </tags>
-  </entry>
+<search> 
+  
+    
+    <entry>
+      <title><![CDATA[linux命令——sed]]></title>
+      <url>/2018/01/31/linux%E5%91%BD%E4%BB%A4%E2%80%94%E2%80%94sed/</url>
+      <content type="html"><![CDATA[<h2 id="sed"><a href="#sed" class="headerlink" title="sed"></a>sed</h2><h3 id="系统"><a href="#系统" class="headerlink" title="系统"></a>系统</h3><p>mac系统用的是原生的bsd系列，而一般的linux系统用的是gnu系统，所以两者在某些命令是有区别的，sed命令位列其中</p>
+<h3 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h3><p>mac上sed的添加和插入文本比较奇葩，需要如此:<br><br>$sed “$line a\ (在\后要加一个空格，然后另起一行，再写需要添加的那一行新的)<br><br>>$value（需要添加新一行的内容）<br><br>>“ $filename(文件名)<br><br>同上，sed i的使用方式亦然</p>
+<h3 id="gnu-sed"><a href="#gnu-sed" class="headerlink" title="gnu-sed"></a>gnu-sed</h3><p>如果无法适应原生bsd系列，可以下载gnu-sed，这个时候brew神器又用到了，直接下载然后配置环境变量即可:<br><br>$brew install gnu-sed<br><br>之后的叙述都是基于gnu-sed说明</p>
+<h3 id="option参数"><a href="#option参数" class="headerlink" title="option参数"></a>option参数</h3><p>-n ：使用安静(silent)模式，在一般 sed 的用法中，所有来自 STDIN 的数据一般都会被列出到终端上，但如果加上 -n 参数后，则只有经过sed 特殊处理的那一行(或者动作)才会被列出来<br><br>-e ：直接在命令列模式上进行 sed 的动作编辑<br><br>-f ：直接将 sed 的动作写在一个文件内， -f filename 则可以运行 filename 内的 sed 动作<br><br>-r ：sed 的动作支持的是延伸型正规表示法的语法。(默认是基础正规表示法语法)<br><br>-i ：直接修改读取的文件内容，而不是输出到终端</p>
+<h3 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h3><p>a ：新增， a 的后面可以接字串，而这些字串会在新的一行出现(目前的下一行)<br><br>c ：取代， c 的后面可以接字串，这些字串可以取代 n1,n2 之间的行<br><br>d ：删除，因为是删除啊，所以 d 后面通常不接任何咚咚<br><br>i ：插入， i 的后面可以接字串，而这些字串会在新的一行出现(目前的上一行)<br><br>p ：列印，亦即将某个选择的数据印出。通常 p 会与参数 sed -n 一起运行<br><br>s ：取代，可以直接进行取代的工作哩！通常这个 s 的动作可以搭配正规表示法</p>
+<h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><p>$sed ‘2a 字符串’ filename —— 第二行下一行添加字符串<br><br>$sed ‘2i 字符串’ filename —— 第二行上一行添加字符串<br><br>以上的命令只能作用在缓存的文件中，其实真实的文件内容并没有被改变<br><br>$sed ‘2a 字符串’ -i  filename —— 这样可以直接修改文件了<br><br>$sed ‘1,2d’ -i filename —— 删除文件1-2行的内容<br><br>sed与nl联合使用可以进行关键字查找:<br><br>$nl filename | sed -n ‘/关键字/p’<br><br>sed支持正则表达的搜索和替换:<br><br>$sed ‘s/正则表达式 or 普通字符串/新字符串/g’ -i filename<br><br>[其他用法:]<a href="https://www.cnblogs.com/ggjucheng/archive/2013/01/13/2856901.html" target="_blank" rel="noopener">https://www.cnblogs.com/ggjucheng/archive/2013/01/13/2856901.html</a></p>
+]]></content>
+      
+        <categories>
+            
+            <category> linux命令 </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> linux命令 </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[linux常用命令——补充]]></title>
+      <url>/2018/01/31/linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E2%80%94%E2%80%94%E8%A1%A5%E5%85%85/</url>
+      <content type="html"><![CDATA[<h1 id="常用命令-补充"><a href="#常用命令-补充" class="headerlink" title="常用命令(补充)"></a>常用命令(补充)</h1><h2 id="grep"><a href="#grep" class="headerlink" title="grep"></a>grep</h2><h3 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h3><p>grep [-acinv][–color=auto] ‘查找字符串’ filename</p>
+<h3 id="option参数"><a href="#option参数" class="headerlink" title="option参数"></a>option参数</h3><p>-c 统计查找字符在文件中出现的次数<b><br>-i 忽略大小写<b><br>-v 反向查找，即显示不在查找内的行，但是根据记录日志的习惯，很少会使用<b><br>–color=auto 对查找的字符进行颜色显示</b></b></b></p>
+<h3 id="联合使用"><a href="#联合使用" class="headerlink" title="联合使用"></a>联合使用</h3><p>ls -l |grep -i filename 列出指定文件/文件夹的属性<br>ps -ef|grep tomcat/java 列出指定的进程信息</p>
+<h2 id="find"><a href="#find" class="headerlink" title="find"></a>find</h2><h3 id="用法-1"><a href="#用法-1" class="headerlink" title="用法"></a>用法</h3><p>find [PATH] [option] [action]</p>
+<h3 id="option参数-1"><a href="#option参数-1" class="headerlink" title="option参数"></a>option参数</h3><p>-mtime n 其中n为数字，表示n天以前，查找n天之前修改过的文件<br>-user name 查找指定所有者的文件<br>-size [+-size] 查重比size大/小的文件</p>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p>$find . -mtime 0 来查找当天修改过的文件，一般可以筛选当天有记录的日志</p>
+<h2 id="tar"><a href="#tar" class="headerlink" title="tar"></a>tar</h2><h3 id="option参数-2"><a href="#option参数-2" class="headerlink" title="option参数"></a>option参数</h3><p>-c ：新建打包文件<br><br>-t ：查看打包文件的内容含有哪些文件名<br><br>-x ：解打包或解压缩的功能，可以搭配-C（大写）指定解压的目录，注意-c,-t,-x不能同时出现在同一条命令中<br><br>-j ：通过bzip2的支持进行压缩/解压缩<br><br>-z ：通过gzip的支持进行压缩/解压缩<br><br>-v ：在压缩/解压缩过程中，将正在处理的文件名显示出来<br><br>-f filename ：filename为要处理的文件<br><br>-C dir ：指定压缩/解压缩的目录dir</p>
+<h3 id="使用实例"><a href="#使用实例" class="headerlink" title="使用实例"></a>使用实例</h3><p>$tar -tzvf xxx.zip 查看指定压缩文件里面的文件内容<br><br>$tar -zxvf xxx.zip 解压缩指定文件<br><br>$tar -cvf  xxx.tar  dir 压缩指定文件夹<br><br>$tar -czvf xxx.tar.gz dir 以gzip的格式进行压缩<br><br>如何使用解压缩命令的option操作，最终还是要看压缩文件的格式的，如-z一般用来支持.gz结尾的压缩包</p>
+<h2 id="kill"><a href="#kill" class="headerlink" title="kill"></a>kill</h2><h3 id="用法-2"><a href="#用法-2" class="headerlink" title="用法"></a>用法</h3><p>kill [选项] [参数]</p>
+<h3 id="option参数-3"><a href="#option参数-3" class="headerlink" title="option参数"></a>option参数</h3><p>-a：当处理当前进程时，不限制命令名和进程号的对应关系<br><br>-l &lt;信息编号&gt;：若不加&lt;信息编号&gt;选项，则-l参数会列出全部的信息名称<br> -p：指定kill 命令只打印相关进程的进程号，而不发送任何信号<br><br>-s &lt;信息名称或编号&gt;：指定要送出的信息<br><br>-u：指定用户</p>
+<h3 id="常用的信号编号"><a href="#常用的信号编号" class="headerlink" title="常用的信号编号"></a>常用的信号编号</h3><p>HUP 1 终端断线 <br><br>INT 2 中断（同 Ctrl + C） <br><br>QUIT 3 退出（同 Ctrl + \）  <br><br>TERM 15 终止  <br><br>KILL 9 强制终止  <br><br>CONT 18 继续（与STOP相反， fg/bg命令） <br><br>STOP 19 暂停（同 Ctrl + Z）<br><br><strong>在mac中18是STOP，19是CONT</strong></p>
+]]></content>
+      
+        <categories>
+            
+            <category> linux命令 </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> linux命令 </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[linux命令文件上传与下载]]></title>
+      <url>/2018/01/31/linux%E5%91%BD%E4%BB%A4%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E4%B8%8E%E4%B8%8B%E8%BD%BD/</url>
+      <content type="html"><![CDATA[<h1 id="文件上传下载"><a href="#文件上传下载" class="headerlink" title="文件上传下载"></a>文件上传下载</h1><h2 id="搭建实践环境"><a href="#搭建实践环境" class="headerlink" title="搭建实践环境"></a>搭建实践环境</h2><p>这边使用笔者自己的电脑和windows电脑进行实践。</p>
+<h3 id="利用ssh打通windows和mac"><a href="#利用ssh打通windows和mac" class="headerlink" title="利用ssh打通windows和mac"></a>利用ssh打通windows和mac</h3><p>打开mac的系统偏好设置中的共享，一般情况下没有界面展示的，需要使用搜索查找共享，<br><img src="https://raw.githubusercontent.com/yunchangwang/blogs/master/ssh/ssh.png" alt="如图"></p>
+<p>然后勾选远程登陆，选择全部用户可访问<br><img src="https://raw.githubusercontent.com/yunchangwang/blogs/master/ssh/ssh2.png" alt="如图"></p>
+<p>在windows上使用ssh连接mac，填写相应的用户名和密码即可<br><img src="https://raw.githubusercontent.com/yunchangwang/blogs/master/ssh/ssh3.png" alt="如图"></p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>要支持sz，rz两个命令，系统需要安装lrzsz，一般的linux系统是自带的，这里使用mac进行实验，需要安装。<a href="http://xfhnever.com/2015/09/04/mac-rzsz/" target="_blank" rel="noopener">参考</a></p>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>sz filename，即从系统上下载文件到本地，filename是系统中你选择下载的文件<br><br>rz -b，将本地的文件以二进制的传递方式上传到系统服务器，一般推荐使用二进制传输方式<br><br><a href="http://blog.csdn.net/k346k346/article/details/71515740" target="_blank" rel="noopener">其他参考</a></p>
+]]></content>
+      
+        <categories>
+            
+            <category> linux命令 </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> linux命令 </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[hexo防止敏感数据部署]]></title>
+      <url>/2018/01/30/hexo%E9%98%B2%E6%AD%A2%E6%95%8F%E6%84%9F%E6%95%B0%E6%8D%AE%E9%83%A8%E7%BD%B2/</url>
+      <content type="html"><![CDATA[<h2 id="hexo防止敏感数据部署"><a href="#hexo防止敏感数据部署" class="headerlink" title="hexo防止敏感数据部署"></a>hexo防止敏感数据部署</h2><h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>熟悉hexo的读者都知道，hexo的部署一般执行如下:<br>$hexo clean<br><br>$hexo g<br><br>$hexo d<br><br>如果不按照顺序执行这三步，读者会发现即使增添了page，部署时git也不会显示增添文件的记录，github上也没有提交的代码记录<br><br>其实这涉及到hexo的部署原理，hexo clean 会清除之前构建的代码，具体就是public文件夹；hexo g 会重新生成，这样读者添加的page也就构建在其中，此时新的public文件夹会生成；hexo d 就是将hexo g 改变的文件提交到github上<br><br>所以不执行clean和generate是不会真正意义上修改remote上的代码</p>
+<h3 id="敏感数据"><a href="#敏感数据" class="headerlink" title="敏感数据"></a>敏感数据</h3><p>敏感数据这里指的就是涉及公司业务的文章，因为hexo d 会将文章直接部署到github上，这样就全部公开化了<br><br>这边最好是本地可以访问，github无法访问你的敏感数据，这篇文章的目的就在此<br></p>
+<h3 id="利用-gitignore"><a href="#利用-gitignore" class="headerlink" title="利用.gitignore"></a>利用.gitignore</h3><p>熟悉git的读者，应该都知道可以使用.gitignore文件忽略一些提交<br><br>网上有些说修改.npmignore文件配置(<strong>hexo的根目录下</strong>)可以起到效果，经过测试发现没有起到作用，所以转而到git寻求解决方案<br><br>一般执行如下(当前目录为hexo根目录):<br><br>$cd .deploy_git    <strong>git push的代码都在此文件夹下</strong><br><br>$vim .gitignore<br><br>增加如下配置:<br><br>page name/     <strong>page的名称，hexo n page创建命令中你定义的文章名，如:linux命令性能监控及优化/</strong><br><br>.gitignore     <strong>自己本身</strong><br><br>但是笔者发现代码虽然没有提交到github上，但是hexo博客上有这个新建的标题，点击访问也是github默认的404页面(<strong>因为hexo g过程中一定会将文章标题写入hexo中，.gitignore只能做到忽略提交</strong>)<br></p>
+<h3 id="自定义404"><a href="#自定义404" class="headerlink" title="自定义404"></a>自定义404</h3><p>上面的问题引入了这个小结，github默认的404页面会让读者误以为是网站的问题，其实是不想公开化，所以你可以自定义404页面<br><br>具体的步骤如下(<strong>hexo的根目录下</strong>):<br><br>$hexo n page 404  <strong>source目录下生成404目录</strong><br><br>index.md中增加配置:<br><br>    layout: false       //是否使用布局文件<br>    comments: false     //是否有评论<br>    permalink: /404     //设置链接<br>然后按照hexo部署步骤上传到github上，然后再访问敏感文章链接会跳转到自定义的404页面<br><br>其实根本问题是github上没有代码，但是hexo在generate时将目录还是写入了导致，但是笔者找不到解决忽略写入的方法</p>
+]]></content>
+      
+        <categories>
+            
+            <category> hexo部署 </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> hexo </tag>
+            
+            <tag> git </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[linux命令性能监控及优化]]></title>
+      <url>/2018/01/30/linux%E5%91%BD%E4%BB%A4%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7%E5%8F%8A%E4%BC%98%E5%8C%96/</url>
+      <content type="html"><![CDATA[<h1 id="性能监控和优化"><a href="#性能监控和优化" class="headerlink" title="性能监控和优化"></a>性能监控和优化</h1><h2 id="top"><a href="#top" class="headerlink" title="top"></a>top</h2><p><a href="https://yunchangwang.github.io/2018/01/26/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94top/" target="_blank" rel="noopener">top</a></p>
+<h2 id="free"><a href="#free" class="headerlink" title="free"></a>free</h2><p><a href="https://yunchangwang.github.io/2018/01/28/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94free/" target="_blank" rel="noopener">free</a></p>
+<h2 id="vmstat"><a href="#vmstat" class="headerlink" title="vmstat"></a>vmstat</h2><p>用来统计虚拟内存的使用情况，这边涉及到linux物理内存和虚拟内存的<a href="http://www.cnblogs.com/peida/archive/2012/12/25/2833108.html" target="_blank" rel="noopener">知识点</a>，其实之前我们也提到过，虚拟内存即交换区</p>
+<h3 id="option参数"><a href="#option参数" class="headerlink" title="option参数"></a>option参数</h3><p>-a：显示活跃和非活跃内存<br><br>-f：显示从系统启动至今的fork数量<br><br>-m：显示slabinfo<br><br>-n：只在开始时显示一次各字段名称<br><br>-s：显示内存相关统计信息及多种系统活动数量<br><br>delay：刷新时间间隔。如果不指定，只显示一条结果<br><br>count：刷新次数。如果不指定刷新次数，但指定了刷新时间间隔，这时刷新次数为无穷<br><br>-d：显示磁盘相关统计信息<br><br>-p：显示指定磁盘分区统计信息<br><br>-S：使用指定单位显示。参数有 k 、K 、m 、M ，分别代表1000、1024、1000000、1048576字节（byte）默认单位为K（1024 bytes）<br><br>-V：显示vmstat版本信息</p>
+<h3 id="使用实例"><a href="#使用实例" class="headerlink" title="使用实例"></a>使用实例</h3><p>$vmstat 5 6   在docker上进行试验，在6秒内采集5次数据<br><img src="https://raw.githubusercontent.com/yunchangwang/blogs/master/vmstat/vmstat.png" alt="例图"></p>
+<h3 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h3><p>Procs（进程）：<br><br>r: 运行队列中进程数量<br><br>b: 等待IO的进程数量<br><br>Memory（内存）：<br><br>swpd: 使用虚拟内存大小<br><br>free: 可用内存大小<br><br>buff: 用作缓冲的内存大小<br><br>cache: 用作缓存的内存大小<br><br>Swap：<br><br>si: 每秒从交换区写到内存的大小<br><br>so: 每秒写入交换区的内存大小<br><br>IO：（现在的Linux版本块的大小为1024bytes）<br><br>bi: 每秒读取的块数<br><br>bo: 每秒写入的块数<br><br>系统：<br><br>in: 每秒中断数，包括时钟中断<br><br>cs: 每秒上下文切换数<br><br>CPU（以百分比表示）：<br><br>us: 用户进程执行时间(user time)<br><br>sy: 系统进程执行时间(system time)<br><br>id: 空闲时间(包括IO等待时间),中央处理器的空闲时间  以百分比表示<br><br>wa: 等待IO时间</p>
+<h3 id="需要关注的指标"><a href="#需要关注的指标" class="headerlink" title="需要关注的指标"></a>需要关注的指标</h3><p>如果 r经常大于 4 ，且id经常少于40，表示cpu的负荷很重<br><br>如果bi，bo 长期不等于0，表示内存不足<br><br>如果disk 经常不等于0， 且在 b中的队列 大于3， 表示 io性能不好<br></p>
+]]></content>
+      
+        <categories>
+            
+            <category> linux命令 </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> linux命令 </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[linux常用命令]]></title>
+      <url>/2018/01/30/linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</url>
+      <content type="html"><![CDATA[<h1 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h1><h2 id="pwd"><a href="#pwd" class="headerlink" title="pwd"></a>pwd</h2><p>没什么可说的，当前不知道处于那个目录下时，<a href="http://www.cnblogs.com/peida/archive/2012/10/24/2737730.html" target="_blank" rel="noopener">pwd</a>即可</p>
+<h2 id="mv"><a href="#mv" class="headerlink" title="mv"></a>mv</h2><p><a href="http://www.cnblogs.com/peida/archive/2012/10/27/2743022.html" target="_blank" rel="noopener">mv</a>命令是将一个文件移动到指定的目录，但是在linux可以用来重命名文件</p>
+<h2 id="more"><a href="#more" class="headerlink" title="more"></a>more</h2><p><a href="http://www.cnblogs.com/peida/archive/2012/11/02/2750588.html" target="_blank" rel="noopener">more</a>是具有翻页功能的<a href="http://www.cnblogs.com/peida/archive/2012/10/30/2746968.html" target="_blank" rel="noopener">cat</a>命令</p>
+<h2 id="less"><a href="#less" class="headerlink" title="less"></a>less</h2><p><a href="http://www.cnblogs.com/peida/archive/2012/11/05/2754477.html" target="_blank" rel="noopener">less</a>是一个可以前后分页浏览文件的命令，相比more更加具有弹性</p>
+<h2 id="which"><a href="#which" class="headerlink" title="which"></a>which</h2><p><a href="http://www.cnblogs.com/peida/archive/2012/11/09/2761928.html" target="_blank" rel="noopener">which</a>用于查找命令包所在的路径，没有配置在环境变量中的命令是搜索不到的，因为which只会搜索path下的命令，echo $PATH可以查看</p>
+<h2 id="ls"><a href="#ls" class="headerlink" title="ls"></a>ls</h2><p>ls命令还是很常用的，不做过多描述<br><br>ls g* 模糊列出文件列表，即将g开头的文件列出</p>
+<h2 id="unzip和gzip"><a href="#unzip和gzip" class="headerlink" title="unzip和gzip"></a>unzip和gzip</h2><p>unzip主要用于解压.zip压缩文件 unzip xxx.zip<br><br>gzip file1 file2 … 文件打包压缩为.gz的形式<br><br>对于文件夹的打包或者其他的压缩格式请使用tar命令</p>
+<h2 id="whatis和man"><a href="#whatis和man" class="headerlink" title="whatis和man"></a>whatis和man</h2><p>$whatis command 用于显示命令使用的描述<br><br>$man command 以使用手册的形式显示</p>
+]]></content>
+      
+        <categories>
+            
+            <category> linux命令 </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> linux命令 </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[微服务问题定位——jmap]]></title>
+      <url>/2018/01/29/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94jmap/</url>
+      <content type="html"><![CDATA[<h2 id="jmap"><a href="#jmap" class="headerlink" title="jmap"></a>jmap</h2><h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><ul>
+<li>内存溢出，线上程序运行时内存越来越大，用jmap dump出堆内存的信息，然后进行相关分析</li>
+<li>内存的真实使用大于预期，这是因为设计不合理导致冗余的对象存在内存中，用jmap来查看内存中的对象，分析是否有存在的必要</li>
+<li>jvm优化，利用jmap来查看整个堆的使用情况，根据老年代和新生代的使用比例来划分jvm的各个区域</li>
+</ul>
+<h3 id="使用实例"><a href="#使用实例" class="headerlink" title="使用实例"></a>使用实例</h3><p>在使用jmap连接进程时，启动的jvm版本和jdk版本要一一对应，毕竟jmap是jdk下的命令包<br><br>$ps -ef | grep java 查找系统的java进程<br><br>$jmap -heap pid 打印指定进程堆的摘要信息，包括gc算法<br><br><img src="https://raw.githubusercontent.com/yunchangwang/blogs/master/jmap/jmap.jpg" alt="例图"><br></p>
+<h4 id="参数说明"><a href="#参数说明" class="headerlink" title="参数说明"></a>参数说明</h4><ul>
+<li>Heap Configuration:  <strong>堆配置信息</strong><blockquote>
+<p>MinHeapFreeRatio   <strong>在堆的使用率小于MinHeapFreeRatio(%)的时候进行收缩，当Xmx=Xms的时候此配置无效</strong><br>MaxHeapFreeRatio  <strong>在堆使用率大于MaxHeapFreeRatio(%)的时候进行扩展，当Xmx=Xms的时候此配置无效</strong><br>MaxHeapSize   <strong>堆的最大空间</strong><br>NewSize  <strong>新生代的大小</strong><br>MaxNewSize   <strong>最大的新生代的大小</strong><br>OldSize   <strong>老年代的大小</strong><br>NewRatio   <strong>新生代中Eden和Survivor区的比例</strong><br>SurvivorRatio   <strong>新生代中Eden和和Survivor区的比例</strong><br>PermSize   <strong>永久代的大小</strong><br>MaxPermSize     <strong>久代的最大内存</strong><br>G1HeapRegionSize    <strong>使用G1垃圾收集的区间</strong></p>
+</blockquote>
+</li>
+<li>Heap Usage:   <strong>堆的使用信息</strong></li>
+<li>New Generation (Eden + 1 Survivor Space):   <strong>新生代的大小（Eden区加一个Survivor区的空间信息</strong><blockquote>
+<blockquote>
+<p>capacity  <strong>总内存</strong><br>used  <strong>已使用内存</strong><br>free   <strong>剩余内存</strong><br>13.823827124993642% used     <strong>使用内存占比</strong></p>
+</blockquote>
+</blockquote>
+</li>
+<li>Eden Space:   <strong>Eden区的大小</strong><blockquote>
+<blockquote>
+<p>capacity<br>used<br>free<br>15.178337946947952% used</p>
+</blockquote>
+</blockquote>
+</li>
+<li>From Space:   <strong>第一个Surivivor区的空间信息</strong><blockquote>
+<blockquote>
+<p>capacity<br>used<br>free<br>2.984432830624237% used</p>
+</blockquote>
+</blockquote>
+</li>
+<li>To Space:   <strong>第二个Survivor区的空间信息</strong><blockquote>
+<blockquote>
+<p>capacity<br>used<br>free<br>0.0% used</p>
+</blockquote>
+</blockquote>
+</li>
+<li>concurrent mark-sweep generation:   <strong>CMS垃圾收集占用的空间信息</strong><blockquote>
+<blockquote>
+<p>capacity<br>used<br>free<br>75.36470666527748% used</p>
+</blockquote>
+</blockquote>
+</li>
+<li>Perm Generation:   <strong>永久代的空间信息</strong><blockquote>
+<blockquote>
+<p>capacity<br>used<br>free<br>47.5915253162384% used</p>
+</blockquote>
+</blockquote>
+</li>
+</ul>
+<h4 id="其他功能"><a href="#其他功能" class="headerlink" title="其他功能"></a>其他功能</h4><p><a href="http://guochenglai.com/2016/07/15/java-command3-jmap/" target="_blank" rel="noopener">参考链接</a></p>
+]]></content>
+      
+        <categories>
+            
+            <category> 微服务问题定位 </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> 微服务 </tag>
+            
+            <tag> jvm </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[微服务问题定位——jstack]]></title>
+      <url>/2018/01/29/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94jstack/</url>
+      <content type="html"><![CDATA[<h2 id="jstack"><a href="#jstack" class="headerlink" title="jstack"></a>jstack</h2><h3 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h3><p>查看运用程序jvm的堆栈情况，可以找出线程的运行情况，从而排查一些隐患或者服务卡顿的问题</p>
+<h3 id="具体说明"><a href="#具体说明" class="headerlink" title="具体说明"></a>具体说明</h3><p>jstack用于打印出给定的java进程id或者core file或者远程调试服务的java堆栈信息，如果是在64位机器上，需要指定选项-J-d64<br><br>如果java程序崩溃会生成core文件，jstack工具可以用来获得core文件的java stack和native stack的信息，从而可以轻松知道java程序是如何崩溃和在程序何处发生问题。</p>
+<h3 id="option参数"><a href="#option参数" class="headerlink" title="option参数"></a>option参数</h3><p>-F 当jstack -l pid 没有响应的时候强制打印栈信息<br><br>-l 长队列，打印关于锁的附加信息<br><br>-m 打印java和native c/c++框架的所有栈信息<br></p>
+<h3 id="命令格式"><a href="#命令格式" class="headerlink" title="命令格式"></a>命令格式</h3><p>jstack [option] pid<br><br>jstack [option] executable core<br><br>jstack [option] [server-id@]remote-hostname-or-IP</p>
+<h3 id="命令格式说明"><a href="#命令格式说明" class="headerlink" title="命令格式说明"></a>命令格式说明</h3><p>executable core 产生core dump的java可执行文件<br><br>remote-hostname-or-IP 远程debug服务的主机名或ip<br><br>server-id 唯一id,假如一台主机上多个远程debug服务</p>
+<h3 id="使用实例"><a href="#使用实例" class="headerlink" title="使用实例"></a>使用实例</h3><p>一般需要与<a href="https://yunchangwang.github.io/2018/01/26/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94top/#more" target="_blank" rel="noopener">top</a>命令联用，使用top命令找出异常的进程(<strong>一般是cpu使用异常的进程</strong>)<br><br>通过top -Hp pid来定位该进程下各线程的cpu使用情况<br><br>再通过jstack pid命令打印该线程对应的堆栈情况</p>
+<h3 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h3><ul>
+<li>在top命令中，已经获取到了占用cpu资源较高的线程pid，将该pid转成16进制的值(<strong><a href="https://tool.lu/hexconvert/" target="_blank" rel="noopener">在线转换</a></strong>)，在thread dump中每个线程都有一个nid，找到对应的nid即可<br></li>
+<li>什么是java core和heap dump文件，<a href="http://www.cnblogs.com/jingmoxukong/p/5509196.html" target="_blank" rel="noopener">参考</a></li>
+</ul>
+]]></content>
+      
+        <categories>
+            
+            <category> 微服务问题定位 </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> 微服务 </tag>
+            
+            <tag> jvm </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[gitbook目录折叠]]></title>
+      <url>/2018/01/28/gitbook%E7%9B%AE%E5%BD%95%E6%8A%98%E5%8F%A0/</url>
+      <content type="html"><![CDATA[<h2 id="gitbook目录折叠"><a href="#gitbook目录折叠" class="headerlink" title="gitbook目录折叠"></a>gitbook目录折叠</h2><h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>在编写gitbook的时候发现目录的数量比较庞大的时候显得杂乱无章<br><br>因为章节比较多的时候全展开，很难有目的地寻找<br><br>所以笔者去寻求了解决之道，用来折叠目录，笔者在网上找到了一个插件可以解决这个问题</p>
+<h3 id="插件"><a href="#插件" class="headerlink" title="插件"></a>插件</h3><p><a href="http://www.chengweiyang.cn/gitbook/plugins/functional/toggle-chapters.html" target="_blank" rel="noopener">插件网站</a><br><br>上面还有其他gitbook使用的插件<br></p>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p><a href="http://www.chengweiyang.cn/gitbook/customize/book.json.html" target="_blank" rel="noopener">参考</a><br><br>个性化配置gitbook，同理你可以在里面添加需要使用的插件，如图<br><br><img src="https://raw.githubusercontent.com/yunchangwang/blogs/master/gitbook/plugin.jpg" alt="样图"><br><br>book.json在根目录下，即与SUMMARY.md同级<br><br>$ cd到gitbook目录<br><br>$ npm install gitbook-plugin-toggle-chapters<br><br>重新build  serve即可</p>
+]]></content>
+      
+        <categories>
+            
+            <category> gitbook </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> gitbook </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[如何在本地搭建gitbook]]></title>
+      <url>/2018/01/28/%E5%A6%82%E4%BD%95%E5%9C%A8%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BAgitbook/</url>
+      <content type="html"><![CDATA[<h2 id="本地搭建gitbook"><a href="#本地搭建gitbook" class="headerlink" title="本地搭建gitbook"></a>本地搭建gitbook</h2><h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>gitbook更加适用于书写使用手册，不太适合书写一些博客和总结，所以笔者最近在做一些迁移的工作，将之前gitbook上的内容迁移到当前的博客上<br><br>但是gitbook对于我们的工作还是有适用的地方的</p>
+<h3 id="先决条件"><a href="#先决条件" class="headerlink" title="先决条件"></a>先决条件</h3><p>安装nodejs是先决条件，因为我们需要npm去下载gitbook<br><br>在mac电脑上，有brew工具的可以直接下载:<br><br>$brew search nodejs 搜索包仓库中是否有nodejs<br><br>$brew install nodejs 有就可以直接下载<br><br>你也可以选择去官网上下载最新的nodejs压缩包，解压配置环境变量后即可使用<br></p>
+<h3 id="搭建"><a href="#搭建" class="headerlink" title="搭建"></a>搭建</h3><p>这里默认大家的电脑上已经安装好了nodejs<br><br>按照步骤执行以下命令:<br><br>$npm install gitbook-cli -g  下载gitbook客户端包<br><br>$gitbook –version  查看gitbook的版本，测试是否可以使用命令<br><br>$cd /users/Desktop 切换到一个目录，这里笔者切换到了桌面<br><br>$mkdir gitbook  创建gitbook目录，这个目录就是用来初始化的<br><br>其实上面的两步读者可以手动完成<br><br>$gitbook init  初始化gitbook<br><br>$gitbook build  构建，一般有内容更新时要构建<br><br>$gitbook serve  开启服务，默认在4000端口监听<br><br><a href="http://localhost:4000" target="_blank" rel="noopener">http://localhost:4000</a>  开启你的访问之路吧！</p>
+<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>笔者之前在windows上搭建过，出现了一些问题，build的时候总是报错<br><br>在github官方issues中，官方表示这个是已知的gitbook的bug，高版本的gitbook会出现这个bug<br><br>如果你遇到相同的问题，请参考:<br><a href="https://github.com/GitbookIO/gitbook/issues/1309" target="_blank" rel="noopener">解决方法</a><br><br>解决方法是点赞和喝彩最多的</p>
+]]></content>
+      
+        <categories>
+            
+            <category> gitbook </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> gitbook </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[微服务问题定位——du]]></title>
+      <url>/2018/01/28/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94du/</url>
+      <content type="html"><![CDATA[<h2 id="du"><a href="#du" class="headerlink" title="du"></a>du</h2><h3 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h3><p>du命令也是查看使用空间的，但是与df命令不同的是 du命令是对文件和目录磁盘使用的空间的查看</p>
+<h3 id="option参数"><a href="#option参数" class="headerlink" title="option参数"></a>option参数</h3><p>-a或-all  显示目录中个别文件的大小<br><br>-b或-bytes  显示目录或文件大小时，以byte为单位<br><br>-c或–total  除了显示个别目录或文件的大小外，同时也显示所有目录或文件的总和<br><br>-k或–kilobytes  以KB(1024bytes)为单位输出<br><br>-m或–megabytes  以MB为单位输出<br><br>-s或–summarize  仅显示总计，只列出最后加总的值<br><br>-h或–human-readable  以K，M，G为单位，提高信息的可读性<br><br>-x或–one-file-xystem  以一开始处理时的文件系统为准，若遇上其它不同的文件系统目录则略过<br><br>-L&lt;符号链接&gt;或–dereference&lt;符号链接&gt; 显示选项中所指定符号链接的源文件大小<br><br>-S或–separate-dirs   显示个别目录的大小时，并不含其子目录的大小<br><br>-X&lt;文件&gt;或–exclude-from=&lt;文件&gt;  在&lt;文件&gt;指定目录或文件<br><br>–exclude=&lt;目录或文件&gt;         略过指定的目录或文件<br><br>-D或–dereference-args   显示指定符号链接的源文件大小<br><br>-H或–si  与-h参数相同，但是K，M，G是以1000为换算单位<br><br>-l或–count-links   重复计算硬件链接的文件<br></p>
+<h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><p>$du 显示当前目录下面子目录的目录大小和总和<br><br>$du dir/filename 显示指定目录或者文件<br><br>$du #1 #2 同时显示多个，空格隔开<br></p>
+]]></content>
+      
+        <categories>
+            
+            <category> 微服务问题定位 </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> linux命令 </tag>
+            
+            <tag> 微服务 </tag>
+            
+            <tag> 磁盘 </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[微服务问题定位——df]]></title>
+      <url>/2018/01/28/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94df/</url>
+      <content type="html"><![CDATA[<h2 id="df"><a href="#df" class="headerlink" title="df"></a>df</h2><h3 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h3><p>用来检查服务器文件系统的磁盘空间占用情况，可以获取硬盘被占了多少空间，目前还剩下多少空间等信息</p>
+<h3 id="option参数"><a href="#option参数" class="headerlink" title="option参数"></a>option参数</h3><p>-a 全部文件系统列表<br><br>-h 方便查阅方式显示<br><br>-H 等-h，但是计数方式变更，1k=1000<br><br>-i 显示node信息<br><br>-k 区块为1024字节<br><br>-l 只显示本地文件系统<br><br>-m 区块为1048576字节<br><br>–no-sync 忽略sync命令<br><br>-P 输出格式为POSIX<br><br>–sync 在取得磁盘信息前先执行sync命令<br><br>-T 文件系统类型<br></p>
+<h4 id="选择参数"><a href="#选择参数" class="headerlink" title="选择参数"></a>选择参数</h4><p>–block-size=&lt;区块大小&gt; 指定区块的大小<br><br>-t &lt;文件系统类型&gt; 只显示选定文件系统的磁盘信息<br><br>-x &lt;文件系统类型&gt; 不显示选定文件系统的磁盘信息<br></p>
+<h3 id="使用实例"><a href="#使用实例" class="headerlink" title="使用实例"></a>使用实例</h3><p><img src="https://raw.githubusercontent.com/yunchangwang/blogs/master/df/df.jpg" alt="例图"><br>第一列 显示各文件系统<br><br>第二列 显示文件系统的块数 这里以512B为一块<br><br>第三列 显示已经使用的磁盘<br><br>第四列 显示可用的磁盘<br><br><a href="http://www.cnblogs.com/peida/archive/2012/12/07/2806483.html" target="_blank" rel="noopener">其他</a><br><br>这边需要说明：已使用的+可使用的 != 总块数，因为缺省的每个分区都预留了少量空间供管理员使用，所以即使普通用户的空间已满，管理员依然可以登录系统解决相关问题</p>
+]]></content>
+      
+        <categories>
+            
+            <category> 微服务问题定位 </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> linux命令 </tag>
+            
+            <tag> 微服务 </tag>
+            
+            <tag> 磁盘 </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[微服务问题定位——ifstat]]></title>
+      <url>/2018/01/28/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94ifstat/</url>
+      <content type="html"><![CDATA[<h2 id="ifstat"><a href="#ifstat" class="headerlink" title="ifstat"></a>ifstat</h2><h3 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h3><p>监控系统的流量问题</p>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>ifstat不是系统自带的命令，所以需要进行安装，笔者这里只介绍mac上如何安装<br><br>$brew install ifstat<br><br>当然这边brew要自行安装</p>
+<h3 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h3><p>-l 监测环路网络接口(lo)，缺省情况下不会显示，所谓的环路网络可认为是localhost(127.0.0.1)<a href="https://www.zhihu.com/question/23940717" target="_blank" rel="noopener">参考</a><br><br>-a 监测系统所有的网络，比加上-l参数还多一个plip0的接口信息(所谓的并口)<br><br>-z 隐藏流量是无的接口，排查问题时排除无用端口<br><br>-i 指定要监测的接口,后面跟网络接口名<br><br>-s 等于加-d snmp:[comm@][#]host[/nn]] 参数，通过SNMP查询一个远程主机<br><br>-t 在每一行的开头加一个时间 戳,，告诉我们具体的时间<br><br>-T 报告所有监测接口的全部带宽，和-i联用来指定端口<br><br>-S 在同一行更新流量状态，不喜欢屏幕滚动的可以使用<br><br><a href="http://man.linuxde.net/ifstat" target="_blank" rel="noopener">其他命令</a></p>
+<h3 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h3><p>如何只查看网卡的流量情况，ifstat足矣<br><br>详细的流量情况需使用iftop命令，系统依旧不会自带需要下载，mac下载方式与ifstat一致<br><br>可以查看恶意请求流量的ip地址，并进行相关防护措施<br><br><a href="http://www.3mu.me/linux%E6%B5%81%E9%87%8F%E7%9B%91%E6%8E%A7%E5%B7%A5%E5%85%B7iftop%E6%9F%A5%E7%9C%8B%E5%B8%A6%E5%AE%BD%E6%B5%81%E9%87%8F%E5%8F%8A%E4%BD%BF%E7%94%A8%E8%AF%A6%E8%A7%A3/" target="_blank" rel="noopener">实例参考</a></p>
+]]></content>
+      
+        <categories>
+            
+            <category> 微服务问题定位 </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> linux命令 </tag>
+            
+            <tag> 微服务 </tag>
+            
+            <tag> 网络 </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[微服务问题定位——free]]></title>
+      <url>/2018/01/28/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94free/</url>
+      <content type="html"><![CDATA[<h2 id="free"><a href="#free" class="headerlink" title="free"></a>free</h2><h3 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h3><p>   显示系统使用和空闲的内存情况，包括物理内存和交互区内存(swap)和内核缓冲区内存</p>
+<h3 id="option参数"><a href="#option参数" class="headerlink" title="option参数"></a>option参数</h3><p>   -b  以Byte为单位显示内存使用情况<br><br>   -k  以KB为单位显示内存使用情况<br><br>   -m  以MB为单位显示内存使用情况<br><br>   -g  以GB为单位显示内存使用情况<br><br>   -o 不显示缓冲区调节列<br><br>   -s&lt;间隔秒数&gt; 持续观察内存使用状况<br><br>   -t 显示内存总和列<br><br>   -V 显示版本信息</p>
+<h3 id="样例"><a href="#样例" class="headerlink" title="样例"></a>样例</h3><p>   <img src="https://raw.githubusercontent.com/yunchangwang/blogs/master/free/swap.png" alt="图片"><br><br>   这边关注第二行的<strong>swap的used指标</strong>，如果使用的值较大，则表示系统的内存处于不够使用的情况</p>
+<h3 id="为何swap-used是一个指标"><a href="#为何swap-used是一个指标" class="headerlink" title="为何swap used是一个指标"></a>为何swap used是一个指标</h3><p>   <strong>swap</strong>又称为交换分区，当系统的内存小于<strong>额定值</strong>的时候，内核(OS)会将系统的一部分物理内存释放出来用于当前线程的使用，一般是很久没有操作过的程序会被释放，<strong>释放的物理内存被放入到交换区</strong>，然后等当前线程执行完毕，内存富余时重新放入物理内存</p>
+]]></content>
+      
+        <categories>
+            
+            <category> 微服务问题定位 </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> linux命令 </tag>
+            
+            <tag> 微服务 </tag>
+            
+            <tag> 内存相关 </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[微服务问题定位——strace]]></title>
+      <url>/2018/01/28/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94strace/</url>
+      <content type="html"><![CDATA[<h2 id="strace"><a href="#strace" class="headerlink" title="strace"></a>strace</h2><p><strong>以下说明都是基于docker系统机器实验</strong></p>
+<h3 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h3><p>   系统调用和信号传递的跟踪</p>
+<h3 id="option参数"><a href="#option参数" class="headerlink" title="option参数"></a>option参数</h3><p>   -c  统计每一系统调用的所执行的时间,次数和出错的次数等<br><br>   -d  输出strace关于标准错误的调试信息<br><br>   -f  跟踪由fork调用所产生的子进程<br><br>   -tt  在输出中的每一行前加上时间信息,微秒级， 时间格式：17:22:58.345879<br><br>   -p pid 跟踪指定的进程pid<br><br>   <strong><em>以上命令一般都是与-p联用</em></strong></p>
+<h3 id="strace的命令使用比较复杂，不做详细说明"><a href="#strace的命令使用比较复杂，不做详细说明" class="headerlink" title="strace的命令使用比较复杂，不做详细说明"></a>strace的命令使用比较复杂，不做详细说明</h3><p>   在此贴出网上的一些参考链接<br><br>   <a href="https://leokongwq.github.io/2016/10/15/strace-learn.html" target="_blank" rel="noopener">strace实例</a><br><br>   <a href="http://www.cnblogs.com/kongzhongqijing/articles/4913192.html" target="_blank" rel="noopener">strace实例2</a><br></p>
+<h3 id="样例贴图"><a href="#样例贴图" class="headerlink" title="样例贴图"></a>样例贴图</h3><p>   <strong>从缺</strong></p>
+]]></content>
+      
+        <categories>
+            
+            <category> 微服务问题定位 </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> linux命令 </tag>
+            
+            <tag> 微服务 </tag>
+            
+            <tag> 进程,线程 </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[微服务问题定位——top]]></title>
+      <url>/2018/01/26/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94top/</url>
+      <content type="html"><![CDATA[<h3 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h3><p>显示当前系统正在执行的进程的相关信息，包括进程ID、 内存占用率 、CPU占用率等</p>
+<h3 id="option-使用参数"><a href="#option-使用参数" class="headerlink" title="option 使用参数"></a>option 使用参数</h3><p>-b 进入批处理模式  <strong>相当于不停地执行top命令显示信息</strong><br><br>-c 显示完整的command <strong>位于信息的最后一列</strong><br><br>-i &lt;时间&gt; 设置间隔时间 <br><br>-u &lt;用户名&gt; 显示指定用户的信息 <br><br>-p &lt;进程号&gt; 显示指定进程的信息 <br><br>-n &lt;次数&gt; 循环显示的次数 <br><br>…</p>
+<h3 id="例图"><a href="#例图" class="headerlink" title="例图"></a>例图</h3><p><img src="https://raw.githubusercontent.com/yunchangwang/blogs/master/top/top.jpg" alt="top信息截图"></p>
+<h3 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h3><p>  *第一行:</p>
+<blockquote>
+<p>13:40:29 — 当前系统时间<br><br>10 day,2:32 — 机器从开机到目前为止运行的时长<br><br>20 users — 登陆的用户有20个<br><br>load average — 分别对应1mins,5mins,15mins的负载情况(<strong>根据一定的算法得到的值，load average／cpu数量&gt;=5说明系统超负荷</strong>)</p>
+</blockquote>
+<p>  *第二行</p>
+<blockquote>
+<p>Tasks total — 当前系统进程269个<br><br>running — 正在运行的1个<br><br>sleeping — 睡眠的268个<br><br>stopped — 停止的0个<br><br>zombie — 僵尸进程0个<br></p>
+</blockquote>
+<p>  *第三行</p>
+<blockquote>
+<p>0.1%us — 用户空间占用CPU的百分比。<br><br>0.0% sy — 内核空间占用CPU的百分比。<br><br>0.0% ni — 改变过优先级的进程占用CPU的百分比<br><br>99.9% id — 空闲CPU百分比<br><br>0.0% wa — IO等待占用CPU的百分比<br><br>0.0% hi — 硬中断（Hardware IRQ）占用CPU的百分比<br><br>0.0% si — 软中断（Software Interrupts）占用CPU的百分比<br></p>
+</blockquote>
+<p>  *第四行</p>
+<blockquote>
+<p>Mem total — 物理内存总量 8GB<br><br>free — 空闲的内存 <br><br>used — 正在使用的内存<br><br>buff/cache — 缓存的内存<br><br>(<strong>used表示现在系统内核控制的内存数，free表示还未进入内核控制的内存数，used还包括了停止使用但可能被重用的内存，所以used使用完的内存不会返还给free，所以free的内存数一定越来越少</strong>)</p>
+</blockquote>
+<p>  *第五行</p>
+<blockquote>
+<p>Swap total — 交换区总量<br><br>used — 使用的交换区总量<br><br>free — 空闲交换区总量<br><br>cached — 缓冲的交换区总量<br><br>(<strong>swap used经常变化的话说明内存已经不够使用了</strong>)<br><a href="http://www.cnblogs.com/kerrycode/p/5246383.html" target="_blank" rel="noopener">参考链接</a><br>(<strong>系统可使用的内存近似为第四行的free+buff/cache+第五行的cache</strong>)</p>
+</blockquote>
+<p>  *进程状态监控各项指标</p>
+<blockquote>
+<p>PID — 进程id<br><br>USER — 进程所有者<br><br>PR — 进程优先级<br><br>NI — nice值。负值表示高优先级，正值表示低优先级<br><br>VIRT — 进程使用的虚拟内存总量，单位kb。VIRT=SWAP+RES<br><br>RES — 进程使用的、未被换出的物理内存大小，单位kb。RES=CODE+DATA<br><br>SHR — 共享内存大小，单位kb<br><br>S — 进程状态。D=不可中断的睡眠状态 R=运行 S=睡眠 T=跟踪/停止 Z=僵尸进程<br><br>%CPU — 上次更新到现在的CPU时间占用百分比<br><br>%MEM — 进程使用的物理内存百分比<br><br>TIME+ — 进程使用的CPU时间总计，单位1/100秒<br><br>COMMAND — 进程名称（命令名/命令行）<br></p>
+</blockquote>
+<h3 id="top交互"><a href="#top交互" class="headerlink" title="top交互"></a>top交互</h3><p>执行top命令之后即进入top信心展示界面，可以使用命令行进行交互<br></p>
+<ul>
+<li>top界面 按1显示多核cpu的使用情况</li>
+<li>top界面默认按cpu的使用降序排序<br>  使用shift+&gt;和shift+&lt;来改变排序的指标</li>
+<li>top界面 按x高亮排序的指标</li>
+<li>top其他使用技巧<br> h 显示帮助画面，给出一些简短的命令总结说明<br><br>  k 终止一个进程 <br><br>  i 忽略闲置和僵死进程。这是一个开关式命令 <br><br>  q 退出程序 <br><br>  r 重新安排一个进程的优先级别 <br><br>  S 切换到累计模式 <br><br>  s 改变两次刷新之间的延迟时间（单位为s），如果有小数，就换算成m      s。输入0值则系统将不断刷新，默认值是5 s <br><br>  f或者F 从当前显示中添加或者删除项目 <br><br>  o或者O 改变显示项目的顺序 <br><br>  l 切换显示平均负载和启动时间信息 <br><br>  m 切换显示内存信息 <br><br>  t 切换显示进程和CPU状态信息 <br><br>  c 切换显示命令名称和完整命令行 <br><br>  M 根据驻留内存大小进行排序 <br><br>  P 根据CPU使用百分比大小进行排序 <br><br>  T 根据时间/累计时间进行排序 <br><br>  W 将当前设置写入~/.toprc文件中 <br></li>
+</ul>
+]]></content>
+      
+        <categories>
+            
+            <category> 微服务问题定位 </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> linux命令 </tag>
+            
+            <tag> 微服务 </tag>
+            
+            <tag> 进程,线程 </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Hello World]]></title>
+      <url>/2018/01/24/hello-world/</url>
+      <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+]]></content>
+      
+        <categories>
+            
+            <category> 迎新 </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> welcome </tag>
+            
+            <tag> hello </tag>
+            
+        </tags>
+        
+    </entry>
+    
+  
+  
 </search>
