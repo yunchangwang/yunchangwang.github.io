@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[linux常用命令——补充]]></title>
+    <url>%2F2018%2F01%2F31%2Flinux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E2%80%94%E2%80%94%E8%A1%A5%E5%85%85%2F</url>
+    <content type="text"><![CDATA[常用命令(补充)grep用法grep [-acinv][–color=auto] ‘查找字符串’ filename option参数-c 统计查找字符在文件中出现的次数-i 忽略大小写-v 反向查找，即显示不在查找内的行，但是根据记录日志的习惯，很少会使用–color=auto 对查找的字符进行颜色显示 联合使用ls -l |grep -i filename 列出指定文件/文件夹的属性ps -ef|grep tomcat/java 列出指定的进程信息 find用法find [PATH] [option] [action] option参数-mtime n 其中n为数字，表示n天以前，查找n天之前修改过的文件-user name 查找指定所有者的文件-size [+-size] 查重比size大/小的文件 使用$find . -mtime 0 来查找当天修改过的文件，一般可以筛选当天有记录的日志 taroption参数-c ：新建打包文件-t ：查看打包文件的内容含有哪些文件名-x ：解打包或解压缩的功能，可以搭配-C（大写）指定解压的目录，注意-c,-t,-x不能同时出现在同一条命令中-j ：通过bzip2的支持进行压缩/解压缩-z ：通过gzip的支持进行压缩/解压缩-v ：在压缩/解压缩过程中，将正在处理的文件名显示出来-f filename ：filename为要处理的文件-C dir ：指定压缩/解压缩的目录dir 使用实例$tar -tzvf xxx.zip 查看指定压缩文件里面的文件内容$tar -zxvf xxx.zip 解压缩指定文件$tar -cvf xxx.tar dir 压缩指定文件夹$tar -czvf xxx.tar.gz dir 以gzip的格式进行压缩如何使用解压缩命令的option操作，最终还是要看压缩文件的格式的，如-z一般用来支持.gz结尾的压缩包 kill用法kill [选项] [参数] option参数-a：当处理当前进程时，不限制命令名和进程号的对应关系-l &lt;信息编号&gt;：若不加&lt;信息编号&gt;选项，则-l参数会列出全部的信息名称 -p：指定kill 命令只打印相关进程的进程号，而不发送任何信号-s &lt;信息名称或编号&gt;：指定要送出的信息-u：指定用户 常用的信号编号HUP 1 终端断线 INT 2 中断（同 Ctrl + C） QUIT 3 退出（同 Ctrl + \） TERM 15 终止 KILL 9 强制终止 CONT 18 继续（与STOP相反， fg/bg命令） STOP 19 暂停（同 Ctrl + Z）在mac中18是STOP，19是CONT]]></content>
+      <categories>
+        <category>linux命令</category>
+      </categories>
+      <tags>
+        <tag>linux命令</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[linux命令文件上传与下载]]></title>
     <url>%2F2018%2F01%2F31%2Flinux%E5%91%BD%E4%BB%A4%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E4%B8%8E%E4%B8%8B%E8%BD%BD%2F</url>
     <content type="text"><![CDATA[文件上传下载搭建实践环境这边使用笔者自己的电脑和windows电脑进行实践。 利用ssh打通windows和mac打开mac的系统偏好设置中的共享，一般情况下没有界面展示的，需要使用搜索查找共享， 然后勾选远程登陆，选择全部用户可访问 在windows上使用ssh连接mac，填写相应的用户名和密码即可 安装要支持sz，rz两个命令，系统需要安装lrzsz，一般的linux系统是自带的，这里使用mac进行实验，需要安装。参考 使用sz filename，即从系统上下载文件到本地，filename是系统中你选择下载的文件rz -b，将本地的文件以二进制的传递方式上传到系统服务器，一般推荐使用二进制传输方式其他参考]]></content>
