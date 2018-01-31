@@ -87,12 +87,12 @@
 <meta property="og:site_name" content="wyc-blog">
 <meta property="og:description" content="crontab作用自定义定时任务笔者一般用这个命令来提醒事项，适用于基本每天执行的事项 option参数-e 编辑cron脚本文件，可以指定编辑器，默认是vi编辑器-l 列出当前用户下的cron任务-u 指定cron在哪个用户下执行，默认是当前用户 使用实例$brontab -e 执行后跳到编辑器你可以在编辑器中书写cron命令，一般的格式是     command content上面格式中的">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://localhost:2000/crontab/crontab.png">
-<meta property="og:updated_time" content="2018-01-31T10:48:14.000Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/yunchangwang/blogs/master/crontab/crontab.png">
+<meta property="og:updated_time" content="2018-01-31T10:58:25.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="linux命令——crontab">
 <meta name="twitter:description" content="crontab作用自定义定时任务笔者一般用这个命令来提醒事项，适用于基本每天执行的事项 option参数-e 编辑cron脚本文件，可以指定编辑器，默认是vi编辑器-l 列出当前用户下的cron任务-u 指定cron在哪个用户下执行，默认是当前用户 使用实例$brontab -e 执行后跳到编辑器你可以在编辑器中书写cron命令，一般的格式是     command content上面格式中的">
-<meta name="twitter:image" content="http://localhost:2000/crontab/crontab.png">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/yunchangwang/blogs/master/crontab/crontab.png">
 
 
 
@@ -392,7 +392,7 @@
 <h4 id="option参数"><a href="#option参数" class="headerlink" title="option参数"></a>option参数</h4><p>-e 编辑cron脚本文件，可以指定编辑器，默认是vi编辑器<br><br>-l 列出当前用户下的cron任务<br><br>-u 指定cron在哪个用户下执行，默认是当前用户<br></p>
 <h4 id="使用实例"><a href="#使用实例" class="headerlink" title="使用实例"></a>使用实例</h4><p>$brontab -e 执行后跳到编辑器<br><br>你可以在编辑器中书写cron命令，一般的格式是<em> </em> <em> </em> <em> command content<br><br>上面格式中的 </em> 从左至右分别表示分，时，日，月份和年份，content就是自定义的命令了<br><br>如果命令较多，你甚至可以写在一个shell脚本中，执行脚本即可<br><br>比如：15 9 <em> </em> * command sh xxx.sh 每天早上9:15执行xxx.sh脚本</p>
 <h4 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h4><p>一般用$cron -e编辑的脚本，笔者也不知道保存到哪里去了，一般笔者都是写完之后直接执行的<br><br>比如：crontab test.cron即可，test.cron即为编写好的脚本，内容形式与上面的一致</p>
-<h4 id="实用价值"><a href="#实用价值" class="headerlink" title="实用价值"></a>实用价值</h4><p>了解敏捷开发的读者应该知道，部门中可能存在一些管理方式，需要每天执行任务，比如早晨的定时晨会，比如记录一天内的工作时间，等等<br><br>读者可以使用outlook来提醒，或者手机的定时闹钟，笔者选择用crontab命令来显示高逼格<br><br><img src="http://localhost:2000/crontab/crontab.png" alt="如图"><br><br>列出了笔者mac中每天执行的任务，将多个cron任务编辑在同一个.cron文件内，执行就能实现多个任务的并存<br><br>发现cron任务content可以直接命令，也可以shell脚本执行</p>
+<h4 id="实用价值"><a href="#实用价值" class="headerlink" title="实用价值"></a>实用价值</h4><p>了解敏捷开发的读者应该知道，部门中可能存在一些管理方式，需要每天执行任务，比如早晨的定时晨会，比如记录一天内的工作时间，等等<br><br>读者可以使用outlook来提醒，或者手机的定时闹钟，笔者选择用crontab命令来显示高逼格<br><br><img src="https://raw.githubusercontent.com/yunchangwang/blogs/master/crontab/crontab.png" alt="如图"><br><br>列出了笔者mac中每天执行的任务，将多个cron任务编辑在同一个.cron文件内，执行就能实现多个任务的并存<br><br>发现cron任务content可以直接命令，也可以shell脚本执行</p>
 
       
     </div>
