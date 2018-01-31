@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[linux命令——crontab]]></title>
+    <url>%2F2018%2F01%2F31%2Flinux%E5%91%BD%E4%BB%A4%E2%80%94%E2%80%94crontab%2F</url>
+    <content type="text"><![CDATA[crontab作用自定义定时任务笔者一般用这个命令来提醒事项，适用于基本每天执行的事项 option参数-e 编辑cron脚本文件，可以指定编辑器，默认是vi编辑器-l 列出当前用户下的cron任务-u 指定cron在哪个用户下执行，默认是当前用户 使用实例$brontab -e 执行后跳到编辑器你可以在编辑器中书写cron命令，一般的格式是 command content上面格式中的 从左至右分别表示分，时，日，月份和年份，content就是自定义的命令了如果命令较多，你甚至可以写在一个shell脚本中，执行脚本即可比如：15 9 * command sh xxx.sh 每天早上9:15执行xxx.sh脚本 扩展一般用$cron -e编辑的脚本，笔者也不知道保存到哪里去了，一般笔者都是写完之后直接执行的比如：crontab test.cron即可，test.cron即为编写好的脚本，内容形式与上面的一致 实用价值了解敏捷开发的读者应该知道，部门中可能存在一些管理方式，需要每天执行任务，比如早晨的定时晨会，比如记录一天内的工作时间，等等读者可以使用outlook来提醒，或者手机的定时闹钟，笔者选择用crontab命令来显示高逼格列出了笔者mac中每天执行的任务，将多个cron任务编辑在同一个.cron文件内，执行就能实现多个任务的并存发现cron任务content可以直接命令，也可以shell脚本执行]]></content>
+      <categories>
+        <category>linux命令</category>
+      </categories>
+      <tags>
+        <tag>linux命令</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[linux命令——awk]]></title>
     <url>%2F2018%2F01%2F31%2Flinux%E5%91%BD%E4%BB%A4%E2%80%94%E2%80%94awk%2F</url>
     <content type="text"><![CDATA[awk用法awk ‘{pattern + action}’ {filenames} 使用方式awk -F 分隔符 ‘{command操作}’awk -f awk-script-file input-file(s)上面的命令比较有意思，awk-script-file是脚本文件，一般比较复杂的awk命令可以写成一个脚本，然后操作到input-file(s)文件上 内置变量ARGC 命令行参数个数ARGV 命令行参数排列ENVIRON 支持队列中系统环境变量的使用FILENAME awk浏览的文件名FNR 浏览文件的记录数FS 设置输入域分隔符，等价于命令行 -F选项NF 浏览记录的域的个数NR 已读的记录数OFS 输出域分隔符ORS 输出记录分隔符RS 控制记录分隔符 使用实例在xqy的日志使用手册中，有统计所有抛出非业务异常的服务的命令，相信很多开发不知道运行的原理，在此我做一下说明：cat common-service-digest.log | grep ‘N,’ | awk -F ( ‘{print $2}’ | awk -F ) ‘{print $1}’ | awk -F , ‘{!a[$1”.”$2”.”$3]++;}END {for (j in a) print j,a[j]}’这个命令比较长，你可以分开进行执行，比如:1.cat common-service-digest.log | grep ‘N,’ 查看调用失败的日志2.awk -F ( ‘{print $2}’ 以 （作为分隔符分割日志行，并打印分隔片区2比如:日志记录:[(tax,ICustomerSettingManageService,getAreaCodeBatch,Y,12ms)] (traceId=84ec429fbff64c5bbc43347c8cc72257)被分隔为:[(tax,ICustomerSettingManageService,getAreaCodeBatch,Y,12ms)](traceId=84ec429fbff64c5bbc43347c8cc72257)最后输出:tax,ICustomerSettingManageService,getAreaCodeBatch,Y,24ms)]3.awk -F ) ‘{print $1}’ 以 ）作为分隔符分割日志行，并打印分隔片区1最后输出:tax,ICustomerSettingManageService,getAreaCodeBatch,Y,12ms4.awk -F , ‘{!a[$1”.”$2”.”$3]++;} 以 ,作为分隔符分割日志行，并以$1”.”$2”.”$3为键统计5.最后end进行循环输出参考 说明当中涉及到xqy的日志业务和图片，所以不部署到github]]></content>

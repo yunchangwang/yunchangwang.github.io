@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="linux命令,微服务,进程,线程," />
+  <meta name="keywords" content="linux命令," />
 
 
 
@@ -79,18 +79,20 @@
 
 
 
-<meta name="description" content="strace以下说明都是基于docker系统机器实验 功能   系统调用和信号传递的跟踪 option参数   -c  统计每一系统调用的所执行的时间,次数和出错的次数等   -d  输出strace关于标准错误的调试信息   -f  跟踪由fork调用所产生的子进程   -tt  在输出中的每一行前加上时间信息,微秒级， 时间格式：17:22:58.345879   -p pid 跟踪指定的进程">
-<meta name="keywords" content="linux命令,微服务,进程,线程">
+<meta name="description" content="crontab作用自定义定时任务笔者一般用这个命令来提醒事项，适用于基本每天执行的事项 option参数-e 编辑cron脚本文件，可以指定编辑器，默认是vi编辑器-l 列出当前用户下的cron任务-u 指定cron在哪个用户下执行，默认是当前用户 使用实例$brontab -e 执行后跳到编辑器你可以在编辑器中书写cron命令，一般的格式是     command content上面格式中的">
+<meta name="keywords" content="linux命令">
 <meta property="og:type" content="article">
-<meta property="og:title" content="微服务问题定位——strace">
-<meta property="og:url" content="http://yoursite.com/2018/01/28/微服务问题定位——strace/index.html">
+<meta property="og:title" content="linux命令——crontab">
+<meta property="og:url" content="http://yoursite.com/2018/01/31/linux命令——crontab/index.html">
 <meta property="og:site_name" content="wyc-blog">
-<meta property="og:description" content="strace以下说明都是基于docker系统机器实验 功能   系统调用和信号传递的跟踪 option参数   -c  统计每一系统调用的所执行的时间,次数和出错的次数等   -d  输出strace关于标准错误的调试信息   -f  跟踪由fork调用所产生的子进程   -tt  在输出中的每一行前加上时间信息,微秒级， 时间格式：17:22:58.345879   -p pid 跟踪指定的进程">
+<meta property="og:description" content="crontab作用自定义定时任务笔者一般用这个命令来提醒事项，适用于基本每天执行的事项 option参数-e 编辑cron脚本文件，可以指定编辑器，默认是vi编辑器-l 列出当前用户下的cron任务-u 指定cron在哪个用户下执行，默认是当前用户 使用实例$brontab -e 执行后跳到编辑器你可以在编辑器中书写cron命令，一般的格式是     command content上面格式中的">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-01-28T08:13:59.000Z">
+<meta property="og:image" content="http://localhost:2000/crontab/crontab.png">
+<meta property="og:updated_time" content="2018-01-31T10:48:14.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="微服务问题定位——strace">
-<meta name="twitter:description" content="strace以下说明都是基于docker系统机器实验 功能   系统调用和信号传递的跟踪 option参数   -c  统计每一系统调用的所执行的时间,次数和出错的次数等   -d  输出strace关于标准错误的调试信息   -f  跟踪由fork调用所产生的子进程   -tt  在输出中的每一行前加上时间信息,微秒级， 时间格式：17:22:58.345879   -p pid 跟踪指定的进程">
+<meta name="twitter:title" content="linux命令——crontab">
+<meta name="twitter:description" content="crontab作用自定义定时任务笔者一般用这个命令来提醒事项，适用于基本每天执行的事项 option参数-e 编辑cron脚本文件，可以指定编辑器，默认是vi编辑器-l 列出当前用户下的cron任务-u 指定cron在哪个用户下执行，默认是当前用户 使用实例$brontab -e 执行后跳到编辑器你可以在编辑器中书写cron命令，一般的格式是     command content上面格式中的">
+<meta name="twitter:image" content="http://localhost:2000/crontab/crontab.png">
 
 
 
@@ -120,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/01/28/微服务问题定位——strace/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/01/31/linux命令——crontab/"/>
 
 
 
 
 
-  <title>微服务问题定位——strace | wyc-blog</title>
+  <title>linux命令——crontab | wyc-blog</title>
   
 
 
@@ -297,7 +299,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/28/微服务问题定位——strace/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/31/linux命令——crontab/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="wyc">
@@ -314,7 +316,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">微服务问题定位——strace</h1>
+          <h1 class="post-title" itemprop="name headline">linux命令——crontab</h1>
         
 
         <div class="post-meta">
@@ -326,8 +328,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-28T15:24:47+08:00">
-                2018-01-28
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-31T18:29:49+08:00">
+                2018-01-31
               </time>
             
 
@@ -349,8 +351,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/微服务问题定位/" itemprop="url" rel="index">
-                    <span itemprop="name">微服务问题定位</span>
+                  <a href="/categories/linux命令/" itemprop="url" rel="index">
+                    <span itemprop="name">linux命令</span>
                   </a>
                 </span>
 
@@ -386,11 +388,11 @@
       
 
       
-        <h2 id="strace"><a href="#strace" class="headerlink" title="strace"></a>strace</h2><p><strong>以下说明都是基于docker系统机器实验</strong></p>
-<h3 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h3><p>   系统调用和信号传递的跟踪</p>
-<h3 id="option参数"><a href="#option参数" class="headerlink" title="option参数"></a>option参数</h3><p>   -c  统计每一系统调用的所执行的时间,次数和出错的次数等<br><br>   -d  输出strace关于标准错误的调试信息<br><br>   -f  跟踪由fork调用所产生的子进程<br><br>   -tt  在输出中的每一行前加上时间信息,微秒级， 时间格式：17:22:58.345879<br><br>   -p pid 跟踪指定的进程pid<br><br>   <strong><em>以上命令一般都是与-p联用</em></strong></p>
-<h3 id="strace的命令使用比较复杂，不做详细说明"><a href="#strace的命令使用比较复杂，不做详细说明" class="headerlink" title="strace的命令使用比较复杂，不做详细说明"></a>strace的命令使用比较复杂，不做详细说明</h3><p>   在此贴出网上的一些参考链接<br><br>   <a href="https://leokongwq.github.io/2016/10/15/strace-learn.html" target="_blank" rel="noopener">strace实例</a><br><br>   <a href="http://www.cnblogs.com/kongzhongqijing/articles/4913192.html" target="_blank" rel="noopener">strace实例2</a><br></p>
-<h3 id="样例贴图"><a href="#样例贴图" class="headerlink" title="样例贴图"></a>样例贴图</h3><p>   <strong>从缺</strong></p>
+        <h2 id="crontab"><a href="#crontab" class="headerlink" title="crontab"></a>crontab</h2><h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4><p>自定义定时任务<br><br>笔者一般用这个命令来提醒事项，适用于基本每天执行的事项<br></p>
+<h4 id="option参数"><a href="#option参数" class="headerlink" title="option参数"></a>option参数</h4><p>-e 编辑cron脚本文件，可以指定编辑器，默认是vi编辑器<br><br>-l 列出当前用户下的cron任务<br><br>-u 指定cron在哪个用户下执行，默认是当前用户<br></p>
+<h4 id="使用实例"><a href="#使用实例" class="headerlink" title="使用实例"></a>使用实例</h4><p>$brontab -e 执行后跳到编辑器<br><br>你可以在编辑器中书写cron命令，一般的格式是<em> </em> <em> </em> <em> command content<br><br>上面格式中的 </em> 从左至右分别表示分，时，日，月份和年份，content就是自定义的命令了<br><br>如果命令较多，你甚至可以写在一个shell脚本中，执行脚本即可<br><br>比如：15 9 <em> </em> * command sh xxx.sh 每天早上9:15执行xxx.sh脚本</p>
+<h4 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h4><p>一般用$cron -e编辑的脚本，笔者也不知道保存到哪里去了，一般笔者都是写完之后直接执行的<br><br>比如：crontab test.cron即可，test.cron即为编写好的脚本，内容形式与上面的一致</p>
+<h4 id="实用价值"><a href="#实用价值" class="headerlink" title="实用价值"></a>实用价值</h4><p>了解敏捷开发的读者应该知道，部门中可能存在一些管理方式，需要每天执行任务，比如早晨的定时晨会，比如记录一天内的工作时间，等等<br><br>读者可以使用outlook来提醒，或者手机的定时闹钟，笔者选择用crontab命令来显示高逼格<br><br><img src="http://localhost:2000/crontab/crontab.png" alt="如图"><br><br>列出了笔者mac中每天执行的任务，将多个cron任务编辑在同一个.cron文件内，执行就能实现多个任务的并存<br><br>发现cron任务content可以直接命令，也可以shell脚本执行</p>
 
       
     </div>
@@ -410,10 +412,6 @@
           
             <a href="/tags/linux命令/" rel="tag"># linux命令</a>
           
-            <a href="/tags/微服务/" rel="tag"># 微服务</a>
-          
-            <a href="/tags/进程-线程/" rel="tag"># 进程,线程</a>
-          
         </div>
       
 
@@ -425,8 +423,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/01/26/微服务定位——top/" rel="next" title="微服务问题定位——top">
-                <i class="fa fa-chevron-left"></i> 微服务问题定位——top
+              <a href="/2018/01/31/linux命令——awk/" rel="next" title="linux命令——awk">
+                <i class="fa fa-chevron-left"></i> linux命令——awk
               </a>
             
           </div>
@@ -434,10 +432,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/01/28/微服务问题定位——free/" rel="prev" title="微服务问题定位——free">
-                微服务问题定位——free <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -590,7 +584,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#strace"><span class="nav-number">1.</span> <span class="nav-text">strace</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#功能"><span class="nav-number">1.1.</span> <span class="nav-text">功能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#option参数"><span class="nav-number">1.2.</span> <span class="nav-text">option参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#strace的命令使用比较复杂，不做详细说明"><span class="nav-number">1.3.</span> <span class="nav-text">strace的命令使用比较复杂，不做详细说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#样例贴图"><span class="nav-number">1.4.</span> <span class="nav-text">样例贴图</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#crontab"><span class="nav-number">1.</span> <span class="nav-text">crontab</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#作用"><span class="nav-number">1.0.1.</span> <span class="nav-text">作用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#option参数"><span class="nav-number">1.0.2.</span> <span class="nav-text">option参数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用实例"><span class="nav-number">1.0.3.</span> <span class="nav-text">使用实例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#扩展"><span class="nav-number">1.0.4.</span> <span class="nav-text">扩展</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实用价值"><span class="nav-number">1.0.5.</span> <span class="nav-text">实用价值</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
