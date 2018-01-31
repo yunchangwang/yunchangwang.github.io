@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[linux命令文件上传与下载]]></title>
+    <url>%2F2018%2F01%2F31%2Flinux%E5%91%BD%E4%BB%A4%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E4%B8%8E%E4%B8%8B%E8%BD%BD%2F</url>
+    <content type="text"><![CDATA[文件上传下载搭建实践环境这边使用笔者自己的电脑和windows电脑进行实践。 利用ssh打通windows和mac打开mac的系统偏好设置中的共享，一般情况下没有界面展示的，需要使用搜索查找共享， 然后勾选远程登陆，选择全部用户可访问 在windows上使用ssh连接mac，填写相应的用户名和密码即可 安装要支持sz，rz两个命令，系统需要安装lrzsz，一般的linux系统是自带的，这里使用mac进行实验，需要安装。参考 使用sz filename，即从系统上下载文件到本地，filename是系统中你选择下载的文件rz -b，将本地的文件以二进制的传递方式上传到系统服务器，一般推荐使用二进制传输方式其他参考]]></content>
+      <categories>
+        <category>linux命令</category>
+      </categories>
+      <tags>
+        <tag>linux命令</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[hexo防止敏感数据部署]]></title>
     <url>%2F2018%2F01%2F30%2Fhexo%E9%98%B2%E6%AD%A2%E6%95%8F%E6%84%9F%E6%95%B0%E6%8D%AE%E9%83%A8%E7%BD%B2%2F</url>
     <content type="text"><![CDATA[hexo防止敏感数据部署原理熟悉hexo的读者都知道，hexo的部署一般执行如下:$hexo clean$hexo g$hexo d如果不按照顺序执行这三步，读者会发现即使增添了page，部署时git也不会显示增添文件的记录，github上也没有提交的代码记录其实这涉及到hexo的部署原理，hexo clean 会清除之前构建的代码，具体就是public文件夹；hexo g 会重新生成，这样读者添加的page也就构建在其中，此时新的public文件夹会生成；hexo d 就是将hexo g 改变的文件提交到github上所以不执行clean和generate是不会真正意义上修改remote上的代码 敏感数据敏感数据这里指的就是涉及公司业务的文章，因为hexo d 会将文章直接部署到github上，这样就全部公开化了这边最好是本地可以访问，github无法访问你的敏感数据，这篇文章的目的就在此 利用.gitignore熟悉git的读者，应该都知道可以使用.gitignore文件忽略一些提交网上有些说修改.npmignore文件配置(hexo的根目录下)可以起到效果，经过测试发现没有起到作用，所以转而到git寻求解决方案一般执行如下(当前目录为hexo根目录):$cd .deploy_git git push的代码都在此文件夹下$vim .gitignore增加如下配置:page name/ page的名称，hexo n page创建命令中你定义的文章名，如:linux命令性能监控及优化/.gitignore 自己本身但是笔者发现代码虽然没有提交到github上，但是hexo博客上有这个新建的标题，点击访问也是github默认的404页面(因为hexo g过程中一定会将文章标题写入hexo中，.gitignore只能做到忽略提交) 自定义404上面的问题引入了这个小结，github默认的404页面会让读者误以为是网站的问题，其实是不想公开化，所以你可以自定义404页面具体的步骤如下(hexo的根目录下):$hexo n page 404 source目录下生成404目录index.md中增加配置: layout: false //是否使用布局文件 comments: false //是否有评论 permalink: /404 //设置链接然后按照hexo部署步骤上传到github上，然后再访问敏感文章链接会跳转到自定义的404页面其实根本问题是github上没有代码，但是hexo在generate时将目录还是写入了导致，但是笔者找不到解决忽略写入的方法]]></content>
