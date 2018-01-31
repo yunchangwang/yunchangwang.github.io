@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[linux命令——sed]]></title>
+    <url>%2F2018%2F01%2F31%2Flinux%E5%91%BD%E4%BB%A4%E2%80%94%E2%80%94sed%2F</url>
+    <content type="text"><![CDATA[sed系统mac系统用的是原生的bsd系列，而一般的linux系统用的是gnu系统，所以两者在某些命令是有区别的，sed命令位列其中 区别mac上sed的添加和插入文本比较奇葩，需要如此:$sed “$line a\ (在\后要加一个空格，然后另起一行，再写需要添加的那一行新的)>$value（需要添加新一行的内容）>“ $filename(文件名)同上，sed i的使用方式亦然 gnu-sed如果无法适应原生bsd系列，可以下载gnu-sed，这个时候brew神器又用到了，直接下载然后配置环境变量即可:$brew install gnu-sed之后的叙述都是基于gnu-sed说明 option参数-n ：使用安静(silent)模式，在一般 sed 的用法中，所有来自 STDIN 的数据一般都会被列出到终端上，但如果加上 -n 参数后，则只有经过sed 特殊处理的那一行(或者动作)才会被列出来-e ：直接在命令列模式上进行 sed 的动作编辑-f ：直接将 sed 的动作写在一个文件内， -f filename 则可以运行 filename 内的 sed 动作-r ：sed 的动作支持的是延伸型正规表示法的语法。(默认是基础正规表示法语法)-i ：直接修改读取的文件内容，而不是输出到终端 方法a ：新增， a 的后面可以接字串，而这些字串会在新的一行出现(目前的下一行)c ：取代， c 的后面可以接字串，这些字串可以取代 n1,n2 之间的行d ：删除，因为是删除啊，所以 d 后面通常不接任何咚咚i ：插入， i 的后面可以接字串，而这些字串会在新的一行出现(目前的上一行)p ：列印，亦即将某个选择的数据印出。通常 p 会与参数 sed -n 一起运行s ：取代，可以直接进行取代的工作哩！通常这个 s 的动作可以搭配正规表示法 实例$sed ‘2a 字符串’ filename —— 第二行下一行添加字符串$sed ‘2i 字符串’ filename —— 第二行上一行添加字符串以上的命令只能作用在缓存的文件中，其实真实的文件内容并没有被改变$sed ‘2a 字符串’ -i filename —— 这样可以直接修改文件了$sed ‘1,2d’ -i filename —— 删除文件1-2行的内容sed与nl联合使用可以进行关键字查找:$nl filename | sed -n ‘/关键字/p’sed支持正则表达的搜索和替换:$sed ‘s/正则表达式 or 普通字符串/新字符串/g’ -i filename[其他用法:]https://www.cnblogs.com/ggjucheng/archive/2013/01/13/2856901.html]]></content>
+      <categories>
+        <category>linux命令</category>
+      </categories>
+      <tags>
+        <tag>linux命令</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[linux常用命令——补充]]></title>
     <url>%2F2018%2F01%2F31%2Flinux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E2%80%94%E2%80%94%E8%A1%A5%E5%85%85%2F</url>
     <content type="text"><![CDATA[常用命令(补充)grep用法grep [-acinv][–color=auto] ‘查找字符串’ filename option参数-c 统计查找字符在文件中出现的次数-i 忽略大小写-v 反向查找，即显示不在查找内的行，但是根据记录日志的习惯，很少会使用–color=auto 对查找的字符进行颜色显示 联合使用ls -l |grep -i filename 列出指定文件/文件夹的属性ps -ef|grep tomcat/java 列出指定的进程信息 find用法find [PATH] [option] [action] option参数-mtime n 其中n为数字，表示n天以前，查找n天之前修改过的文件-user name 查找指定所有者的文件-size [+-size] 查重比size大/小的文件 使用$find . -mtime 0 来查找当天修改过的文件，一般可以筛选当天有记录的日志 taroption参数-c ：新建打包文件-t ：查看打包文件的内容含有哪些文件名-x ：解打包或解压缩的功能，可以搭配-C（大写）指定解压的目录，注意-c,-t,-x不能同时出现在同一条命令中-j ：通过bzip2的支持进行压缩/解压缩-z ：通过gzip的支持进行压缩/解压缩-v ：在压缩/解压缩过程中，将正在处理的文件名显示出来-f filename ：filename为要处理的文件-C dir ：指定压缩/解压缩的目录dir 使用实例$tar -tzvf xxx.zip 查看指定压缩文件里面的文件内容$tar -zxvf xxx.zip 解压缩指定文件$tar -cvf xxx.tar dir 压缩指定文件夹$tar -czvf xxx.tar.gz dir 以gzip的格式进行压缩如何使用解压缩命令的option操作，最终还是要看压缩文件的格式的，如-z一般用来支持.gz结尾的压缩包 kill用法kill [选项] [参数] option参数-a：当处理当前进程时，不限制命令名和进程号的对应关系-l &lt;信息编号&gt;：若不加&lt;信息编号&gt;选项，则-l参数会列出全部的信息名称 -p：指定kill 命令只打印相关进程的进程号，而不发送任何信号-s &lt;信息名称或编号&gt;：指定要送出的信息-u：指定用户 常用的信号编号HUP 1 终端断线 INT 2 中断（同 Ctrl + C） QUIT 3 退出（同 Ctrl + \） TERM 15 终止 KILL 9 强制终止 CONT 18 继续（与STOP相反， fg/bg命令） STOP 19 暂停（同 Ctrl + Z）在mac中18是STOP，19是CONT]]></content>
