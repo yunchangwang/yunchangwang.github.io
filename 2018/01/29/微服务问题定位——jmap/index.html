@@ -88,7 +88,7 @@
 <meta property="og:description" content="jmap使用场景 内存溢出，线上程序运行时内存越来越大，用jmap dump出堆内存的信息，然后进行相关分析 内存的真实使用大于预期，这是因为设计不合理导致冗余的对象存在内存中，用jmap来查看内存中的对象，分析是否有存在的必要 jvm优化，利用jmap来查看整个堆的使用情况，根据老年代和新生代的使用比例来划分jvm的各个区域  使用实例在使用jmap连接进程时，启动的jvm版本和jdk版本要一一">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://raw.githubusercontent.com/yunchangwang/blogs/master/jmap/jmap.jpg">
-<meta property="og:updated_time" content="2018-01-30T00:54:29.000Z">
+<meta property="og:updated_time" content="2018-02-01T01:06:44.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="微服务问题定位——jmap">
 <meta name="twitter:description" content="jmap使用场景 内存溢出，线上程序运行时内存越来越大，用jmap dump出堆内存的信息，然后进行相关分析 内存的真实使用大于预期，这是因为设计不合理导致冗余的对象存在内存中，用jmap来查看内存中的对象，分析是否有存在的必要 jvm优化，利用jmap来查看整个堆的使用情况，根据老年代和新生代的使用比例来划分jvm的各个区域  使用实例在使用jmap连接进程时，启动的jvm版本和jdk版本要一一">
@@ -396,7 +396,7 @@
 <h3 id="使用实例"><a href="#使用实例" class="headerlink" title="使用实例"></a>使用实例</h3><p>在使用jmap连接进程时，启动的jvm版本和jdk版本要一一对应，毕竟jmap是jdk下的命令包<br><br>$ps -ef | grep java 查找系统的java进程<br><br>$jmap -heap pid 打印指定进程堆的摘要信息，包括gc算法<br><br><img src="https://raw.githubusercontent.com/yunchangwang/blogs/master/jmap/jmap.jpg" alt="例图"><br></p>
 <h4 id="参数说明"><a href="#参数说明" class="headerlink" title="参数说明"></a>参数说明</h4><ul>
 <li>Heap Configuration:  <strong>堆配置信息</strong><blockquote>
-<p>MinHeapFreeRatio   <strong>在堆的使用率小于MinHeapFreeRatio(%)的时候进行收缩，当Xmx=Xms的时候此配置无效</strong><br>MaxHeapFreeRatio  <strong>在堆使用率大于MaxHeapFreeRatio(%)的时候进行扩展，当Xmx=Xms的时候此配置无效</strong><br>MaxHeapSize   <strong>堆的最大空间</strong><br>NewSize  <strong>新生代的大小</strong><br>MaxNewSize   <strong>最大的新生代的大小</strong><br>OldSize   <strong>老年代的大小</strong><br>NewRatio   <strong>新生代中Eden和Survivor区的比例</strong><br>SurvivorRatio   <strong>新生代中Eden和和Survivor区的比例</strong><br>PermSize   <strong>永久代的大小</strong><br>MaxPermSize     <strong>久代的最大内存</strong><br>G1HeapRegionSize    <strong>使用G1垃圾收集的区间</strong></p>
+<p>MinHeapFreeRatio   <strong>在堆的使用率小于MinHeapFreeRatio(%)的时候进行收缩，当Xmx=Xms的时候此配置无效</strong><br>MaxHeapFreeRatio  <strong>在堆使用率大于MaxHeapFreeRatio(%)的时候进行扩展，当Xmx=Xms的时候此配置无效</strong><br>MaxHeapSize   <strong>堆的最大空间</strong><br>NewSize  <strong>新生代的大小</strong><br>MaxNewSize   <strong>最大的新生代的大小</strong><br>OldSize   <strong>老年代的大小</strong><br>NewRatio   <strong>老年代和新生代的比例</strong><br>SurvivorRatio   <strong>新生代中Eden和和Survivor区的比例</strong><br>PermSize   <strong>永久代的大小</strong><br>MaxPermSize     <strong>久代的最大内存</strong><br>G1HeapRegionSize    <strong>使用G1垃圾收集的区间</strong></p>
 </blockquote>
 </li>
 <li>Heap Usage:   <strong>堆的使用信息</strong></li>
