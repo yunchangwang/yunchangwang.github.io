@@ -1,6 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[生产问题排查指南——排查思路]]></title>
+    <url>%2F2018%2F02%2F12%2F%E7%94%9F%E4%BA%A7%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5%E6%8C%87%E5%8D%97%E2%80%94%E2%80%94%E6%8E%92%E6%9F%A5%E6%80%9D%E8%B7%AF%2F</url>
+    <content type="text"></content>
+      <categories>
+        <category>生产环境</category>
+      </categories>
+      <tags>
+        <tag>问题排查</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[生产问题排查指南——问题排查方法]]></title>
+    <url>%2F2018%2F02%2F12%2F%E7%94%9F%E4%BA%A7%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5%E6%8C%87%E5%8D%97%E2%80%94%E2%80%94%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5%E6%96%B9%E6%B3%95%2F</url>
+    <content type="text"></content>
+      <categories>
+        <category>生产环境</category>
+      </categories>
+      <tags>
+        <tag>问题排查</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[生产问题排查指南——指标查询指令与方法]]></title>
+    <url>%2F2018%2F02%2F12%2F%E7%94%9F%E4%BA%A7%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5%E6%8C%87%E5%8D%97%E2%80%94%E2%80%94%E6%8C%87%E6%A0%87%E6%9F%A5%E8%AF%A2%E6%8C%87%E4%BB%A4%E4%B8%8E%E6%96%B9%E6%B3%95%2F</url>
+    <content type="text"></content>
+      <categories>
+        <category>生产环境</category>
+      </categories>
+      <tags>
+        <tag>问题排查</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[如何在mac上搭建python环境并使用docx模块]]></title>
     <url>%2F2018%2F02%2F12%2F%E5%A6%82%E4%BD%95%E5%9C%A8mac%E4%B8%8A%E6%90%AD%E5%BB%BApython%E7%8E%AF%E5%A2%83%E5%B9%B6%E4%BD%BF%E7%94%A8docx%E6%A8%A1%E5%9D%97%2F</url>
     <content type="text"><![CDATA[背景之前接手到一个处理word文档的项目，需要读取word内容，并对读取的字符串进行一系列的处理。一开始笔者使用java进行处理，需要引入第三方模块——poi。说实话，这个第三方模块对于word的处理不够完善，第一没有很好的写入方式，第二没有很好的样式处理机制，第三没有封装java的io流，仍然需要笔者手动创建和关闭io资源。 在之后的资料中查询到可以使用python的docx模块很快速处理word文件，使用快捷方便，几行代码就可以实现读写，并且很好的支持word的样式。但是docx模块只支持docx后缀的文档，读者可以先将doc转换docx。 搭建环境搭建平台是macOS10.12.6，一般mac上是自带python的，但是普遍版本较低，目录位置为/Library/Python，以后安装的其他版本也在相同的目录下。 终端$python –version 查看python的版本。 这边可以使用pyenv来管理python的各个版本，笔者这边使用IDE(python编译环境)管理的。如果选择pyenv，请参考。即使不使用pyenv，笔者还是要推荐参考博客中提及的brew——mac的统一依赖包管理器。如果选择IDE管理，请到官网下载PyCharm，这种方式不像pyenv可以使用命令下载python的其他版本，读者可以访问官网下载其他python版本。 IDE在栏目PyCharm下选择Pereferences，如图选择可以切换编译器的python版本：不同的版本切换对代码的编译可能会造成影响。 引入docx模块python处理word也需要引入第三方模块，一般使用pip去下载python的第三方模块。mac里面python自带easy_install。$sudo easy_install pip 输入密码下载pip，笔者强烈建议不要在系统自带的python下折腾，因为mac系统下很多软件都依赖python模块，一些操作可能导致系统的软件打开错误。 读者可以先去官网下载其他版本，然后设置环境变量，sudo vim /etc/profile，编辑添加export PATH=xxxx:$PATH，其中xxxx为下载后python的路径，参考搭建环境。 $python –version 查看版本是否更改，之后执行$sudo easy_install pip，然后在执行$pip install docx模块。 然后读者就可以在当前python版本的目录下看到pip模块和docx模块了。之后在PyCharm中切换python的版本，在编写的代码中引入docx模块即可。读者可以参考官网手册]]></content>
@@ -284,6 +317,18 @@
       <tags>
         <tag>welcome</tag>
         <tag>hello</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[梁希森林公园]]></title>
+    <url>%2F2017%2F04%2F04%2F%E6%A2%81%E5%B8%8C%E6%A3%AE%E6%9E%97%E5%85%AC%E5%9B%AD%2F</url>
+    <content type="text"><![CDATA[写博客以来，笔者一直用github作为图床，但当图片的大小超过一定值打开github链接就会直接下载，无法作为url链接，所以将图片暂放微博。 我与梁希先生 人生得意须尽欢 流水潺潺 狗年行大运]]></content>
+      <categories>
+        <category>生活</category>
+      </categories>
+      <tags>
+        <tag>生活</tag>
+        <tag>自然环境</tag>
       </tags>
   </entry>
 </search>
