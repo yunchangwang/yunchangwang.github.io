@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="wyc-blog">
 <meta property="og:description" content="这边先预设几个问题 一个组织分配ip地址的过程(涉及到ISP等概念) a,b,c,d,e类的ip地址 如何知道一个主机的子网掩码，它第一跳的路由地址，dns服务器的地址 DHCP动态分配地址 什么是网络地址转换(NAT) ipv4和ipv6的区别  基本概念ip地址目前有ipv4和ipv6两种，这里以ipv4举例。ip地址在整个网络中相当于地址的存在，只有知晓了地址，才能知道向哪里送信，信件又使从">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-02-19T03:35:18.000Z">
+<meta property="og:updated_time" content="2018-02-20T11:52:23.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="网络攻防——ip地址">
 <meta name="twitter:description" content="这边先预设几个问题 一个组织分配ip地址的过程(涉及到ISP等概念) a,b,c,d,e类的ip地址 如何知道一个主机的子网掩码，它第一跳的路由地址，dns服务器的地址 DHCP动态分配地址 什么是网络地址转换(NAT) ipv4和ipv6的区别  基本概念ip地址目前有ipv4和ipv6两种，这里以ipv4举例。ip地址在整个网络中相当于地址的存在，只有知晓了地址，才能知道向哪里送信，信件又使从">
@@ -402,7 +402,7 @@
 <p>在分配子网的时候，不一定使用标准的网络地址。比如一个组织，分类到了一个C类(/24)子网，其仅能容下2^8 - 2 = 254台主机(2^8 = 256，其中的两个地址预留用于特殊的用途)，这对于许多组织来说太小了。然而一个B类(/16)子网可支持多达65534台主机，又太大了。</p>
 <h2 id="组织内主机分配ip地址的过程"><a href="#组织内主机分配ip地址的过程" class="headerlink" title="组织内主机分配ip地址的过程"></a>组织内主机分配ip地址的过程</h2><p>为了获取一块ip地址用于一个组织的子网，网络管理员也许首先会与他的ISP<a href="https://baike.baidu.com/item/ISP/10152" target="_blank" rel="noopener">参考百度百科</a>联系，该ISP可能会从已分配给它的更大的地址块中提供一些地址。这里假设ISP自己已被分配了地址块200.23.16.0/20：<br><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ISP的地址块    200.23.16.0/20    (11001000 00010111 0001)0000 00000000</span><br><span class="line">组织0         200.23.16.0/23     (11001000 00010111 000100)0 00000000</span><br><span class="line">组织1         200.23.18.0/23     (11001000 00010111 0001001)0 00000000</span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
 <p>加入组织0已经得到了子网地址：200.23.16.0/23，这就表示该组织下的所有主机ip地址都是以<strong>11001000 00010111 000100</strong>开头的。系统管理员一般手动配置路由器ip地址，主机地址也能手动配置，但是想象一下：如果一个组织下有数以万计的主机，那么系统管理员已哭晕在厕所。所以这里引出另一个概念DHCP(动态主机配置协议，又称即插即用协议)，主机可以自动获取一个临时的ip地址。这也解释了为什么在公司中，主机重启之后主机的ip地址会改变，因为是临时随机分配的。</p>
-<h2 id="DHCP"><a href="#DHCP" class="headerlink" title="DHCP"></a>DHCP</h2><p>暂时从缺</p>
+<h2 id="DHCP"><a href="#DHCP" class="headerlink" title="DHCP"></a>DHCP</h2><p>笔者认为这个概念可以重新开一个章节，读者可以跳转参考<a href="">计算机网络——DHCP</a><br>DHCP，即动态主机配置协议。个人觉得就这个概念可以重新开一个章节，所以在此进行简单的描述。<br><br>为了解决新的主机接入子网时避免手动配置ip，DHCP允许主机被分配ip。DHCP是一个服务器，维护了一张</p>
 <h2 id="NAT"><a href="#NAT" class="headerlink" title="NAT"></a>NAT</h2><p>暂时从缺</p>
 <h2 id="如何生动形象解释"><a href="#如何生动形象解释" class="headerlink" title="如何生动形象解释"></a>如何生动形象解释</h2><p>这里主要解释了ip地址，子网掩码，网关等概念。<br><br>读者可以参考这篇<a href="https://www.zhihu.com/question/20717354" target="_blank" rel="noopener">知乎文章</a>。</p>
 
@@ -446,6 +446,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/02/20/计算机网络——DHCP/" rel="prev" title="计算机网络——DHCP">
+                计算机网络——DHCP <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -533,7 +537,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-count">32</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -544,7 +548,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -555,7 +559,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-count">26</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
