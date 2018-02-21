@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="简介作用例子">
+<meta name="description" content="简介NAT(Network Address Translation)，网络地址转换。NAT可以看成一个开放到公网(全球因特网)上的公用路由器，用来代理一个子网下的所有主机的请求和应答。NAT在转换的时候，会将主机的ip地址和端口号替换成公用路由器的ip地址和端口，并且维护在一张表中进行一一对应，为了将返回的数据应答到唯一的主机上。 作用由于ipv4规则的ip地址消耗殆尽，不可能为所有的主机都分配真">
 <meta name="keywords" content="计算机网络,网路协议">
 <meta property="og:type" content="article">
 <meta property="og:title" content="计算机网络——NAT">
 <meta property="og:url" content="http://yoursite.com/2018/02/20/计算机网络——NAT/index.html">
 <meta property="og:site_name" content="wyc-blog">
-<meta property="og:description" content="简介作用例子">
+<meta property="og:description" content="简介NAT(Network Address Translation)，网络地址转换。NAT可以看成一个开放到公网(全球因特网)上的公用路由器，用来代理一个子网下的所有主机的请求和应答。NAT在转换的时候，会将主机的ip地址和端口号替换成公用路由器的ip地址和端口，并且维护在一张表中进行一一对应，为了将返回的数据应答到唯一的主机上。 作用由于ipv4规则的ip地址消耗殆尽，不可能为所有的主机都分配真">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-02-20T13:05:49.000Z">
+<meta property="og:updated_time" content="2018-02-21T00:51:50.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="计算机网络——NAT">
-<meta name="twitter:description" content="简介作用例子">
+<meta name="twitter:description" content="简介NAT(Network Address Translation)，网络地址转换。NAT可以看成一个开放到公网(全球因特网)上的公用路由器，用来代理一个子网下的所有主机的请求和应答。NAT在转换的时候，会将主机的ip地址和端口号替换成公用路由器的ip地址和端口，并且维护在一张表中进行一一对应，为了将返回的数据应答到唯一的主机上。 作用由于ipv4规则的ip地址消耗殆尽，不可能为所有的主机都分配真">
 
 
 
@@ -386,7 +386,19 @@
       
 
       
-        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><h2 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h2><h2 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h2>
+        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>NAT(Network Address Translation)，网络地址转换。NAT可以看成一个开放到公网(全球因特网)上的公用路由器，用来代理一个子网下的所有主机的请求和应答。<br><br>NAT在转换的时候，会将主机的ip地址和端口号替换成公用路由器的ip地址和端口，并且维护在一张表中进行一一对应，为了将返回的数据应答到唯一的主机上。</p>
+<h2 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h2><p>由于ipv4规则的ip地址消耗殆尽，不可能为所有的主机都分配真正的公网ip，所以很多主机ip地址都是虚拟的ip地址，并且有统一的代理服务器进行消息的请求和应答。<br><br>NAT的作用就是将私有的ip地址转换成全球因特网承认的ip地址，私有的ip地址有三种：<br><br>①10.0.0.0~10.255.255.255/8 <br><br>②172.16.0.0~172.31.255.255/12 <br><br>③192.168.0.0~192.168.255.255/16 <br><br>这些IP地址是用于私有的网络。<br><br>NAT使得一个组织局域网中的主机都能互相访问，但是想要访问公网就只有一条出路，这样也可以保证局域网中信息的安全性。</p>
+<h2 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h2><p>假设用户王某坐在家庭主机10.0.0.1傍边，请求域名为 www.bilibili.com (ip地址为112.49.19.4)的web服务器(端口为80)上的一个web页面。主机10.0.0.1为其指派了任意的端口2233，并将请求的报文发送到LAN中。<br><br>NAT路由器收到该数据请求，为其生成了新的端口号5000，并将ip地址替换成广域网的ip地址138.76.29.7，然后继续想目标服务器请求。<br><br>具体步骤如下：<br></p>
+<ul>
+<li>10.0.0.1:2233 发送报文 —&gt; LAN</li>
+<li>LAN —&gt; NAT路由器 —&gt; 替换成138.76.29.7:5000 并维护一张映射表</li>
+<li>138.76.29.7:5000 发送请求报文 —&gt; 112.49.19.4:80</li>
+<li>返回数据到WAN —&gt; NAT路由器</li>
+<li>NAT路由器从维护的映射表中获取私有ip地址</li>
+<li>返回数据 —&gt; LAN  —&gt; 10.0.0.1:2233</li>
+</ul>
+<p>读者以前可能发现，百度的ip地址和主机的ip地址不同，因为一个是公网的，主机的只是私有的ip地址，中间就是利用了NAT。<br><br>代理服务器，即NAT在跳转的当中可能存在很多个，即一个请求可能通过n个NAT。</p>
+
       
     </div>
     
