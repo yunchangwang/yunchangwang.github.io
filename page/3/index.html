@@ -1431,9 +1431,7 @@ option参数   -b  以Byte为单位显示内存使用情况   -k  以KB为单位
       
         
           
-          strace以下说明都是基于docker系统机器实验
-功能   系统调用和信号传递的跟踪
-option参数   -c  统计每一系统调用的所执行的时间,次数和出错的次数等   -d  输出strace
+          strace功能   在linux世界，进程不能直接访问硬件设备，当进程需要访问硬件设备(比如读取磁盘文件，接收网络数据等等)时，必须由用户态模式切换至内核态模式，通过系统调用访问硬件设备。   st
           ...
           <!--noindex-->
           <div class="post-button text-center">

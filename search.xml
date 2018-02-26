@@ -20,8 +20,8 @@
         <category>计算机网络</category>
       </categories>
       <tags>
-        <tag>计算机网络</tag>
         <tag>网络协议</tag>
+        <tag>计算机网络</tag>
       </tags>
   </entry>
   <entry>
@@ -320,7 +320,7 @@
   <entry>
     <title><![CDATA[微服务问题定位——strace]]></title>
     <url>%2F2018%2F01%2F28%2F%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94strace%2F</url>
-    <content type="text"><![CDATA[strace以下说明都是基于docker系统机器实验 功能 系统调用和信号传递的跟踪 option参数 -c 统计每一系统调用的所执行的时间,次数和出错的次数等 -d 输出strace关于标准错误的调试信息 -f 跟踪由fork调用所产生的子进程 -tt 在输出中的每一行前加上时间信息,微秒级， 时间格式：17:22:58.345879 -p pid 跟踪指定的进程pid 以上命令一般都是与-p联用 strace的命令使用比较复杂，不做详细说明 在此贴出网上的一些参考链接 strace实例 strace实例2 样例贴图 从缺]]></content>
+    <content type="text"><![CDATA[strace功能 在linux世界，进程不能直接访问硬件设备，当进程需要访问硬件设备(比如读取磁盘文件，接收网络数据等等)时，必须由用户态模式切换至内核态模式，通过系统调用访问硬件设备。 strace可以跟踪到一个进程产生的系统调用，包括参数，返回值，执行消耗的时间。 option参数 -c 统计每一系统调用的所执行的时间,次数和出错的次数等 -d 输出strace关于标准错误的调试信息 -f 跟踪由fork调用所产生的子进程 -tt 在输出中的每一行前加上时间信息,微秒级， 时间格式：17:22:58.345879 -p pid 跟踪指定的进程pid 以上命令一般都是与-p联用 读者可以使用man strace或者strace -help查看完整的参数列表。 strace使用 strace的使用一般在top命令之后，top命令是用来查看占用cpu异常的进程的。读者可以参考微服务定位——top。 找到异常的进程后，使用命令：top -Hp pid[进程id]进入进程，找到执行异常的那个线程。使用命令：strace -p nid[线程id] -T来查看底层的调用情况。 在此贴出网上的一些参考链接 strace实例 strace实例2 样例贴图 笔者在此贴出strace命令显示的底层执行的信息： 1234567891011$strace cat /dev/nullexecve(&quot;/bin/cat&quot;, [&quot;cat&quot;, &quot;/dev/null&quot;], [/* 22 vars */]) = 0brk(0) = 0xab1000access(&quot;/etc/ld.so.nohwcap&quot;, F_OK) = -1 ENOENT (No such file or directory)mmap(NULL, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f29379a7000access(&quot;/etc/ld.so.preload&quot;, R_OK) = -1 ENOENT (No such file or directory)...每一行都是一条系统调用，等号左边是系统调用的函数名及其参数，右边是该调用的返回值。strace 显示这些调用的参数并返回符号形式的值。strace 从内核接收信息，而且不需要以任何特殊的方式来构建内核。]]></content>
       <categories>
         <category>微服务问题定位</category>
       </categories>

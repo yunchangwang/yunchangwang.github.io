@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="strace以下说明都是基于docker系统机器实验 功能   系统调用和信号传递的跟踪 option参数   -c  统计每一系统调用的所执行的时间,次数和出错的次数等   -d  输出strace关于标准错误的调试信息   -f  跟踪由fork调用所产生的子进程   -tt  在输出中的每一行前加上时间信息,微秒级， 时间格式：17:22:58.345879   -p pid 跟踪指定的进程">
+<meta name="description" content="strace功能   在linux世界，进程不能直接访问硬件设备，当进程需要访问硬件设备(比如读取磁盘文件，接收网络数据等等)时，必须由用户态模式切换至内核态模式，通过系统调用访问硬件设备。   strace可以跟踪到一个进程产生的系统调用，包括参数，返回值，执行消耗的时间。 option参数   -c  统计每一系统调用的所执行的时间,次数和出错的次数等   -d  输出strace关于标准错误">
 <meta name="keywords" content="linux命令,微服务,进程,线程">
 <meta property="og:type" content="article">
 <meta property="og:title" content="微服务问题定位——strace">
 <meta property="og:url" content="http://yoursite.com/2018/01/28/微服务问题定位——strace/index.html">
 <meta property="og:site_name" content="wyc-blog">
-<meta property="og:description" content="strace以下说明都是基于docker系统机器实验 功能   系统调用和信号传递的跟踪 option参数   -c  统计每一系统调用的所执行的时间,次数和出错的次数等   -d  输出strace关于标准错误的调试信息   -f  跟踪由fork调用所产生的子进程   -tt  在输出中的每一行前加上时间信息,微秒级， 时间格式：17:22:58.345879   -p pid 跟踪指定的进程">
+<meta property="og:description" content="strace功能   在linux世界，进程不能直接访问硬件设备，当进程需要访问硬件设备(比如读取磁盘文件，接收网络数据等等)时，必须由用户态模式切换至内核态模式，通过系统调用访问硬件设备。   strace可以跟踪到一个进程产生的系统调用，包括参数，返回值，执行消耗的时间。 option参数   -c  统计每一系统调用的所执行的时间,次数和出错的次数等   -d  输出strace关于标准错误">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-01-28T08:13:59.000Z">
+<meta property="og:updated_time" content="2018-02-26T00:18:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="微服务问题定位——strace">
-<meta name="twitter:description" content="strace以下说明都是基于docker系统机器实验 功能   系统调用和信号传递的跟踪 option参数   -c  统计每一系统调用的所执行的时间,次数和出错的次数等   -d  输出strace关于标准错误的调试信息   -f  跟踪由fork调用所产生的子进程   -tt  在输出中的每一行前加上时间信息,微秒级， 时间格式：17:22:58.345879   -p pid 跟踪指定的进程">
+<meta name="twitter:description" content="strace功能   在linux世界，进程不能直接访问硬件设备，当进程需要访问硬件设备(比如读取磁盘文件，接收网络数据等等)时，必须由用户态模式切换至内核态模式，通过系统调用访问硬件设备。   strace可以跟踪到一个进程产生的系统调用，包括参数，返回值，执行消耗的时间。 option参数   -c  统计每一系统调用的所执行的时间,次数和出错的次数等   -d  输出strace关于标准错误">
 
 
 
@@ -386,11 +386,11 @@
       
 
       
-        <h2 id="strace"><a href="#strace" class="headerlink" title="strace"></a>strace</h2><p><strong>以下说明都是基于docker系统机器实验</strong></p>
-<h3 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h3><p>   系统调用和信号传递的跟踪</p>
-<h3 id="option参数"><a href="#option参数" class="headerlink" title="option参数"></a>option参数</h3><p>   -c  统计每一系统调用的所执行的时间,次数和出错的次数等<br><br>   -d  输出strace关于标准错误的调试信息<br><br>   -f  跟踪由fork调用所产生的子进程<br><br>   -tt  在输出中的每一行前加上时间信息,微秒级， 时间格式：17:22:58.345879<br><br>   -p pid 跟踪指定的进程pid<br><br>   <strong><em>以上命令一般都是与-p联用</em></strong></p>
-<h3 id="strace的命令使用比较复杂，不做详细说明"><a href="#strace的命令使用比较复杂，不做详细说明" class="headerlink" title="strace的命令使用比较复杂，不做详细说明"></a>strace的命令使用比较复杂，不做详细说明</h3><p>   在此贴出网上的一些参考链接<br><br>   <a href="https://leokongwq.github.io/2016/10/15/strace-learn.html" target="_blank" rel="noopener">strace实例</a><br><br>   <a href="http://www.cnblogs.com/kongzhongqijing/articles/4913192.html" target="_blank" rel="noopener">strace实例2</a><br></p>
-<h3 id="样例贴图"><a href="#样例贴图" class="headerlink" title="样例贴图"></a>样例贴图</h3><p>   <strong>从缺</strong></p>
+        <h2 id="strace"><a href="#strace" class="headerlink" title="strace"></a>strace</h2><h3 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h3><p>   在linux世界，进程不能直接访问硬件设备，当进程需要访问硬件设备(比如读取磁盘文件，接收网络数据等等)时，必须由用户态模式切换至内核态模式，通过系统调用访问硬件设备。<br><br>   strace可以跟踪到一个进程产生的系统调用，包括参数，返回值，执行消耗的时间。</p>
+<h3 id="option参数"><a href="#option参数" class="headerlink" title="option参数"></a>option参数</h3><p>   -c  统计每一系统调用的所执行的时间,次数和出错的次数等<br><br>   -d  输出strace关于标准错误的调试信息<br><br>   -f  跟踪由fork调用所产生的子进程<br><br>   -tt  在输出中的每一行前加上时间信息,微秒级， 时间格式：17:22:58.345879<br><br>   -p pid 跟踪指定的进程pid<br><br>   <strong>以上命令一般都是与-p联用</strong><br><br>   读者可以使用<strong>man strace</strong>或者<strong>strace -help</strong>查看完整的参数列表。</p>
+<h3 id="strace使用"><a href="#strace使用" class="headerlink" title="strace使用"></a>strace使用</h3><p>   strace的使用一般在top命令之后，top命令是用来查看占用cpu异常的进程的。读者可以参考<a href="https://yunchangwang.github.io/2018/01/26/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94top/" target="_blank" rel="noopener">微服务定位——top</a>。<br><br>   找到异常的进程后，使用命令：<strong>top -Hp pid[进程id]</strong>进入进程，找到执行异常的那个线程。使用命令：<strong>strace -p nid[线程id] -T</strong>来查看底层的调用情况。</p>
+<p>   在此贴出网上的一些参考链接<br>   <a href="https://leokongwq.github.io/2016/10/15/strace-learn.html" target="_blank" rel="noopener">strace实例</a><br>   <a href="http://www.cnblogs.com/kongzhongqijing/articles/4913192.html" target="_blank" rel="noopener">strace实例2</a><br></p>
+<h3 id="样例贴图"><a href="#样例贴图" class="headerlink" title="样例贴图"></a>样例贴图</h3><p>   笔者在此贴出strace命令显示的底层执行的信息：<br>   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$strace cat /dev/null</span><br><span class="line">execve(&quot;/bin/cat&quot;, [&quot;cat&quot;, &quot;/dev/null&quot;], [/* 22 vars */]) = 0</span><br><span class="line">brk(0)                                  = 0xab1000</span><br><span class="line">access(&quot;/etc/ld.so.nohwcap&quot;, F_OK)      = -1 ENOENT (No such file or directory)</span><br><span class="line">mmap(NULL, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f29379a7000</span><br><span class="line">access(&quot;/etc/ld.so.preload&quot;, R_OK)      = -1 ENOENT (No such file or directory)</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">每一行都是一条系统调用，等号左边是系统调用的函数名及其参数，右边是该调用的返回值。</span><br><span class="line">strace 显示这些调用的参数并返回符号形式的值。</span><br><span class="line">strace 从内核接收信息，而且不需要以任何特殊的方式来构建内核。</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -590,7 +590,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#strace"><span class="nav-number">1.</span> <span class="nav-text">strace</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#功能"><span class="nav-number">1.1.</span> <span class="nav-text">功能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#option参数"><span class="nav-number">1.2.</span> <span class="nav-text">option参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#strace的命令使用比较复杂，不做详细说明"><span class="nav-number">1.3.</span> <span class="nav-text">strace的命令使用比较复杂，不做详细说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#样例贴图"><span class="nav-number">1.4.</span> <span class="nav-text">样例贴图</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#strace"><span class="nav-number">1.</span> <span class="nav-text">strace</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#功能"><span class="nav-number">1.1.</span> <span class="nav-text">功能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#option参数"><span class="nav-number">1.2.</span> <span class="nav-text">option参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#strace使用"><span class="nav-number">1.3.</span> <span class="nav-text">strace使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#样例贴图"><span class="nav-number">1.4.</span> <span class="nav-text">样例贴图</span></a></li></ol></li></ol></div>
             
 
           </div>
