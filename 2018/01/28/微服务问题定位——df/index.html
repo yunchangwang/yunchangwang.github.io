@@ -79,19 +79,19 @@
 
 
 
-<meta name="description" content="df功能用来检查服务器文件系统的磁盘空间占用情况，可以获取硬盘被占了多少空间，目前还剩下多少空间等信息 option参数-a 全部文件系统列表-h 方便查阅方式显示-H 等-h，但是计数方式变更，1k=1000-i 显示node信息-k 区块为1024字节-l 只显示本地文件系统-m 区块为1048576字节–no-sync 忽略sync命令-P 输出格式为POSIX–sync 在取得磁盘信息前先">
+<meta name="description" content="功能用来检查服务器文件系统的磁盘空间占用情况，可以获取硬盘被占了多少空间，目前还剩下多少空间等信息。 option 参数-a 显示全部文件系统列表-h 以方便查阅的方式显示，即带有单位的形式-H 相当于-h，但是换算的方式变更，这里1k=1000-i 显示node信息-k 区块为1024字节，即1Kb为一个区块-l 只显示本地文件系统-m 区块为1048576字节，即1Mb为一个区块–no-syn">
 <meta name="keywords" content="linux命令,微服务,磁盘">
 <meta property="og:type" content="article">
 <meta property="og:title" content="微服务问题定位——df">
 <meta property="og:url" content="http://yoursite.com/2018/01/28/微服务问题定位——df/index.html">
 <meta property="og:site_name" content="wyc-blog">
-<meta property="og:description" content="df功能用来检查服务器文件系统的磁盘空间占用情况，可以获取硬盘被占了多少空间，目前还剩下多少空间等信息 option参数-a 全部文件系统列表-h 方便查阅方式显示-H 等-h，但是计数方式变更，1k=1000-i 显示node信息-k 区块为1024字节-l 只显示本地文件系统-m 区块为1048576字节–no-sync 忽略sync命令-P 输出格式为POSIX–sync 在取得磁盘信息前先">
+<meta property="og:description" content="功能用来检查服务器文件系统的磁盘空间占用情况，可以获取硬盘被占了多少空间，目前还剩下多少空间等信息。 option 参数-a 显示全部文件系统列表-h 以方便查阅的方式显示，即带有单位的形式-H 相当于-h，但是换算的方式变更，这里1k=1000-i 显示node信息-k 区块为1024字节，即1Kb为一个区块-l 只显示本地文件系统-m 区块为1048576字节，即1Mb为一个区块–no-syn">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://raw.githubusercontent.com/yunchangwang/blogs/master/df/df.jpg">
-<meta property="og:updated_time" content="2018-01-28T08:28:05.000Z">
+<meta property="og:updated_time" content="2018-02-28T12:27:21.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="微服务问题定位——df">
-<meta name="twitter:description" content="df功能用来检查服务器文件系统的磁盘空间占用情况，可以获取硬盘被占了多少空间，目前还剩下多少空间等信息 option参数-a 全部文件系统列表-h 方便查阅方式显示-H 等-h，但是计数方式变更，1k=1000-i 显示node信息-k 区块为1024字节-l 只显示本地文件系统-m 区块为1048576字节–no-sync 忽略sync命令-P 输出格式为POSIX–sync 在取得磁盘信息前先">
+<meta name="twitter:description" content="功能用来检查服务器文件系统的磁盘空间占用情况，可以获取硬盘被占了多少空间，目前还剩下多少空间等信息。 option 参数-a 显示全部文件系统列表-h 以方便查阅的方式显示，即带有单位的形式-H 相当于-h，但是换算的方式变更，这里1k=1000-i 显示node信息-k 区块为1024字节，即1Kb为一个区块-l 只显示本地文件系统-m 区块为1048576字节，即1Mb为一个区块–no-syn">
 <meta name="twitter:image" content="https://raw.githubusercontent.com/yunchangwang/blogs/master/df/df.jpg">
 
 
@@ -388,10 +388,10 @@
       
 
       
-        <h2 id="df"><a href="#df" class="headerlink" title="df"></a>df</h2><h3 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h3><p>用来检查服务器文件系统的磁盘空间占用情况，可以获取硬盘被占了多少空间，目前还剩下多少空间等信息</p>
-<h3 id="option参数"><a href="#option参数" class="headerlink" title="option参数"></a>option参数</h3><p>-a 全部文件系统列表<br><br>-h 方便查阅方式显示<br><br>-H 等-h，但是计数方式变更，1k=1000<br><br>-i 显示node信息<br><br>-k 区块为1024字节<br><br>-l 只显示本地文件系统<br><br>-m 区块为1048576字节<br><br>–no-sync 忽略sync命令<br><br>-P 输出格式为POSIX<br><br>–sync 在取得磁盘信息前先执行sync命令<br><br>-T 文件系统类型<br></p>
+        <h3 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h3><p>用来检查服务器文件系统的磁盘空间占用情况，可以获取硬盘被占了多少空间，目前还剩下多少空间等信息。</p>
+<h3 id="option-参数"><a href="#option-参数" class="headerlink" title="option 参数"></a>option 参数</h3><p>-a 显示全部文件系统列表<br><br>-h 以方便查阅的方式显示，即带有单位的形式<br><br>-H 相当于-h，但是换算的方式变更，这里1k=1000<br><br>-i 显示node信息<br><br>-k 区块为1024字节，即1Kb为一个区块<br><br>-l 只显示本地文件系统<br><br>-m 区块为1048576字节，即1Mb为一个区块<br><br>–no-sync 忽略sync命令<br><br>-P 输出格式为POSIX<br><br>–sync 在取得磁盘信息前先执行sync命令<br><br>-T 文件系统类型<br></p>
 <h4 id="选择参数"><a href="#选择参数" class="headerlink" title="选择参数"></a>选择参数</h4><p>–block-size=&lt;区块大小&gt; 指定区块的大小<br><br>-t &lt;文件系统类型&gt; 只显示选定文件系统的磁盘信息<br><br>-x &lt;文件系统类型&gt; 不显示选定文件系统的磁盘信息<br></p>
-<h3 id="使用实例"><a href="#使用实例" class="headerlink" title="使用实例"></a>使用实例</h3><p><img src="https://raw.githubusercontent.com/yunchangwang/blogs/master/df/df.jpg" alt="例图"><br>第一列 显示各文件系统<br><br>第二列 显示文件系统的块数 这里以512B为一块<br><br>第三列 显示已经使用的磁盘<br><br>第四列 显示可用的磁盘<br><br><a href="http://www.cnblogs.com/peida/archive/2012/12/07/2806483.html" target="_blank" rel="noopener">其他</a><br><br>这边需要说明：已使用的+可使用的 != 总块数，因为缺省的每个分区都预留了少量空间供管理员使用，所以即使普通用户的空间已满，管理员依然可以登录系统解决相关问题</p>
+<h3 id="使用实例"><a href="#使用实例" class="headerlink" title="使用实例"></a>使用实例</h3><p><img src="https://raw.githubusercontent.com/yunchangwang/blogs/master/df/df.jpg" alt="例图"><br>第一列 显示各文件系统<br><br>第二列 显示文件系统的共有多少块，这里以512B为一块，换算后即可知道文件系统大小<br><br>第三列 显示已经使用的磁盘大小<br><br>第四列 显示可用的磁盘大小<br><br>关于其他的使用方式，读者可以参考<a href="http://www.cnblogs.com/peida/archive/2012/12/07/2806483.html" target="_blank" rel="noopener">cnblogs</a>了解。<br><br>这边需要说明：已使用的+可使用的 != 总块数，因为缺省的每个分区都预留了少量空间供管理员使用，所以即使普通用户的空间已满，管理员依然可以登录系统解决相关问题。</p>
 
       
     </div>
@@ -591,7 +591,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#df"><span class="nav-number">1.</span> <span class="nav-text">df</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#功能"><span class="nav-number">1.1.</span> <span class="nav-text">功能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#option参数"><span class="nav-number">1.2.</span> <span class="nav-text">option参数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#选择参数"><span class="nav-number">1.2.1.</span> <span class="nav-text">选择参数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用实例"><span class="nav-number">1.3.</span> <span class="nav-text">使用实例</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#功能"><span class="nav-number">1.</span> <span class="nav-text">功能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#option-参数"><span class="nav-number">2.</span> <span class="nav-text">option 参数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#选择参数"><span class="nav-number">2.1.</span> <span class="nav-text">选择参数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用实例"><span class="nav-number">3.</span> <span class="nav-text">使用实例</span></a></li></ol></div>
             
 
           </div>
