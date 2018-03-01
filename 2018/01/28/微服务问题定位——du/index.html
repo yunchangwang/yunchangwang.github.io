@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="du功能du命令也是查看使用空间的，但是与df命令不同的是 du命令是对文件和目录磁盘使用的空间的查看 option参数-a或-all  显示目录中个别文件的大小-b或-bytes  显示目录或文件大小时，以byte为单位-c或–total  除了显示个别目录或文件的大小外，同时也显示所有目录或文件的总和-k或–kilobytes  以KB(1024bytes)为单位输出-m或–megabytes">
+<meta name="description" content="功能du命令也是查看使用空间的，但是与df命令不同的是，du命令是对文件和目录磁盘使用的空间进行查看，而不是针对整个文件系统。 option 参数-a或-all  显示目录中个别文件的大小-b或-bytes  显示目录或文件大小时，以byte为单位-c或–total  除了显示个别目录或文件的大小外，同时也显示所有目录或文件的总和-k或–kilobytes  以KB(1024bytes)为单位输出">
 <meta name="keywords" content="linux命令,微服务,磁盘">
 <meta property="og:type" content="article">
 <meta property="og:title" content="微服务问题定位——du">
 <meta property="og:url" content="http://yoursite.com/2018/01/28/微服务问题定位——du/index.html">
 <meta property="og:site_name" content="wyc-blog">
-<meta property="og:description" content="du功能du命令也是查看使用空间的，但是与df命令不同的是 du命令是对文件和目录磁盘使用的空间的查看 option参数-a或-all  显示目录中个别文件的大小-b或-bytes  显示目录或文件大小时，以byte为单位-c或–total  除了显示个别目录或文件的大小外，同时也显示所有目录或文件的总和-k或–kilobytes  以KB(1024bytes)为单位输出-m或–megabytes">
+<meta property="og:description" content="功能du命令也是查看使用空间的，但是与df命令不同的是，du命令是对文件和目录磁盘使用的空间进行查看，而不是针对整个文件系统。 option 参数-a或-all  显示目录中个别文件的大小-b或-bytes  显示目录或文件大小时，以byte为单位-c或–total  除了显示个别目录或文件的大小外，同时也显示所有目录或文件的总和-k或–kilobytes  以KB(1024bytes)为单位输出">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-01-28T08:27:35.000Z">
+<meta property="og:updated_time" content="2018-03-01T00:37:02.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="微服务问题定位——du">
-<meta name="twitter:description" content="du功能du命令也是查看使用空间的，但是与df命令不同的是 du命令是对文件和目录磁盘使用的空间的查看 option参数-a或-all  显示目录中个别文件的大小-b或-bytes  显示目录或文件大小时，以byte为单位-c或–total  除了显示个别目录或文件的大小外，同时也显示所有目录或文件的总和-k或–kilobytes  以KB(1024bytes)为单位输出-m或–megabytes">
+<meta name="twitter:description" content="功能du命令也是查看使用空间的，但是与df命令不同的是，du命令是对文件和目录磁盘使用的空间进行查看，而不是针对整个文件系统。 option 参数-a或-all  显示目录中个别文件的大小-b或-bytes  显示目录或文件大小时，以byte为单位-c或–total  除了显示个别目录或文件的大小外，同时也显示所有目录或文件的总和-k或–kilobytes  以KB(1024bytes)为单位输出">
 
 
 
@@ -386,9 +386,9 @@
       
 
       
-        <h2 id="du"><a href="#du" class="headerlink" title="du"></a>du</h2><h3 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h3><p>du命令也是查看使用空间的，但是与df命令不同的是 du命令是对文件和目录磁盘使用的空间的查看</p>
-<h3 id="option参数"><a href="#option参数" class="headerlink" title="option参数"></a>option参数</h3><p>-a或-all  显示目录中个别文件的大小<br><br>-b或-bytes  显示目录或文件大小时，以byte为单位<br><br>-c或–total  除了显示个别目录或文件的大小外，同时也显示所有目录或文件的总和<br><br>-k或–kilobytes  以KB(1024bytes)为单位输出<br><br>-m或–megabytes  以MB为单位输出<br><br>-s或–summarize  仅显示总计，只列出最后加总的值<br><br>-h或–human-readable  以K，M，G为单位，提高信息的可读性<br><br>-x或–one-file-xystem  以一开始处理时的文件系统为准，若遇上其它不同的文件系统目录则略过<br><br>-L&lt;符号链接&gt;或–dereference&lt;符号链接&gt; 显示选项中所指定符号链接的源文件大小<br><br>-S或–separate-dirs   显示个别目录的大小时，并不含其子目录的大小<br><br>-X&lt;文件&gt;或–exclude-from=&lt;文件&gt;  在&lt;文件&gt;指定目录或文件<br><br>–exclude=&lt;目录或文件&gt;         略过指定的目录或文件<br><br>-D或–dereference-args   显示指定符号链接的源文件大小<br><br>-H或–si  与-h参数相同，但是K，M，G是以1000为换算单位<br><br>-l或–count-links   重复计算硬件链接的文件<br></p>
-<h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><p>$du 显示当前目录下面子目录的目录大小和总和<br><br>$du dir/filename 显示指定目录或者文件<br><br>$du #1 #2 同时显示多个，空格隔开<br></p>
+        <h3 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h3><p>du命令也是查看使用空间的，但是与df命令不同的是，du命令是对文件和目录磁盘使用的空间进行查看，而不是针对整个文件系统。</p>
+<h3 id="option-参数"><a href="#option-参数" class="headerlink" title="option 参数"></a>option 参数</h3><p>-a或-all  显示目录中个别文件的大小<br><br>-b或-bytes  显示目录或文件大小时，以byte为单位<br><br>-c或–total  除了显示个别目录或文件的大小外，同时也显示所有目录或文件的总和<br><br>-k或–kilobytes  以KB(1024bytes)为单位输出<br><br>-m或–megabytes  以MB为单位输出<br><br>-s或–summarize  仅显示总计，只列出最后加总的值<br><br>-h或–human-readable  以K，M，G为单位显示，提高信息的可读性<br><br>-x或–one-file-xystem  以一开始处理时的文件系统为准，若遇上其它不同的文件系统目录则略过<br><br>-L&lt;符号链接&gt;或–dereference&lt;符号链接&gt; 显示选项中所指定符号链接的源文件大小<br><br>-S或–separate-dirs   显示个别目录的大小时，并不含其子目录的大小<br><br>-X&lt;文件&gt;或–exclude-from=&lt;文件&gt;  在&lt;文件&gt;指定目录或文件<br><br>–exclude=&lt;目录或文件&gt;         略过指定的目录或文件<br><br>-D或–dereference-args   显示指定符号链接的源文件大小<br><br>-H或–si  与-h参数相同，但是K，M，G是以1000为换算单位<br><br>-l或–count-links   重复计算硬件链接的文件<br><br>读者可以使用<strong>man du</strong>或者<strong>du -help</strong>查看完整的参数列表。</p>
+<h3 id="使用实例"><a href="#使用实例" class="headerlink" title="使用实例"></a>使用实例</h3><p>$du 显示当前目录下以及子目录中所有文件的大小，一般都是使用<strong>-a</strong>参数指定文件的，因为罗列所有的信息读者很难找到相关的。<br><br>$du dir/filename 显示指定目录或者文件，<strong>dir/filename</strong>为系统中的路径。<br><br>$du #1 #2 同时显示多个，空格隔开<br></p>
 
       
     </div>
@@ -523,7 +523,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -534,7 +534,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">12</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -545,7 +545,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">26</span>
+                  <span class="site-state-item-count">23</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -588,7 +588,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#du"><span class="nav-number">1.</span> <span class="nav-text">du</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#功能"><span class="nav-number">1.1.</span> <span class="nav-text">功能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#option参数"><span class="nav-number">1.2.</span> <span class="nav-text">option参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实例"><span class="nav-number">1.3.</span> <span class="nav-text">实例</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#功能"><span class="nav-number">1.</span> <span class="nav-text">功能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#option-参数"><span class="nav-number">2.</span> <span class="nav-text">option 参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用实例"><span class="nav-number">3.</span> <span class="nav-text">使用实例</span></a></li></ol></div>
             
 
           </div>
