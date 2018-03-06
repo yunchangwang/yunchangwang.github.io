@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="本地搭建gitbook介绍gitbook更加适用于书写使用手册，不太适合书写一些博客和总结，所以笔者最近在做一些迁移的工作，将之前gitbook上的内容迁移到当前的博客上但是gitbook对于我们的工作还是有适用的地方的 先决条件安装nodejs是先决条件，因为我们需要npm去下载gitbook在mac电脑上，有brew工具的可以直接下载:$brew search nodejs 搜索包仓库中是否有">
+<meta name="description" content="介绍gitbook更加适用于书写使用手册，不太适合书写一些博客和总结，所以笔者最近在做一些迁移的工作，将之前gitbook上的内容迁移到当前的博客上。但是gitbook对于我们的工作还是有适用的地方的。所以在此介绍一下如何本地安装gitbook。 先决条件安装nodejs是先决条件，因为我们需要npm去下载gitbook。在mac电脑上，有brew工具的可以直接下载：$brew search no">
 <meta name="keywords" content="gitbook">
 <meta property="og:type" content="article">
 <meta property="og:title" content="如何在本地搭建gitbook">
 <meta property="og:url" content="http://yoursite.com/2018/01/28/如何在本地搭建gitbook/index.html">
 <meta property="og:site_name" content="wyc-blog">
-<meta property="og:description" content="本地搭建gitbook介绍gitbook更加适用于书写使用手册，不太适合书写一些博客和总结，所以笔者最近在做一些迁移的工作，将之前gitbook上的内容迁移到当前的博客上但是gitbook对于我们的工作还是有适用的地方的 先决条件安装nodejs是先决条件，因为我们需要npm去下载gitbook在mac电脑上，有brew工具的可以直接下载:$brew search nodejs 搜索包仓库中是否有">
+<meta property="og:description" content="介绍gitbook更加适用于书写使用手册，不太适合书写一些博客和总结，所以笔者最近在做一些迁移的工作，将之前gitbook上的内容迁移到当前的博客上。但是gitbook对于我们的工作还是有适用的地方的。所以在此介绍一下如何本地安装gitbook。 先决条件安装nodejs是先决条件，因为我们需要npm去下载gitbook。在mac电脑上，有brew工具的可以直接下载：$brew search no">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-01-28T09:08:09.000Z">
+<meta property="og:updated_time" content="2018-03-06T12:38:03.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="如何在本地搭建gitbook">
-<meta name="twitter:description" content="本地搭建gitbook介绍gitbook更加适用于书写使用手册，不太适合书写一些博客和总结，所以笔者最近在做一些迁移的工作，将之前gitbook上的内容迁移到当前的博客上但是gitbook对于我们的工作还是有适用的地方的 先决条件安装nodejs是先决条件，因为我们需要npm去下载gitbook在mac电脑上，有brew工具的可以直接下载:$brew search nodejs 搜索包仓库中是否有">
+<meta name="twitter:description" content="介绍gitbook更加适用于书写使用手册，不太适合书写一些博客和总结，所以笔者最近在做一些迁移的工作，将之前gitbook上的内容迁移到当前的博客上。但是gitbook对于我们的工作还是有适用的地方的。所以在此介绍一下如何本地安装gitbook。 先决条件安装nodejs是先决条件，因为我们需要npm去下载gitbook。在mac电脑上，有brew工具的可以直接下载：$brew search no">
 
 
 
@@ -386,10 +386,11 @@
       
 
       
-        <h2 id="本地搭建gitbook"><a href="#本地搭建gitbook" class="headerlink" title="本地搭建gitbook"></a>本地搭建gitbook</h2><h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>gitbook更加适用于书写使用手册，不太适合书写一些博客和总结，所以笔者最近在做一些迁移的工作，将之前gitbook上的内容迁移到当前的博客上<br><br>但是gitbook对于我们的工作还是有适用的地方的</p>
-<h3 id="先决条件"><a href="#先决条件" class="headerlink" title="先决条件"></a>先决条件</h3><p>安装nodejs是先决条件，因为我们需要npm去下载gitbook<br><br>在mac电脑上，有brew工具的可以直接下载:<br><br>$brew search nodejs 搜索包仓库中是否有nodejs<br><br>$brew install nodejs 有就可以直接下载<br><br>你也可以选择去官网上下载最新的nodejs压缩包，解压配置环境变量后即可使用<br></p>
-<h3 id="搭建"><a href="#搭建" class="headerlink" title="搭建"></a>搭建</h3><p>这里默认大家的电脑上已经安装好了nodejs<br><br>按照步骤执行以下命令:<br><br>$npm install gitbook-cli -g  下载gitbook客户端包<br><br>$gitbook –version  查看gitbook的版本，测试是否可以使用命令<br><br>$cd /users/Desktop 切换到一个目录，这里笔者切换到了桌面<br><br>$mkdir gitbook  创建gitbook目录，这个目录就是用来初始化的<br><br>其实上面的两步读者可以手动完成<br><br>$gitbook init  初始化gitbook<br><br>$gitbook build  构建，一般有内容更新时要构建<br><br>$gitbook serve  开启服务，默认在4000端口监听<br><br><a href="http://localhost:4000" target="_blank" rel="noopener">http://localhost:4000</a>  开启你的访问之路吧！</p>
-<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>笔者之前在windows上搭建过，出现了一些问题，build的时候总是报错<br><br>在github官方issues中，官方表示这个是已知的gitbook的bug，高版本的gitbook会出现这个bug<br><br>如果你遇到相同的问题，请参考:<br><a href="https://github.com/GitbookIO/gitbook/issues/1309" target="_blank" rel="noopener">解决方法</a><br><br>解决方法是点赞和喝彩最多的</p>
+        <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>gitbook更加适用于书写使用手册，不太适合书写一些博客和总结，所以笔者最近在做一些迁移的工作，将之前gitbook上的内容迁移到当前的博客上。<br><br>但是gitbook对于我们的工作还是有适用的地方的。所以在此介绍一下如何本地安装gitbook。</p>
+<h3 id="先决条件"><a href="#先决条件" class="headerlink" title="先决条件"></a>先决条件</h3><p>安装nodejs是先决条件，因为我们需要npm去下载gitbook。<br><br>在mac电脑上，有brew工具的可以直接下载：<br>$brew search nodejs 搜索包仓库中是否有nodejs<br>$brew install nodejs 有就可以直接下载<br><br>你也可以选择去官网上下载最新的nodejs压缩包，解压配置环境变量后即可使用。<br><br><strong>关于brew，读者可以参考<a href="https://www.jianshu.com/p/4e80b42823d5" target="_blank" rel="noopener">简书</a>进行安装。</strong></p>
+<h3 id="搭建"><a href="#搭建" class="headerlink" title="搭建"></a>搭建</h3><p>这里默认大家的电脑上已经安装好了nodejs。<br><br>按照步骤执行以下命令：<br>$npm install gitbook-cli -g  下载gitbook客户端包<br>$gitbook –version  查看gitbook的版本，测试是否可以使用命令<br>$cd /users/Desktop 切换到一个目录，这里笔者切换到了桌面<br>$mkdir gitbook  创建gitbook目录，这个目录就是用来初始化的<br><em>其实上面的两步(切换目录和创建目录)读者可以手动完成。</em><br>$gitbook init  初始化gitbook目录<br>$gitbook build  构建，一般有内容更新时要构建<br>$gitbook serve  开启服务，默认在4000端口监听<br>访问<a href="http://localhost:4000" target="_blank" rel="noopener">http://localhost:4000</a>  开启你的gitbook之路吧！</p>
+<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>你的系统 4000 端口可能已经被占用了，gitbook可以指定端口启动：<br><strong>gitbook serve –port 2000</strong></p>
+<p>另一个问题是笔者在windows上搭建时遇到的：<br>笔者之前在windows上搭建过，出现了一些问题，build的时候总是报错。<br><br>在github官方issues中，官方表示这个是已知的gitbook的bug，高版本的gitbook会出现这个bug。<br>如果你遇到相同的问题，请参考gitbug上的<a href="https://github.com/GitbookIO/gitbook/issues/1309" target="_blank" rel="noopener">解决方法</a>。<br>解决方法是点赞和喝彩最多的。</p>
 
       
     </div>
@@ -520,7 +521,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-count">31</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -542,7 +543,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-count">24</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -585,7 +586,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#本地搭建gitbook"><span class="nav-number">1.</span> <span class="nav-text">本地搭建gitbook</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#介绍"><span class="nav-number">1.1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#先决条件"><span class="nav-number">1.2.</span> <span class="nav-text">先决条件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#搭建"><span class="nav-number">1.3.</span> <span class="nav-text">搭建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#问题"><span class="nav-number">1.4.</span> <span class="nav-text">问题</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#先决条件"><span class="nav-number">2.</span> <span class="nav-text">先决条件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#搭建"><span class="nav-number">3.</span> <span class="nav-text">搭建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#问题"><span class="nav-number">4.</span> <span class="nav-text">问题</span></a></li></ol></div>
             
 
           </div>

@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[python网络数据采集——简介]]></title>
+    <url>%2F2018%2F03%2F04%2Fpython%E7%BD%91%E7%BB%9C%E6%95%B0%E6%8D%AE%E9%87%87%E9%9B%86%E2%80%94%E2%80%94%E7%AE%80%E4%BB%8B%2F</url>
+    <content type="text"><![CDATA[简介网络数据采集(网络爬虫)，是一种网络数据的采集方式，又称为网页抓屏，数据挖掘，网络收割或者其他类似的版本。网络数据采集是一种通过多种手段收集网络数据的方式，比如通过api交互，当然如果你有毅力可以选择手动摘抄，人们最常用的估计是使用浏览器进行网页的浏览，这其实也是一种网络数据采集。注：之后相关文章都使用网络爬虫这个术语。 意义已经有浏览器了，为何还需要网络爬虫呢？ 首先浏览器的搜索是主流的，你不一定能从中找到有用的信息。 你需要的数据可能来自不同的网站，为了分析和对比。 网站可能没有api(接口)提供给外部使用。 网络爬虫可以解决这些问题，爬取的数据也可以进行保存和更新，你也可以通过特定的方式进行展示，比如图表。实际上，这些都是手动摘抄都可以办到的，但是谁又会整天看着数据有没有改变，然后去更新手头的数据呢？ 扩展之前笔者是学习过一段时间的python基础的，但是笔者糊口的语言是java，python只是笔者业余的爱好罢了。笔者认为python的几大领域为网络数据采集，自动化和大数据分析，所以读者可以在学习了python的基础上选择一个方向再深入的研究。 关于python的基础知识，笔者的笔记并没有开放在网站上，读者可以自行寻找。 关于网络爬虫，笔者认为基本对现在的业务没有什么帮助，因为网络爬虫对于一个产品的稳定性来说一定是大打折扣的(因为谁有能保证你收集的信息来源是否还存在呢？)。但是可以给你的生活带来一些乐趣，人生在世，技多不压身嘛。]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python网络爬虫</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[计算机网络——NAT]]></title>
     <url>%2F2018%2F02%2F20%2F%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E2%80%94%E2%80%94NAT%2F</url>
     <content type="text"><![CDATA[简介NAT(Network Address Translation)，网络地址转换。NAT可以看成一个开放到公网(全球因特网)上的公用路由器，用来代理一个子网下的所有主机的请求和应答。NAT在转换的时候，会将主机的ip地址和端口号替换成公用路由器的ip地址和端口，并且维护在一张表中进行一一对应，为了将返回的数据应答到唯一的主机上。 作用由于ipv4规则的ip地址消耗殆尽，不可能为所有的主机都分配真正的公网ip，所以很多主机ip地址都是虚拟的ip地址，并且有统一的代理服务器进行消息的请求和应答。NAT的作用就是将私有的ip地址转换成全球因特网承认的ip地址，私有的ip地址有三种：①10.0.0.0~10.255.255.255/8 ②172.16.0.0~172.31.255.255/12 ③192.168.0.0~192.168.255.255/16 这些IP地址是用于私有的网络。NAT使得一个组织局域网中的主机都能互相访问，但是想要访问公网就只有一条出路，这样也可以保证局域网中信息的安全性。 例子假设用户王某坐在家庭主机10.0.0.1傍边，请求域名为 www.bilibili.com (ip地址为112.49.19.4)的web服务器(端口为80)上的一个web页面。主机10.0.0.1为其指派了任意的端口2233，并将请求的报文发送到LAN中。NAT路由器收到该数据请求，为其生成了新的端口号5000，并将ip地址替换成广域网的ip地址138.76.29.7，然后继续想目标服务器请求。具体步骤如下： 10.0.0.1:2233 发送报文 —&gt; LAN LAN —&gt; NAT路由器 —&gt; 替换成138.76.29.7:5000 并维护一张映射表 138.76.29.7:5000 发送请求报文 —&gt; 112.49.19.4:80 返回数据到WAN —&gt; NAT路由器 NAT路由器从维护的映射表中获取私有ip地址 返回数据 —&gt; LAN —&gt; 10.0.0.1:2233 读者以前可能发现，百度的ip地址和主机的ip地址不同，因为一个是公网的，主机的只是私有的ip地址，中间就是利用了NAT。代理服务器，即NAT在跳转的当中可能存在很多个，即一个请求可能通过n个NAT。]]></content>
@@ -20,8 +31,8 @@
         <category>计算机网络</category>
       </categories>
       <tags>
-        <tag>网络协议</tag>
         <tag>计算机网络</tag>
+        <tag>网络协议</tag>
       </tags>
   </entry>
   <entry>
@@ -231,7 +242,7 @@
   <entry>
     <title><![CDATA[如何在本地搭建gitbook]]></title>
     <url>%2F2018%2F01%2F28%2F%E5%A6%82%E4%BD%95%E5%9C%A8%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BAgitbook%2F</url>
-    <content type="text"><![CDATA[本地搭建gitbook介绍gitbook更加适用于书写使用手册，不太适合书写一些博客和总结，所以笔者最近在做一些迁移的工作，将之前gitbook上的内容迁移到当前的博客上但是gitbook对于我们的工作还是有适用的地方的 先决条件安装nodejs是先决条件，因为我们需要npm去下载gitbook在mac电脑上，有brew工具的可以直接下载:$brew search nodejs 搜索包仓库中是否有nodejs$brew install nodejs 有就可以直接下载你也可以选择去官网上下载最新的nodejs压缩包，解压配置环境变量后即可使用 搭建这里默认大家的电脑上已经安装好了nodejs按照步骤执行以下命令:$npm install gitbook-cli -g 下载gitbook客户端包$gitbook –version 查看gitbook的版本，测试是否可以使用命令$cd /users/Desktop 切换到一个目录，这里笔者切换到了桌面$mkdir gitbook 创建gitbook目录，这个目录就是用来初始化的其实上面的两步读者可以手动完成$gitbook init 初始化gitbook$gitbook build 构建，一般有内容更新时要构建$gitbook serve 开启服务，默认在4000端口监听http://localhost:4000 开启你的访问之路吧！ 问题笔者之前在windows上搭建过，出现了一些问题，build的时候总是报错在github官方issues中，官方表示这个是已知的gitbook的bug，高版本的gitbook会出现这个bug如果你遇到相同的问题，请参考:解决方法解决方法是点赞和喝彩最多的]]></content>
+    <content type="text"><![CDATA[介绍gitbook更加适用于书写使用手册，不太适合书写一些博客和总结，所以笔者最近在做一些迁移的工作，将之前gitbook上的内容迁移到当前的博客上。但是gitbook对于我们的工作还是有适用的地方的。所以在此介绍一下如何本地安装gitbook。 先决条件安装nodejs是先决条件，因为我们需要npm去下载gitbook。在mac电脑上，有brew工具的可以直接下载：$brew search nodejs 搜索包仓库中是否有nodejs$brew install nodejs 有就可以直接下载你也可以选择去官网上下载最新的nodejs压缩包，解压配置环境变量后即可使用。关于brew，读者可以参考简书进行安装。 搭建这里默认大家的电脑上已经安装好了nodejs。按照步骤执行以下命令：$npm install gitbook-cli -g 下载gitbook客户端包$gitbook –version 查看gitbook的版本，测试是否可以使用命令$cd /users/Desktop 切换到一个目录，这里笔者切换到了桌面$mkdir gitbook 创建gitbook目录，这个目录就是用来初始化的其实上面的两步(切换目录和创建目录)读者可以手动完成。$gitbook init 初始化gitbook目录$gitbook build 构建，一般有内容更新时要构建$gitbook serve 开启服务，默认在4000端口监听访问http://localhost:4000 开启你的gitbook之路吧！ 问题你的系统 4000 端口可能已经被占用了，gitbook可以指定端口启动：gitbook serve –port 2000 另一个问题是笔者在windows上搭建时遇到的：笔者之前在windows上搭建过，出现了一些问题，build的时候总是报错。在github官方issues中，官方表示这个是已知的gitbook的bug，高版本的gitbook会出现这个bug。如果你遇到相同的问题，请参考gitbug上的解决方法。解决方法是点赞和喝彩最多的。]]></content>
       <categories>
         <category>gitbook</category>
       </categories>
