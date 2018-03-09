@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[python网络数据采集——网络连接]]></title>
+    <url>%2F2018%2F03%2F09%2Fpython%E7%BD%91%E7%BB%9C%E6%95%B0%E6%8D%AE%E9%87%87%E9%9B%86%E2%80%94%E2%80%94%E7%BD%91%E7%BB%9C%E8%BF%9E%E6%8E%A5%2F</url>
+    <content type="text"><![CDATA[初识urllib要采集信息，首先你需要将html文件抓取到本地，python中使用urllib这个包来进行网络连接，并且进行html的抓取，如果是python2.x版本，使用的是urllib2这个包。下面贴出一段代码，读者可自行运行：123456#! /usr/local/bin/python3# encoding:utf-8from urllib.request import urlopenhtml = urlopen(&quot;http://pythonscraping.com/pages/page1.html&quot;)print(html.read()) 运行BeautifulSoupBeautifulSoup是第三方的python模块，所以需要进行安装，在此只介绍macOS系统的下载方式：12345678910python中一般使用pip来下载第三方的依赖包$sudo easy_install pip 首先确保你的系统中有pip命令$pip install beautifulsoup4 即可下载如果使用的是python3.x版本$pip3 install beautifulsoup4 需要在pip后面加上数字3一般macOS系统自带的是python2.x，在这里推荐使用brew来下载python3$brew search python$brew install python3 即可 BeautifulSoup在代码中的作用相当于html解析器，然后读者可以通过该模块的方法来获取一些html中的标签。在这里贴出BeautifulSoup的代码：123456789#! /usr/local/bin/python3# encoding:utf-8from urllib.request import urlopenfrom bs4 import BeautifulSouphtml = urlopen(&quot;http://pythonscraping.com/pages/page1.html&quot;)bsObj = BeautifulSoup(html, &quot;html.parser&quot;)print(bsObj.h1) BeautifulSoup比较老的版本构造时不需要传入”html.parser” 参数，新的版本中，虽然结果仍然打印了出来，但是在运行过程中会报错。html.parser 是为了告诉BeautifulSoup 我使用的是 html 解析器。读者可以参考官方手册了解更过BeautifulSoup的知识点。 可靠的网络连接像上面写的代码，很有可能抛出异常，谁也不知道这个url是否可靠，如果服务器宕机了怎么办？等等问题，都会使得程序终止。想象一下，你的爬虫在晚上执行，你想早上起来查看收集的数据，但是由于中间的错误，导致之后的程序没有执行，你不得不再等待一天的时间。其实说了这么多，就是在代码层面中捕获异常。可靠的网络连接，要保证程序在运行过程中，即使中途遇到了错误，也能保证余下的代码可执行。大家参考下面的代码来发现不同点：12345678910111213141516171819202122from urllib.request import urlopenfrom urllib.request import HTTPErrorfrom bs4 import BeautifulSoupdef get_h1(url): try: html = urlopen(url) except HTTPError as e: return None else: try: bsObj = BeautifulSoup(html, &quot;html.parser&quot;) h1 = bsObj.h1 except AttributeError as e: return None return h1if __name__ == &apos;__main__&apos;: h1 = get_h1(&quot;http://pythonscraping.com/pages/page1.html&quot;) print(h1)]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python网络爬虫</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[python网络数据采集——简介]]></title>
     <url>%2F2018%2F03%2F04%2Fpython%E7%BD%91%E7%BB%9C%E6%95%B0%E6%8D%AE%E9%87%87%E9%9B%86%E2%80%94%E2%80%94%E7%AE%80%E4%BB%8B%2F</url>
     <content type="text"><![CDATA[简介网络数据采集(网络爬虫)，是一种网络数据的采集方式，又称为网页抓屏，数据挖掘，网络收割或者其他类似的版本。网络数据采集是一种通过多种手段收集网络数据的方式，比如通过api交互，当然如果你有毅力可以选择手动摘抄，人们最常用的估计是使用浏览器进行网页的浏览，这其实也是一种网络数据采集。注：之后相关文章都使用网络爬虫这个术语。 意义已经有浏览器了，为何还需要网络爬虫呢？ 首先浏览器的搜索是主流的，你不一定能从中找到有用的信息。 你需要的数据可能来自不同的网站，为了分析和对比。 网站可能没有api(接口)提供给外部使用。 网络爬虫可以解决这些问题，爬取的数据也可以进行保存和更新，你也可以通过特定的方式进行展示，比如图表。实际上，这些都是手动摘抄都可以办到的，但是谁又会整天看着数据有没有改变，然后去更新手头的数据呢？ 扩展之前笔者是学习过一段时间的python基础的，但是笔者糊口的语言是java，python只是笔者业余的爱好罢了。笔者认为python的几大领域为网络数据采集，自动化和大数据分析，所以读者可以在学习了python的基础上选择一个方向再深入的研究。 关于python的基础知识，笔者的笔记并没有开放在网站上，读者可以自行寻找。 关于网络爬虫，笔者认为基本对现在的业务没有什么帮助，因为网络爬虫对于一个产品的稳定性来说一定是大打折扣的(因为谁有能保证你收集的信息来源是否还存在呢？)。但是可以给你的生活带来一些乐趣，人生在世，技多不压身嘛。]]></content>
