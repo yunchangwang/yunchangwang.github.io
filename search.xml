@@ -53,8 +53,8 @@
         <category>计算机网络</category>
       </categories>
       <tags>
-        <tag>计算机网络</tag>
         <tag>网络协议</tag>
+        <tag>计算机网络</tag>
       </tags>
   </entry>
   <entry>
@@ -253,7 +253,7 @@
   <entry>
     <title><![CDATA[gitbook目录折叠]]></title>
     <url>%2F2018%2F01%2F28%2Fgitbook%E7%9B%AE%E5%BD%95%E6%8A%98%E5%8F%A0%2F</url>
-    <content type="text"><![CDATA[gitbook目录折叠背景在编写gitbook的时候发现目录的数量比较庞大的时候显得杂乱无章因为章节比较多的时候全展开，很难有目的地寻找所以笔者去寻求了解决之道，用来折叠目录，笔者在网上找到了一个插件可以解决这个问题 插件插件网站上面还有其他gitbook使用的插件 使用参考个性化配置gitbook，同理你可以在里面添加需要使用的插件，如图book.json在根目录下，即与SUMMARY.md同级$ cd到gitbook目录$ npm install gitbook-plugin-toggle-chapters重新build serve即可]]></content>
+    <content type="text"><![CDATA[背景在编写gitbook的时候发现目录的数量比较庞大的时候显得杂乱无章，因为章节比较多的时候gitbook对于目录默认是全展开，很难有目的地寻找，对于管理人和阅读的读者来说很不友好。(主要是后者，一切都要从用户的角度考虑)如果可以将gitbook的目录折叠，那么查找时会更加清晰，笔者在网上找到了插件，只要让gitbook引入即可。 插件 插件名称：toggle-chapters 效果：默认只在目录导航中显示章的标题，而不会显示小节的标题，点击每一章或者每一节会显示当前章或节的子目录，如果有的话，但是同时会收起其它之前展开的章节。 关于更多的gitbook插件，读者可以参考插件网站。 配置在根目录(即与SUMMARY.md同级的目录)下的配置文件 book.json(如果没有则新建)中添加插件配置，如图：读者可以参考进行配置，同理你可以在里面添加需要使用的插件。配置完成后，可按照一下步骤进行： $ cd gitbook根目录 $ npm install gitbook-plugin-toggle-chapters (此时gitbook的根目录下的node_modules文件夹中已经有了该插件了) $ gitbook build $ gitbook serve访问 http://localhost:4000 看你的插件是否已经生效。]]></content>
       <categories>
         <category>gitbook</category>
       </categories>

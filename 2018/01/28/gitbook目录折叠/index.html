@@ -79,19 +79,19 @@
 
 
 
-<meta name="description" content="gitbook目录折叠背景在编写gitbook的时候发现目录的数量比较庞大的时候显得杂乱无章因为章节比较多的时候全展开，很难有目的地寻找所以笔者去寻求了解决之道，用来折叠目录，笔者在网上找到了一个插件可以解决这个问题 插件插件网站上面还有其他gitbook使用的插件 使用参考个性化配置gitbook，同理你可以在里面添加需要使用的插件，如图book.json在根目录下，即与SUMMARY.md同级">
+<meta name="description" content="背景在编写gitbook的时候发现目录的数量比较庞大的时候显得杂乱无章，因为章节比较多的时候gitbook对于目录默认是全展开，很难有目的地寻找，对于管理人和阅读的读者来说很不友好。(主要是后者，一切都要从用户的角度考虑)如果可以将gitbook的目录折叠，那么查找时会更加清晰，笔者在网上找到了插件，只要让gitbook引入即可。 插件 插件名称：toggle-chapters 效果：默认只在目录">
 <meta name="keywords" content="gitbook">
 <meta property="og:type" content="article">
 <meta property="og:title" content="gitbook目录折叠">
 <meta property="og:url" content="http://yoursite.com/2018/01/28/gitbook目录折叠/index.html">
 <meta property="og:site_name" content="wyc-blog">
-<meta property="og:description" content="gitbook目录折叠背景在编写gitbook的时候发现目录的数量比较庞大的时候显得杂乱无章因为章节比较多的时候全展开，很难有目的地寻找所以笔者去寻求了解决之道，用来折叠目录，笔者在网上找到了一个插件可以解决这个问题 插件插件网站上面还有其他gitbook使用的插件 使用参考个性化配置gitbook，同理你可以在里面添加需要使用的插件，如图book.json在根目录下，即与SUMMARY.md同级">
+<meta property="og:description" content="背景在编写gitbook的时候发现目录的数量比较庞大的时候显得杂乱无章，因为章节比较多的时候gitbook对于目录默认是全展开，很难有目的地寻找，对于管理人和阅读的读者来说很不友好。(主要是后者，一切都要从用户的角度考虑)如果可以将gitbook的目录折叠，那么查找时会更加清晰，笔者在网上找到了插件，只要让gitbook引入即可。 插件 插件名称：toggle-chapters 效果：默认只在目录">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://raw.githubusercontent.com/yunchangwang/blogs/master/gitbook/plugin.jpg">
-<meta property="og:updated_time" content="2018-01-28T09:36:45.000Z">
+<meta property="og:updated_time" content="2018-03-12T07:46:39.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="gitbook目录折叠">
-<meta name="twitter:description" content="gitbook目录折叠背景在编写gitbook的时候发现目录的数量比较庞大的时候显得杂乱无章因为章节比较多的时候全展开，很难有目的地寻找所以笔者去寻求了解决之道，用来折叠目录，笔者在网上找到了一个插件可以解决这个问题 插件插件网站上面还有其他gitbook使用的插件 使用参考个性化配置gitbook，同理你可以在里面添加需要使用的插件，如图book.json在根目录下，即与SUMMARY.md同级">
+<meta name="twitter:description" content="背景在编写gitbook的时候发现目录的数量比较庞大的时候显得杂乱无章，因为章节比较多的时候gitbook对于目录默认是全展开，很难有目的地寻找，对于管理人和阅读的读者来说很不友好。(主要是后者，一切都要从用户的角度考虑)如果可以将gitbook的目录折叠，那么查找时会更加清晰，笔者在网上找到了插件，只要让gitbook引入即可。 插件 插件名称：toggle-chapters 效果：默认只在目录">
 <meta name="twitter:image" content="https://raw.githubusercontent.com/yunchangwang/blogs/master/gitbook/plugin.jpg">
 
 
@@ -388,9 +388,19 @@
       
 
       
-        <h2 id="gitbook目录折叠"><a href="#gitbook目录折叠" class="headerlink" title="gitbook目录折叠"></a>gitbook目录折叠</h2><h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>在编写gitbook的时候发现目录的数量比较庞大的时候显得杂乱无章<br><br>因为章节比较多的时候全展开，很难有目的地寻找<br><br>所以笔者去寻求了解决之道，用来折叠目录，笔者在网上找到了一个插件可以解决这个问题</p>
-<h3 id="插件"><a href="#插件" class="headerlink" title="插件"></a>插件</h3><p><a href="http://www.chengweiyang.cn/gitbook/plugins/functional/toggle-chapters.html" target="_blank" rel="noopener">插件网站</a><br><br>上面还有其他gitbook使用的插件<br></p>
-<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p><a href="http://www.chengweiyang.cn/gitbook/customize/book.json.html" target="_blank" rel="noopener">参考</a><br><br>个性化配置gitbook，同理你可以在里面添加需要使用的插件，如图<br><br><img src="https://raw.githubusercontent.com/yunchangwang/blogs/master/gitbook/plugin.jpg" alt="样图"><br><br>book.json在根目录下，即与SUMMARY.md同级<br><br>$ cd到gitbook目录<br><br>$ npm install gitbook-plugin-toggle-chapters<br><br>重新build  serve即可</p>
+        <h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>在编写gitbook的时候发现目录的数量比较庞大的时候显得<strong>杂乱无章</strong>，因为章节比较多的时候<strong>gitbook对于目录默认是全展开</strong>，很难有目的地寻找，对于管理人和阅读的读者来说很不友好。<strong>(主要是后者，一切都要从用户的角度考虑)</strong><br><br>如果可以将gitbook的目录折叠，那么查找时会更加清晰，笔者在网上找到了插件，只要让gitbook引入即可。</p>
+<h3 id="插件"><a href="#插件" class="headerlink" title="插件"></a>插件</h3><ul>
+<li>插件名称：toggle-chapters</li>
+<li>效果：默认只在目录导航中显示章的标题，而不会显示小节的标题，点击每一章或者每一节会显示当前章或节的子目录，如果有的话，但是同时会收起其它之前展开的章节。</li>
+</ul>
+<p>关于更多的gitbook插件，读者可以参考<a href="http://www.chengweiyang.cn/gitbook/plugins/functional/toggle-chapters.html" target="_blank" rel="noopener">插件网站</a>。<br></p>
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><p>在根目录(即与SUMMARY.md同级的目录)下的配置文件 book.json(<strong>如果没有则新建</strong>)中添加插件配置，如图：<br><br><img src="https://raw.githubusercontent.com/yunchangwang/blogs/master/gitbook/plugin.jpg" alt="样图"><br>读者可以<a href="http://www.chengweiyang.cn/gitbook/customize/book.json.html" target="_blank" rel="noopener">参考</a>进行配置，同理你可以在里面添加需要使用的插件。<br><br>配置完成后，可按照一下步骤进行：</p>
+<ul>
+<li>$ cd gitbook根目录</li>
+<li>$ npm install gitbook-plugin-toggle-chapters (此时gitbook的根目录下的node_modules文件夹中已经有了该插件了)</li>
+<li>$ gitbook build</li>
+<li>$ gitbook serve<br>访问 <a href="http://localhost:4000" target="_blank" rel="noopener">http://localhost:4000</a> 看你的插件是否已经生效。</li>
+</ul>
 
       
     </div>
@@ -586,7 +596,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#gitbook目录折叠"><span class="nav-number">1.</span> <span class="nav-text">gitbook目录折叠</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#背景"><span class="nav-number">1.1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#插件"><span class="nav-number">1.2.</span> <span class="nav-text">插件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用"><span class="nav-number">1.3.</span> <span class="nav-text">使用</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#背景"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#插件"><span class="nav-number">2.</span> <span class="nav-text">插件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置"><span class="nav-number">3.</span> <span class="nav-text">配置</span></a></li></ol></div>
             
 
           </div>
