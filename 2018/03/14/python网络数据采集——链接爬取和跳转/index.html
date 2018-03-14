@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="初识urllib要采集信息，首先你需要将html文件抓取到本地，python中使用urllib这个包来进行网络连接，并且进行html的抓取，如果是python2.x版本，使用的是urllib2这个包。下面贴出一段代码，读者可自行运行：123456#! /usr/local/bin/python3# encoding:utf-8from urllib.request import urlopenht">
+<meta name="description" content="网页跳转在网络数据采集中，如果只对单页面进行操作，那么这个爬虫将毫无意义。因为采集的数据往往是分散在不同的网页的，所以对于单页面而言，爬虫需要采集页面中的链接，并且进行跳转。网页跳转，在正在采集的页面中收集新的链接，然后将新的链接传入到采集程序中，如此之后，采集程序就已经在新的页面采集信息了。 举个例子我们以维基百科的一个页面为例，从主页面开始，采集 id 为 mw-content-text 的段">
 <meta name="keywords" content="python网络爬虫">
 <meta property="og:type" content="article">
-<meta property="og:title" content="python网络数据采集——网络连接">
-<meta property="og:url" content="http://yoursite.com/2018/03/09/python网络数据采集——网络连接/index.html">
+<meta property="og:title" content="python网络数据采集——链接爬取和跳转">
+<meta property="og:url" content="http://yoursite.com/2018/03/14/python网络数据采集——链接爬取和跳转/index.html">
 <meta property="og:site_name" content="wyc-blog">
-<meta property="og:description" content="初识urllib要采集信息，首先你需要将html文件抓取到本地，python中使用urllib这个包来进行网络连接，并且进行html的抓取，如果是python2.x版本，使用的是urllib2这个包。下面贴出一段代码，读者可自行运行：123456#! /usr/local/bin/python3# encoding:utf-8from urllib.request import urlopenht">
+<meta property="og:description" content="网页跳转在网络数据采集中，如果只对单页面进行操作，那么这个爬虫将毫无意义。因为采集的数据往往是分散在不同的网页的，所以对于单页面而言，爬虫需要采集页面中的链接，并且进行跳转。网页跳转，在正在采集的页面中收集新的链接，然后将新的链接传入到采集程序中，如此之后，采集程序就已经在新的页面采集信息了。 举个例子我们以维基百科的一个页面为例，从主页面开始，采集 id 为 mw-content-text 的段">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-09T13:10:23.000Z">
+<meta property="og:updated_time" content="2018-03-14T04:27:44.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="python网络数据采集——网络连接">
-<meta name="twitter:description" content="初识urllib要采集信息，首先你需要将html文件抓取到本地，python中使用urllib这个包来进行网络连接，并且进行html的抓取，如果是python2.x版本，使用的是urllib2这个包。下面贴出一段代码，读者可自行运行：123456#! /usr/local/bin/python3# encoding:utf-8from urllib.request import urlopenht">
+<meta name="twitter:title" content="python网络数据采集——链接爬取和跳转">
+<meta name="twitter:description" content="网页跳转在网络数据采集中，如果只对单页面进行操作，那么这个爬虫将毫无意义。因为采集的数据往往是分散在不同的网页的，所以对于单页面而言，爬虫需要采集页面中的链接，并且进行跳转。网页跳转，在正在采集的页面中收集新的链接，然后将新的链接传入到采集程序中，如此之后，采集程序就已经在新的页面采集信息了。 举个例子我们以维基百科的一个页面为例，从主页面开始，采集 id 为 mw-content-text 的段">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/03/09/python网络数据采集——网络连接/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/03/14/python网络数据采集——链接爬取和跳转/"/>
 
 
 
 
 
-  <title>python网络数据采集——网络连接 | wyc-blog</title>
+  <title>python网络数据采集——链接爬取和跳转 | wyc-blog</title>
   
 
 
@@ -297,7 +297,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/09/python网络数据采集——网络连接/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/14/python网络数据采集——链接爬取和跳转/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="wyc">
@@ -314,7 +314,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">python网络数据采集——网络连接</h1>
+          <h1 class="post-title" itemprop="name headline">python网络数据采集——链接爬取和跳转</h1>
         
 
         <div class="post-meta">
@@ -326,8 +326,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-09T20:27:29+08:00">
-                2018-03-09
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-14T08:53:10+08:00">
+                2018-03-14
               </time>
             
 
@@ -386,12 +386,23 @@
       
 
       
-        <h2 id="初识urllib"><a href="#初识urllib" class="headerlink" title="初识urllib"></a>初识urllib</h2><p>要采集信息，首先你需要将html文件抓取到本地，python中使用urllib这个包来进行网络连接，并且进行html的抓取，<strong>如果是python2.x版本，使用的是urllib2这个包</strong>。<br><br>下面贴出一段代码，读者可自行运行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#! /usr/local/bin/python3</span><br><span class="line"># encoding:utf-8</span><br><span class="line">from urllib.request import urlopen</span><br><span class="line"></span><br><span class="line">html = urlopen(&quot;http://pythonscraping.com/pages/page1.html&quot;)</span><br><span class="line">print(html.read())</span><br></pre></td></tr></table></figure></p>
-<h2 id="运行BeautifulSoup"><a href="#运行BeautifulSoup" class="headerlink" title="运行BeautifulSoup"></a>运行BeautifulSoup</h2><p><strong>BeautifulSoup</strong>是第三方的python模块，所以需要进行安装，在此只介绍macOS系统的下载方式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">python中一般使用pip来下载第三方的依赖包</span><br><span class="line">$sudo easy_install pip 首先确保你的系统中有pip命令</span><br><span class="line">$pip install beautifulsoup4 即可下载</span><br><span class="line"></span><br><span class="line">如果使用的是python3.x版本</span><br><span class="line">$pip3 install beautifulsoup4 需要在pip后面加上数字3</span><br><span class="line"></span><br><span class="line">一般macOS系统自带的是python2.x，在这里推荐使用brew来下载python3</span><br><span class="line">$brew search python</span><br><span class="line">$brew install python3 即可</span><br></pre></td></tr></table></figure></p>
-<p><strong>BeautifulSoup</strong>在代码中的作用相当于html解析器，然后读者可以通过该模块的方法来获取一些html中的标签。在这里贴出<strong>BeautifulSoup</strong>的代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#! /usr/local/bin/python3</span><br><span class="line"># encoding:utf-8</span><br><span class="line"></span><br><span class="line">from urllib.request import urlopen</span><br><span class="line">from bs4 import BeautifulSoup</span><br><span class="line"></span><br><span class="line">html = urlopen(&quot;http://pythonscraping.com/pages/page1.html&quot;)</span><br><span class="line">bsObj = BeautifulSoup(html, &quot;html.parser&quot;)</span><br><span class="line">print(bsObj.h1)</span><br></pre></td></tr></table></figure></p>
-<p><strong>BeautifulSoup</strong>比较老的版本构造时不需要传入”html.parser” 参数，新的版本中，虽然结果仍然打印了出来，但是在运行过程中会报错。html.parser 是为了告诉<strong>BeautifulSoup</strong> 我使用的是 html 解析器。<br><br>读者可以参考<a href="https://www.crummy.com/software/BeautifulSoup/bs4/doc.zh/" target="_blank" rel="noopener">官方手册</a>了解更过<strong>BeautifulSoup</strong>的知识点。</p>
-<h2 id="可靠的网络连接"><a href="#可靠的网络连接" class="headerlink" title="可靠的网络连接"></a>可靠的网络连接</h2><p>像上面写的代码，很有可能抛出异常，谁也不知道这个url是否可靠，如果服务器宕机了怎么办？等等问题，都会使得程序终止。<br><br>想象一下，你的爬虫在晚上执行，你想早上起来查看收集的数据，但是由于中间的错误，导致之后的程序没有执行，你不得不再等待一天的时间。<br><br>其实说了这么多，就是在代码层面中<strong>捕获异常</strong>。可靠的网络连接，要保证程序在运行过程中，即使中途遇到了错误，也能保证余下的代码可执行。大家参考下面的代码来发现不同点：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">from urllib.request import urlopen</span><br><span class="line">from urllib.request import HTTPError</span><br><span class="line">from bs4 import BeautifulSoup</span><br><span class="line"></span><br><span class="line">def get_h1(url):</span><br><span class="line">    try:</span><br><span class="line">        html = urlopen(url)</span><br><span class="line">    except HTTPError as e:</span><br><span class="line">        return None</span><br><span class="line">    else:</span><br><span class="line">        try:</span><br><span class="line">            bsObj = BeautifulSoup(html, &quot;html.parser&quot;)</span><br><span class="line">            h1 = bsObj.h1</span><br><span class="line">        except AttributeError as e:</span><br><span class="line">            return None</span><br><span class="line"></span><br><span class="line">    return h1</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    h1 = get_h1(&quot;http://pythonscraping.com/pages/page1.html&quot;)</span><br><span class="line">    print(h1)</span><br></pre></td></tr></table></figure></p>
-<p>上面这段代码使用了python中经典的try…exception…else的格式，这样保证了即使发生了异常，也能保证else中的代码被执行。在python中获取异常可以使你的代码更加健壮，也是一个好的习惯。</p>
+        <h2 id="网页跳转"><a href="#网页跳转" class="headerlink" title="网页跳转"></a>网页跳转</h2><p>在网络数据采集中，如果只对单页面进行操作，那么这个爬虫将毫无意义。因为采集的数据往往是分散在不同的网页的，所以对于单页面而言，爬虫需要采集页面中的链接，并且进行跳转。<br><br>网页跳转，在正在采集的页面中收集新的链接，然后将新的链接传入到采集程序中，如此之后，采集程序就已经在新的页面采集信息了。</p>
+<h3 id="举个例子"><a href="#举个例子" class="headerlink" title="举个例子"></a>举个例子</h3><p>我们以<strong>维基百科</strong>的一个页面为例，从主页面开始，采集<strong> id 为 mw-content-text </strong>的段落<strong> p </strong>和<strong> id 为 ca-edit </strong>的<strong> span 中的 a 链接标签</strong>。读者可以参考以下代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">from urllib.request import urlopen</span><br><span class="line">from bs4 import BeautifulSoup</span><br><span class="line">import re</span><br><span class="line"></span><br><span class="line">pages = set()</span><br><span class="line"></span><br><span class="line">def getLinks(pageUrl):</span><br><span class="line">    global pages</span><br><span class="line">    html = urlopen(&quot;http://en.wikipedia.org&quot;+pageUrl)</span><br><span class="line">    bsObj = BeautifulSoup(html, &quot;html.parser&quot;)</span><br><span class="line">    # print(bsObj)</span><br><span class="line">    try:</span><br><span class="line">        print(bsObj.h1.get_text())</span><br><span class="line">        print(bsObj.find(id=&quot;mw-content-text&quot;).find_all(&quot;p&quot;)[0])</span><br><span class="line">        print(bsObj.find(id=&quot;ca-edit&quot;).find(&quot;span&quot;).find(&quot;a&quot;).attrs[&apos;href&apos;])</span><br><span class="line">    except AttributeError:</span><br><span class="line">        print(&quot;页面缺少一些属性!不过不用担心!&quot;)</span><br><span class="line"></span><br><span class="line">    for link in bsObj.find_all(&quot;a&quot;, href=re.compile(&quot;^(/wiki/)&quot;)):</span><br><span class="line">        if &apos;href&apos; in link.attrs:</span><br><span class="line">            if link.attrs[&apos;href&apos;] not in pages:</span><br><span class="line">                # 我们遇到了新页面</span><br><span class="line">                newPage = link.attrs[&apos;href&apos;]</span><br><span class="line">                print(&quot;----------------\n&quot;+newPage)</span><br><span class="line">                pages.add(newPage)</span><br><span class="line">                getLinks(newPage)</span><br><span class="line"></span><br><span class="line">getLinks(&quot;&quot;)</span><br></pre></td></tr></table></figure></p>
+<p>程序先从 <a href="http://en.wikipedia.org" target="_blank" rel="noopener">http://en.wikipedia.org</a> 网页开始，然后查找以 <strong>/wiki/</strong> 开头的链接，之后拼接到 <a href="http://en.wikipedia.org" target="_blank" rel="noopener">http://en.wikipedia.org</a> 形成新的链接。对于重复的链接程序不进行采集，程序中体现了递归的概念，理论上你很难等到程序的结束。</p>
+<h2 id="六度空间理论"><a href="#六度空间理论" class="headerlink" title="六度空间理论"></a>六度空间理论</h2><p>所谓<strong>六度空间理论</strong>是数学界中的一种猜想，对于一个陌生人，你可以通过至多6个人认识他，即你与陌生人中间的连接点不会超过6个人。<br><br>我们可以将这个猜想应用到爬虫程序中，即通过一个人的简介，我们可以爬取到另一个人的简介。这里还是以<strong>维基百科</strong>为例，从 Kevin_Bacon 开始，爬取其他人的信息：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">from urllib.request import urlopen</span><br><span class="line">from bs4 import BeautifulSoup</span><br><span class="line">import datetime</span><br><span class="line">import random</span><br><span class="line">import re</span><br><span class="line"></span><br><span class="line">random.seed(datetime.datetime.now())</span><br><span class="line"></span><br><span class="line">def getLinks(articleUrl):</span><br><span class="line">    html = urlopen(&quot;http://en.wikipedia.org&quot;+articleUrl)</span><br><span class="line">    bsObj = BeautifulSoup(html, &quot;html.parser&quot;)</span><br><span class="line">    return bsObj.find(&quot;div&quot;, &#123;&quot;id&quot;: &quot;bodyContent&quot;&#125;).findAll(&quot;a&quot;, href=re.compile(&quot;^(/wiki/)((?!:).)*$&quot;))</span><br><span class="line"></span><br><span class="line">links = getLinks(&quot;/wiki/Kevin_Bacon&quot;)</span><br><span class="line">while len(links) &gt; 0:</span><br><span class="line">    newArticle = links[random.randint(0, len(links)-1)].attrs[&quot;href&quot;]</span><br><span class="line">    print(newArticle)</span><br><span class="line">    links = getLinks(newArticle)</span><br></pre></td></tr></table></figure></p>
+<p>程序中使用随机数字，从新的链接集合中随机选取，并使用新的链接再次爬取。</p>
+<h2 id="scrapy"><a href="#scrapy" class="headerlink" title="scrapy"></a>scrapy</h2><p>写网络爬虫，你不得不重复一些简单的操作：找出页面上所有的链接，区分内链与外链，跳转到新的页面。像这种重复的工作可以交给第三方工具类来处理，scrapy就是这样一款工具。<br><br>曾经的 scrapy 是一个傲娇的工具，只支持 python2.7 版本，软件的不普遍支持性会导致软件的不可用。好消息就是，现在的 scrapy 在 python3.x 的环境下也是支持的。$pip3 install scrapy 即可下载。<strong>如果是python2.x版本的，务必使用pip命令</strong>。<br><br>scrapy 的使用需要重新创建一个工程(<strong>在这里演示如何获取网页的title</strong>)：<br></p>
+<ul>
+<li>$scrapy startproject wikiSpider 创建新工程</li>
+<li>在 spiders 目录下创建 ArticleSpider.py文件，名字也可自取</li>
+<li>在 item.py 文件中定义类 Article</li>
+<li>scrapy crawl article 运行程序(<strong>这行命令会用条目名称 article 来调用爬虫(不是类名，也不是文件名，而是由 ArticleSpider 的 name = “article” 决定的)</strong>)</li>
+</ul>
+<p>item.py文件中应如此定义：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line"></span><br><span class="line"># Define here the models for your scraped items</span><br><span class="line">#</span><br><span class="line"># See documentation in:</span><br><span class="line"># https://doc.scrapy.org/en/latest/topics/items.html</span><br><span class="line"></span><br><span class="line"># import scrapy</span><br><span class="line">from scrapy import Item, Field</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># class WikispiderItem(scrapy.Item):</span><br><span class="line">#     # define the fields for your item here like:</span><br><span class="line">#     # name = scrapy.Field()</span><br><span class="line">#     pass</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">class Article(Item):</span><br><span class="line">    # define the fields for your item here like: # name = scrapy.Field()</span><br><span class="line">    title = Field()</span><br></pre></td></tr></table></figure></p>
+<p>scrapy的每个Item(条目)对象表示网站上的一个页面。当然，你可以根据需要定义不同的条目(比如url、content、header image等)，但是现在我只演示收集每页的title字段 (field)。</p>
+<p>ArticleSpider.py 文件中写入如下程序：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">#! /usr/local/bin/python3</span><br><span class="line"># encoding:utf-8</span><br><span class="line"></span><br><span class="line">from scrapy import Spider</span><br><span class="line"># 这里的引用简直有毒 scrapy crawl article</span><br><span class="line"># 像这样 from wikiSpider.wikiSpider.items import Article 编译器是正确的，但是终端执行是错误的</span><br><span class="line"># 要如此引用 from wikiSpider.items import Article 但是编译器会报错</span><br><span class="line"># 所以建议使用相对路径</span><br><span class="line">from .. items import Article</span><br><span class="line"># from wikiSpider.wikiSpider.items import Article</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">class ArticleSpider(Spider):</span><br><span class="line">    name = &quot;article&quot;</span><br><span class="line">    allowed_domains = [&quot;en.wikipedia.org&quot;]</span><br><span class="line">    start_urls = [&quot;http://en.wikipedia.org/wiki/Main_Page&quot;,</span><br><span class="line">                  &quot;http://en.wikipedia.org/wiki/Python_%28programming_language%29&quot;]</span><br><span class="line"></span><br><span class="line">    def parse(self, response):</span><br><span class="line">        item = Article()</span><br><span class="line">        title = response.xpath(&apos;//h1/text()&apos;)[0].extract()</span><br><span class="line">        print(&quot;Title is: &quot;+title)</span><br><span class="line">        item[&apos;title&apos;] = title</span><br><span class="line">        return item</span><br></pre></td></tr></table></figure></p>
+<p>注意文件中引入项目的注释。</p>
+<p>如果正确，终端中运行的结果应该是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Title is: Main Page</span><br><span class="line">Title is: Python (programming language)</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -422,8 +433,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/03/04/python网络数据采集——简介/" rel="next" title="python网络数据采集——简介">
-                <i class="fa fa-chevron-left"></i> python网络数据采集——简介
+              <a href="/2018/03/11/python网络数据采集——BeautifulSoup/" rel="next" title="python网络数据采集——BeautifulSoup">
+                <i class="fa fa-chevron-left"></i> python网络数据采集——BeautifulSoup
               </a>
             
           </div>
@@ -431,10 +442,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/03/11/python网络数据采集——BeautifulSoup/" rel="prev" title="python网络数据采集——BeautifulSoup">
-                python网络数据采集——BeautifulSoup <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -587,7 +594,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#初识urllib"><span class="nav-number">1.</span> <span class="nav-text">初识urllib</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#运行BeautifulSoup"><span class="nav-number">2.</span> <span class="nav-text">运行BeautifulSoup</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可靠的网络连接"><span class="nav-number">3.</span> <span class="nav-text">可靠的网络连接</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#网页跳转"><span class="nav-number">1.</span> <span class="nav-text">网页跳转</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#举个例子"><span class="nav-number">1.1.</span> <span class="nav-text">举个例子</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#六度空间理论"><span class="nav-number">2.</span> <span class="nav-text">六度空间理论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#scrapy"><span class="nav-number">3.</span> <span class="nav-text">scrapy</span></a></li></ol></div>
             
 
           </div>
