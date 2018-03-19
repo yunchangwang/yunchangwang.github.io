@@ -1,1130 +1,411 @@
 <?xml version="1.0" encoding="utf-8"?>
-<search> 
-  
-    
-    <entry>
-      <title><![CDATA[python网络数据采集——链接爬取和跳转]]></title>
-      <url>/2018/03/14/python%E7%BD%91%E7%BB%9C%E6%95%B0%E6%8D%AE%E9%87%87%E9%9B%86%E2%80%94%E2%80%94%E9%93%BE%E6%8E%A5%E7%88%AC%E5%8F%96%E5%92%8C%E8%B7%B3%E8%BD%AC/</url>
-      <content type="html"><![CDATA[<h2 id="网页跳转"><a href="#网页跳转" class="headerlink" title="网页跳转"></a>网页跳转</h2><p>在网络数据采集中，如果只对单页面进行操作，那么这个爬虫将毫无意义。因为采集的数据往往是分散在不同的网页的，所以对于单页面而言，爬虫需要采集页面中的链接，并且进行跳转。<br><br>网页跳转，在正在采集的页面中收集新的链接，然后将新的链接传入到采集程序中，如此之后，采集程序就已经在新的页面采集信息了。</p>
-<h3 id="举个例子"><a href="#举个例子" class="headerlink" title="举个例子"></a>举个例子</h3><p>我们以<strong>维基百科</strong>的一个页面为例，从主页面开始，采集<strong> id 为 mw-content-text </strong>的段落<strong> p </strong>和<strong> id 为 ca-edit </strong>的<strong> span 中的 a 链接标签</strong>。读者可以参考以下代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">from urllib.request import urlopen</span><br><span class="line">from bs4 import BeautifulSoup</span><br><span class="line">import re</span><br><span class="line"></span><br><span class="line">pages = set()</span><br><span class="line"></span><br><span class="line">def getLinks(pageUrl):</span><br><span class="line">    global pages</span><br><span class="line">    html = urlopen(&quot;http://en.wikipedia.org&quot;+pageUrl)</span><br><span class="line">    bsObj = BeautifulSoup(html, &quot;html.parser&quot;)</span><br><span class="line">    # print(bsObj)</span><br><span class="line">    try:</span><br><span class="line">        print(bsObj.h1.get_text())</span><br><span class="line">        print(bsObj.find(id=&quot;mw-content-text&quot;).find_all(&quot;p&quot;)[0])</span><br><span class="line">        print(bsObj.find(id=&quot;ca-edit&quot;).find(&quot;span&quot;).find(&quot;a&quot;).attrs[&apos;href&apos;])</span><br><span class="line">    except AttributeError:</span><br><span class="line">        print(&quot;页面缺少一些属性!不过不用担心!&quot;)</span><br><span class="line"></span><br><span class="line">    for link in bsObj.find_all(&quot;a&quot;, href=re.compile(&quot;^(/wiki/)&quot;)):</span><br><span class="line">        if &apos;href&apos; in link.attrs:</span><br><span class="line">            if link.attrs[&apos;href&apos;] not in pages:</span><br><span class="line">                # 我们遇到了新页面</span><br><span class="line">                newPage = link.attrs[&apos;href&apos;]</span><br><span class="line">                print(&quot;----------------\n&quot;+newPage)</span><br><span class="line">                pages.add(newPage)</span><br><span class="line">                getLinks(newPage)</span><br><span class="line"></span><br><span class="line">getLinks(&quot;&quot;)</span><br></pre></td></tr></table></figure></p>
-<p>程序先从 <a href="http://en.wikipedia.org" target="_blank" rel="noopener">http://en.wikipedia.org</a> 网页开始，然后查找以 <strong>/wiki/</strong> 开头的链接，之后拼接到 <a href="http://en.wikipedia.org" target="_blank" rel="noopener">http://en.wikipedia.org</a> 形成新的链接。对于重复的链接程序不进行采集，程序中体现了递归的概念，理论上你很难等到程序的结束。</p>
-<h2 id="六度空间理论"><a href="#六度空间理论" class="headerlink" title="六度空间理论"></a>六度空间理论</h2><p>所谓<strong>六度空间理论</strong>是数学界中的一种猜想，对于一个陌生人，你可以通过至多6个人认识他，即你与陌生人中间的连接点不会超过6个人。<br><br>我们可以将这个猜想应用到爬虫程序中，即通过一个人的简介，我们可以爬取到另一个人的简介。这里还是以<strong>维基百科</strong>为例，从 Kevin_Bacon 开始，爬取其他人的信息：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">from urllib.request import urlopen</span><br><span class="line">from bs4 import BeautifulSoup</span><br><span class="line">import datetime</span><br><span class="line">import random</span><br><span class="line">import re</span><br><span class="line"></span><br><span class="line">random.seed(datetime.datetime.now())</span><br><span class="line"></span><br><span class="line">def getLinks(articleUrl):</span><br><span class="line">    html = urlopen(&quot;http://en.wikipedia.org&quot;+articleUrl)</span><br><span class="line">    bsObj = BeautifulSoup(html, &quot;html.parser&quot;)</span><br><span class="line">    return bsObj.find(&quot;div&quot;, &#123;&quot;id&quot;: &quot;bodyContent&quot;&#125;).findAll(&quot;a&quot;, href=re.compile(&quot;^(/wiki/)((?!:).)*$&quot;))</span><br><span class="line"></span><br><span class="line">links = getLinks(&quot;/wiki/Kevin_Bacon&quot;)</span><br><span class="line">while len(links) &gt; 0:</span><br><span class="line">    newArticle = links[random.randint(0, len(links)-1)].attrs[&quot;href&quot;]</span><br><span class="line">    print(newArticle)</span><br><span class="line">    links = getLinks(newArticle)</span><br></pre></td></tr></table></figure></p>
-<p>程序中使用随机数字，从新的链接集合中随机选取，并使用新的链接再次爬取。</p>
-<h2 id="scrapy"><a href="#scrapy" class="headerlink" title="scrapy"></a>scrapy</h2><p>写网络爬虫，你不得不重复一些简单的操作：找出页面上所有的链接，区分内链与外链，跳转到新的页面。像这种重复的工作可以交给第三方工具类来处理，scrapy就是这样一款工具。<br><br>曾经的 scrapy 是一个傲娇的工具，只支持 python2.7 版本，软件的不普遍支持性会导致软件的不可用。好消息就是，现在的 scrapy 在 python3.x 的环境下也是支持的。$pip3 install scrapy 即可下载。<strong>如果是python2.x版本的，务必使用pip命令</strong>。<br><br>scrapy 的使用需要重新创建一个工程(<strong>在这里演示如何获取网页的title</strong>)：<br></p>
-<ul>
-<li>$scrapy startproject wikiSpider 创建新工程</li>
-<li>在 spiders 目录下创建 ArticleSpider.py文件，名字也可自取</li>
-<li>在 item.py 文件中定义类 Article</li>
-<li>scrapy crawl article 运行程序(<strong>这行命令会用条目名称 article 来调用爬虫(不是类名，也不是文件名，而是由 ArticleSpider 的 name = “article” 决定的)</strong>)</li>
-</ul>
-<p>item.py文件中应如此定义：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line"></span><br><span class="line"># Define here the models for your scraped items</span><br><span class="line">#</span><br><span class="line"># See documentation in:</span><br><span class="line"># https://doc.scrapy.org/en/latest/topics/items.html</span><br><span class="line"></span><br><span class="line"># import scrapy</span><br><span class="line">from scrapy import Item, Field</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># class WikispiderItem(scrapy.Item):</span><br><span class="line">#     # define the fields for your item here like:</span><br><span class="line">#     # name = scrapy.Field()</span><br><span class="line">#     pass</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">class Article(Item):</span><br><span class="line">    # define the fields for your item here like: # name = scrapy.Field()</span><br><span class="line">    title = Field()</span><br></pre></td></tr></table></figure></p>
-<p>scrapy的每个Item(条目)对象表示网站上的一个页面。当然，你可以根据需要定义不同的条目(比如url、content、header image等)，但是现在我只演示收集每页的title字段 (field)。</p>
-<p>ArticleSpider.py 文件中写入如下程序：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">#! /usr/local/bin/python3</span><br><span class="line"># encoding:utf-8</span><br><span class="line"></span><br><span class="line">from scrapy import Spider</span><br><span class="line"># 这里的引用简直有毒 scrapy crawl article</span><br><span class="line"># 像这样 from wikiSpider.wikiSpider.items import Article 编译器是正确的，但是终端执行是错误的</span><br><span class="line"># 要如此引用 from wikiSpider.items import Article 但是编译器会报错</span><br><span class="line"># 所以建议使用相对路径</span><br><span class="line">from .. items import Article</span><br><span class="line"># from wikiSpider.wikiSpider.items import Article</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">class ArticleSpider(Spider):</span><br><span class="line">    name = &quot;article&quot;</span><br><span class="line">    allowed_domains = [&quot;en.wikipedia.org&quot;]</span><br><span class="line">    start_urls = [&quot;http://en.wikipedia.org/wiki/Main_Page&quot;,</span><br><span class="line">                  &quot;http://en.wikipedia.org/wiki/Python_%28programming_language%29&quot;]</span><br><span class="line"></span><br><span class="line">    def parse(self, response):</span><br><span class="line">        item = Article()</span><br><span class="line">        title = response.xpath(&apos;//h1/text()&apos;)[0].extract()</span><br><span class="line">        print(&quot;Title is: &quot;+title)</span><br><span class="line">        item[&apos;title&apos;] = title</span><br><span class="line">        return item</span><br></pre></td></tr></table></figure></p>
-<p>注意文件中引入项目的注释。</p>
-<p>如果正确，终端中运行的结果应该是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Title is: Main Page</span><br><span class="line">Title is: Python (programming language)</span><br></pre></td></tr></table></figure></p>
-]]></content>
-      
-        <categories>
-            
-            <category> python </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> python网络爬虫 </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[python网络数据采集——BeautifulSoup]]></title>
-      <url>/2018/03/11/python%E7%BD%91%E7%BB%9C%E6%95%B0%E6%8D%AE%E9%87%87%E9%9B%86%E2%80%94%E2%80%94BeautifulSoup/</url>
-      <content type="html"><![CDATA[<h2 id="BeautifulSoup"><a href="#BeautifulSoup" class="headerlink" title="BeautifulSoup"></a>BeautifulSoup</h2><p>BeautifulSoup 是 python 中最受欢迎的 html 解析库。如果 BeautifulSoup 这个第三方库不能解决问题，读者可以考虑另外两个库：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">xml：</span><br><span class="line">可以用来解析 HTML 和 XML 文档，以非常底层的实现而闻名于世，大部分源代码是用 C 语言写的。</span><br><span class="line">虽然学习它需要花一些时间(其实学习曲线越陡峭，表明你可以越快地学会它)，但它在处理绝大多数 HTML 文档时速度都非常快。</span><br><span class="line">如果遇到的是引用第三方库处理时遇到的性能瓶颈，可以考虑。</span><br><span class="line"></span><br><span class="line">HTML parser：</span><br><span class="line">这是 Python 自带的解析库(https://docs.python.org/3/library/html.parser.html )。</span><br><span class="line">因为它不用安装(只要装了 Python 就有)，所以可以很方便地使用。</span><br></pre></td></tr></table></figure></p>
-<h2 id="find-和-find-all"><a href="#find-和-find-all" class="headerlink" title="find 和 find_all"></a>find 和 find_all</h2><p>在 BeautifulSoup 中，这两个函数是经常使用的，专门用来查找 html 中指定的标签。接下来笔者用链接：<a href="http://www.pythonscraping.com/pages/warandpeace.html" target="_blank" rel="noopener">http://www.pythonscraping.com/pages/warandpeace.html</a> 做为例子来使用这两个函数。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">#! /usr/local/bin/python3</span><br><span class="line"># encoding:utf-8</span><br><span class="line"></span><br><span class="line">from urllib.request import urlopen</span><br><span class="line">from bs4 import BeautifulSoup</span><br><span class="line"></span><br><span class="line">html = urlopen(&quot;http://www.pythonscraping.com/pages/warandpeace.html&quot;)</span><br><span class="line">bsObject = BeautifulSoup(html, &quot;html.parser&quot;)</span><br><span class="line"># 使用 findAll 方法查找 指定标签 指定class属性的</span><br><span class="line">nameList = bsObject.find_all(&quot;span&quot;, &#123;&quot;class&quot;: &quot;green&quot;&#125;)</span><br><span class="line">for name in nameList:</span><br><span class="line">    print(name.get_text())</span><br><span class="line"></span><br><span class="line"># 像这样，你就抓取了html中所有的人名</span><br><span class="line"># 因为经过分析，发现 span 标签且 class 为 green 的内容都是小说的人名</span><br></pre></td></tr></table></figure></p>
-<p>通过源码你会发现 find_all 方法拥有以下参数：name=None, attrs={}, recursive=True, text=None, limit=None, **kwargs，<strong>在此说明一下 以前的 BeautifulSoup 版本方法名是 findAll</strong>。<br><br>在开发的过程中，95%的情况下你只会使用到 name attars 这两个参数，但是在这里还是要说明一下其他参数的作用：</p>
-<ul>
-<li>name html中tag的名称 比如span h1 你可以传入多个tag的集合来查找 这个集合是一个set结构</li>
-<li>attrs 字典集 用来指定 tag的一些属性 比如class width height</li>
-<li>recursive 表示在查找时 你是否想要递归 到子标签中查找 默认为True 递归</li>
-<li>text 直接查找文本 有相同文本的匹配</li>
-<li>limit 指定查找的数量 查找的顺序是按照 html 的顺序来的 默认 全部</li>
-<li>kwargs 字典集 查找具有指定属性的标签   业界认为是冗余的设计   不推荐使用   并且存在缺陷  比如无法指定class属性  因为class是python的保留关键字<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">hList = bsObject.find_all(&#123;&quot;h1&quot;, &quot;h2&quot;, &quot;h3&quot;&#125;)</span><br><span class="line">print(hList)</span><br><span class="line"></span><br><span class="line">tList = bsObject.find_all(text=&quot;Anna Pavlovna&quot;)</span><br><span class="line">print(tList)</span><br><span class="line"></span><br><span class="line">nameList = bsObject.find_all(class_=&quot;green&quot;)</span><br><span class="line">print(nameList)</span><br><span class="line"># 但是你可以使用 class_ 来代替</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>find 的使用方式和 find_all 差不多，只是缺少了参数 limit 而已。</p>
-<h2 id="导航树"><a href="#导航树" class="headerlink" title="导航树"></a>导航树</h2><p>先抛出一个问题：<br>find_all 函数是通过标签的名称和属性来查找标签的，但是如果需要通过标签在文档中的位置来查找标签，该如何？<br><br>引入导航树(Navigating Trees)的概念就是为何解决这个问题，比如：bsObject.tag.subTag.anotherSubTag。</p>
-<p>在这里我们使用虚拟的购物网站：<a href="http://www.pythonscraping.com/pages/page3.html" target="_blank" rel="noopener">http://www.pythonscraping.com/pages/page3.html</a>  来作为实例。对于使用导航树，你只需要学会处理三个问题：</p>
-<ul>
-<li>处理子标签和后代标签</li>
-<li>处理兄弟标签</li>
-<li>处理父标签</li>
-</ul>
-<h3 id="子标签和后代标签"><a href="#子标签和后代标签" class="headerlink" title="子标签和后代标签"></a>子标签和后代标签</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">from urllib.request import urlopen</span><br><span class="line">from bs4 import BeautifulSoup</span><br><span class="line">html = urlopen(&quot;http://www.pythonscraping.com/pages/page3.html&quot;)</span><br><span class="line">bsObject = BeautifulSoup(html, &quot;html.parser&quot;)</span><br><span class="line"></span><br><span class="line">for child in bsObject.find(&quot;table&quot;, &#123;&quot;id&quot;: &quot;giftList&quot;&#125;).children:</span><br><span class="line">    # print(type(child))</span><br><span class="line">    print(child)</span><br></pre></td></tr></table></figure>
-<p>子标签和后代标签在定义上是不同的：子标签只有一个层级的差距，后代标签则是一个或者多个层级差距。Tag对象 函数 children 和 descendants 分别获取子标签和后代标签。</p>
-<h3 id="兄弟标签"><a href="#兄弟标签" class="headerlink" title="兄弟标签"></a>兄弟标签</h3><p>兄弟标签表示 Tag类型相同且处于同一层级的，Tag对象 函数 next_siblings 和 previous_siblings 分别获取定位标签的上面的所有Tag和下面所有Tag。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">比如：</span><br><span class="line">&lt;tr class=&quot;tr1&quot;&gt;&lt;/tr&gt;</span><br><span class="line">&lt;tr class=&quot;tr2&quot;&gt;&lt;/tr&gt;</span><br><span class="line">&lt;tr class=&quot;tr3&quot;&gt;&lt;/tr&gt;</span><br><span class="line">&lt;tr class=&quot;tr4&quot;&gt;&lt;/tr&gt;</span><br><span class="line">&lt;tr class=&quot;tr5&quot;&gt;&lt;/tr&gt;</span><br><span class="line">现在定位tr3，next_siblings可获取tr4，tr5；previous_siblings可获取tr2，tr1</span><br><span class="line"></span><br><span class="line">for sibling in bsObject.find(&quot;table&quot;, &#123;&quot;id&quot;: &quot;giftList&quot;&#125;).tr.next_siblings:</span><br><span class="line">     print(sibling)</span><br><span class="line"># 与第一段代码相比，可以发现少了表格标题的tr，因为第一个tr标签不能将自己视为兄弟</span><br><span class="line"># 当然也可以使用next_sibling 和 previous_sibling 只不过获取到的是距离最近的那一个</span><br></pre></td></tr></table></figure></p>
-<h3 id="父标签"><a href="#父标签" class="headerlink" title="父标签"></a>父标签</h3><p>查找父标签在提取信息的过程中是偶尔的情况下才会用到的，如果那个信息比较深入，并且它的子标签有明显的特点方便查找，可以考虑使用。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">print(bsObject.find(&quot;img&quot;, &#123;&quot;src&quot;: &quot;../img/gifts/img1.jpg&quot;&#125;)</span><br><span class="line">      .parent.previous_sibling.get_text())</span><br><span class="line"></span><br><span class="line"># 1.找到Tag类型是 img 的且 src 是 ../img/gifts/img1.jpg</span><br><span class="line"># 2.向上寻找到父标签 即 td</span><br><span class="line"># 3.找到 td 标签的上一个兄弟标签 还是 td</span><br><span class="line"># 4.得到里面的 text 文本，即商品的价格</span><br></pre></td></tr></table></figure></p>
-]]></content>
-      
-        <categories>
-            
-            <category> python </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> python网络爬虫 </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[python网络数据采集——网络连接]]></title>
-      <url>/2018/03/09/python%E7%BD%91%E7%BB%9C%E6%95%B0%E6%8D%AE%E9%87%87%E9%9B%86%E2%80%94%E2%80%94%E7%BD%91%E7%BB%9C%E8%BF%9E%E6%8E%A5/</url>
-      <content type="html"><![CDATA[<h2 id="初识urllib"><a href="#初识urllib" class="headerlink" title="初识urllib"></a>初识urllib</h2><p>要采集信息，首先你需要将html文件抓取到本地，python中使用urllib这个包来进行网络连接，并且进行html的抓取，<strong>如果是python2.x版本，使用的是urllib2这个包</strong>。<br><br>下面贴出一段代码，读者可自行运行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#! /usr/local/bin/python3</span><br><span class="line"># encoding:utf-8</span><br><span class="line">from urllib.request import urlopen</span><br><span class="line"></span><br><span class="line">html = urlopen(&quot;http://pythonscraping.com/pages/page1.html&quot;)</span><br><span class="line">print(html.read())</span><br></pre></td></tr></table></figure></p>
-<h2 id="运行BeautifulSoup"><a href="#运行BeautifulSoup" class="headerlink" title="运行BeautifulSoup"></a>运行BeautifulSoup</h2><p><strong>BeautifulSoup</strong>是第三方的python模块，所以需要进行安装，在此只介绍macOS系统的下载方式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">python中一般使用pip来下载第三方的依赖包</span><br><span class="line">$sudo easy_install pip 首先确保你的系统中有pip命令</span><br><span class="line">$pip install beautifulsoup4 即可下载</span><br><span class="line"></span><br><span class="line">如果使用的是python3.x版本</span><br><span class="line">$pip3 install beautifulsoup4 需要在pip后面加上数字3</span><br><span class="line"></span><br><span class="line">一般macOS系统自带的是python2.x，在这里推荐使用brew来下载python3</span><br><span class="line">$brew search python</span><br><span class="line">$brew install python3 即可</span><br></pre></td></tr></table></figure></p>
-<p><strong>BeautifulSoup</strong>在代码中的作用相当于html解析器，然后读者可以通过该模块的方法来获取一些html中的标签。在这里贴出<strong>BeautifulSoup</strong>的代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#! /usr/local/bin/python3</span><br><span class="line"># encoding:utf-8</span><br><span class="line"></span><br><span class="line">from urllib.request import urlopen</span><br><span class="line">from bs4 import BeautifulSoup</span><br><span class="line"></span><br><span class="line">html = urlopen(&quot;http://pythonscraping.com/pages/page1.html&quot;)</span><br><span class="line">bsObj = BeautifulSoup(html, &quot;html.parser&quot;)</span><br><span class="line">print(bsObj.h1)</span><br></pre></td></tr></table></figure></p>
-<p><strong>BeautifulSoup</strong>比较老的版本构造时不需要传入”html.parser” 参数，新的版本中，虽然结果仍然打印了出来，但是在运行过程中会报错。html.parser 是为了告诉<strong>BeautifulSoup</strong> 我使用的是 html 解析器。<br><br>读者可以参考<a href="https://www.crummy.com/software/BeautifulSoup/bs4/doc.zh/" target="_blank" rel="noopener">官方手册</a>了解更过<strong>BeautifulSoup</strong>的知识点。</p>
-<h2 id="可靠的网络连接"><a href="#可靠的网络连接" class="headerlink" title="可靠的网络连接"></a>可靠的网络连接</h2><p>像上面写的代码，很有可能抛出异常，谁也不知道这个url是否可靠，如果服务器宕机了怎么办？等等问题，都会使得程序终止。<br><br>想象一下，你的爬虫在晚上执行，你想早上起来查看收集的数据，但是由于中间的错误，导致之后的程序没有执行，你不得不再等待一天的时间。<br><br>其实说了这么多，就是在代码层面中<strong>捕获异常</strong>。可靠的网络连接，要保证程序在运行过程中，即使中途遇到了错误，也能保证余下的代码可执行。大家参考下面的代码来发现不同点：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">from urllib.request import urlopen</span><br><span class="line">from urllib.request import HTTPError</span><br><span class="line">from bs4 import BeautifulSoup</span><br><span class="line"></span><br><span class="line">def get_h1(url):</span><br><span class="line">    try:</span><br><span class="line">        html = urlopen(url)</span><br><span class="line">    except HTTPError as e:</span><br><span class="line">        return None</span><br><span class="line">    else:</span><br><span class="line">        try:</span><br><span class="line">            bsObj = BeautifulSoup(html, &quot;html.parser&quot;)</span><br><span class="line">            h1 = bsObj.h1</span><br><span class="line">        except AttributeError as e:</span><br><span class="line">            return None</span><br><span class="line"></span><br><span class="line">    return h1</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    h1 = get_h1(&quot;http://pythonscraping.com/pages/page1.html&quot;)</span><br><span class="line">    print(h1)</span><br></pre></td></tr></table></figure></p>
-<p>上面这段代码使用了python中经典的try…exception…else的格式，这样保证了即使发生了异常，也能保证else中的代码被执行。在python中获取异常可以使你的代码更加健壮，也是一个好的习惯。</p>
-]]></content>
-      
-        <categories>
-            
-            <category> python </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> python网络爬虫 </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[python网络数据采集——简介]]></title>
-      <url>/2018/03/04/python%E7%BD%91%E7%BB%9C%E6%95%B0%E6%8D%AE%E9%87%87%E9%9B%86%E2%80%94%E2%80%94%E7%AE%80%E4%BB%8B/</url>
-      <content type="html"><![CDATA[<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>网络数据采集(网络爬虫)，是一种网络数据的采集方式，又称为网页抓屏，数据挖掘，网络收割或者其他类似的版本。<br><br>网络数据采集是一种通过多种手段收集网络数据的方式，比如通过api交互，当然如果你有毅力可以选择手动摘抄，人们最常用的估计是使用浏览器进行网页的浏览，这其实也是一种网络数据采集。<br><br><em>注：之后相关文章都使用网络爬虫这个术语。</em></p>
-<h2 id="意义"><a href="#意义" class="headerlink" title="意义"></a>意义</h2><p>已经有浏览器了，为何还需要网络爬虫呢？<br></p>
-<ul>
-<li>首先浏览器的搜索是主流的，你不一定能从中找到有用的信息。</li>
-<li>你需要的数据可能来自不同的网站，为了分析和对比。</li>
-<li>网站可能没有api(接口)提供给外部使用。</li>
-</ul>
-<p>网络爬虫可以解决这些问题，爬取的数据也可以进行保存和更新，你也可以通过特定的方式进行展示，比如图表。实际上，这些都是手动摘抄都可以办到的，但是谁又会整天看着数据有没有改变，然后去更新手头的数据呢？</p>
-<h2 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h2><p>之前笔者是学习过一段时间的python基础的，但是笔者糊口的语言是java，python只是笔者业余的爱好罢了。笔者认为python的几大领域为网络数据采集，自动化和大数据分析，所以读者可以在学习了python的基础上选择一个方向再深入的研究。<br></p>
-<p>关于python的基础知识，笔者的笔记并没有开放在网站上，读者可以自行寻找。<br></p>
-<p>关于网络爬虫，笔者认为基本对现在的业务没有什么帮助，因为网络爬虫对于一个产品的稳定性来说一定是大打折扣的(因为谁有能保证你收集的信息来源是否还存在呢？)。但是可以给你的生活带来一些乐趣，人生在世，技多不压身嘛。</p>
-]]></content>
-      
-        <categories>
-            
-            <category> python </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> python网络爬虫 </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[计算机网络——NAT]]></title>
-      <url>/2018/02/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E2%80%94%E2%80%94NAT/</url>
-      <content type="html"><![CDATA[<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>NAT(Network Address Translation)，网络地址转换。NAT可以看成一个开放到公网(全球因特网)上的公用路由器，用来代理一个子网下的所有主机的请求和应答。<br><br>NAT在转换的时候，会将主机的ip地址和端口号替换成公用路由器的ip地址和端口，并且维护在一张表中进行一一对应，为了将返回的数据应答到唯一的主机上。</p>
-<h2 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h2><p>由于ipv4规则的ip地址消耗殆尽，不可能为所有的主机都分配真正的公网ip，所以很多主机ip地址都是虚拟的ip地址，并且有统一的代理服务器进行消息的请求和应答。<br><br>NAT的作用就是将私有的ip地址转换成全球因特网承认的ip地址，私有的ip地址有三种：<br><br>①10.0.0.0~10.255.255.255/8 <br><br>②172.16.0.0~172.31.255.255/12 <br><br>③192.168.0.0~192.168.255.255/16 <br><br>这些IP地址是用于私有的网络。<br><br>NAT使得一个组织局域网中的主机都能互相访问，但是想要访问公网就只有一条出路，这样也可以保证局域网中信息的安全性。</p>
-<h2 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h2><p>假设用户王某坐在家庭主机10.0.0.1傍边，请求域名为 www.bilibili.com (ip地址为112.49.19.4)的web服务器(端口为80)上的一个web页面。主机10.0.0.1为其指派了任意的端口2233，并将请求的报文发送到LAN中。<br><br>NAT路由器收到该数据请求，为其生成了新的端口号5000，并将ip地址替换成广域网的ip地址138.76.29.7，然后继续想目标服务器请求。<br><br>具体步骤如下：<br></p>
-<ul>
-<li>10.0.0.1:2233 发送报文 —&gt; LAN</li>
-<li>LAN —&gt; NAT路由器 —&gt; 替换成138.76.29.7:5000 并维护一张映射表</li>
-<li>138.76.29.7:5000 发送请求报文 —&gt; 112.49.19.4:80</li>
-<li>返回数据到WAN —&gt; NAT路由器</li>
-<li>NAT路由器从维护的映射表中获取私有ip地址</li>
-<li>返回数据 —&gt; LAN  —&gt; 10.0.0.1:2233</li>
-</ul>
-<p>读者以前可能发现，百度的ip地址和主机的ip地址不同，因为一个是公网的，主机的只是私有的ip地址，中间就是利用了NAT。<br><br>代理服务器，即NAT在跳转的当中可能存在很多个，即一个请求可能通过n个NAT。</p>
-]]></content>
-      
-        <categories>
-            
-            <category> 计算机网络 </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> 计算机网络 </tag>
-            
-            <tag> 网路协议 </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[计算机网络——DHCP]]></title>
-      <url>/2018/02/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E2%80%94%E2%80%94DHCP/</url>
-      <content type="html"><![CDATA[<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>DHCP(Dynamic Host Configuration)，即动态主机配置协议。由于DHCP具有能将主机连接进一个网络的网络相关方面的自动能力，故它又常被称为即插即用协议。<br><br>DHCP协议维护了一张表(存放于DHCP服务器)，用来存放现子网中可以分配的ip，如果有主机离开或者接入子网，则DHCP服务器会更新这张表。</p>
-<h2 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h2><p>一旦一个组织获取了子网的ip地址，网络管理员需要给组织中的主机都配置ip<br>(读者可以参考<a href="https://yunchangwang.github.io/2018/02/18/%E7%BD%91%E7%BB%9C%E6%94%BB%E9%98%B2%E2%80%94%E2%80%94ip%E5%9C%B0%E5%9D%80/" target="_blank" rel="noopener">网络攻防——ip地址</a>了解一个组织内主机ip地址配置过程)。<br><br>DHCP的问世是为了节省网络管理员手动配置主机ip地址的时间。网络管理员只需要配置DHCP，以使某给定主机每次与网络连接时能得到一个相同的ip地址，或者某主机将被分配一个<strong>临时的ip</strong>地址，该地址每次与网络连接时也许是不同的。</p>
-<h2 id="协议的步骤"><a href="#协议的步骤" class="headerlink" title="协议的步骤"></a>协议的步骤</h2><p>对于一台新到达的主机而言，DHCP协议是一个4个步骤的过程：<br><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">1.DHCP服务器发现。一台新的主机接入子网时首要的任务时让DHCP服务器发现它。所以主机会在</span><br><span class="line">UDP分组中向端口67发送一个DHCP发现报文，并且这个数据时广播的，因为主机现有的情况是不知</span><br><span class="line">道DHCP服务器的具体ip地址的。</span><br><span class="line">2.DHCP服务器提供。DHCP服务器收到这个报文时，用一个DHCP提供报文向主机作出应答。这边也</span><br><span class="line">是使用的广播的形式，因为在子网中可能存在多个DHCP服务器，主机可以根据各个DHCP服务器返回</span><br><span class="line">的信息进行择优选择。</span><br><span class="line">3.DHCP请求。主机从一个或多个DHCP服务器中挑选一个，并向选中的服务器提供一个DHCP请求报</span><br><span class="line">文进行响应。</span><br><span class="line">4.DHCP ACK。服务器用DHCP ACK报文对主机请求报文进行响应，证实所要求的参数。</span><br></pre></td></tr></table></figure></p>
-<p>一旦主机完成了以上的4步，交互便完成了，主机也接入了子网，并拥有了子网中唯一的ip地址。</p>
-<h2 id="缺陷"><a href="#缺陷" class="headerlink" title="缺陷"></a>缺陷</h2><p>从移动性的角度看，DHCP确实有不足之处。因为每当节点连接到一个新的子网时，要从DHCP得到一个新的ip地址，当一个移动节点在子网之间移动时，就不能维持与远程应用之间的TCP连接。之后会<strong>研究移动IP</strong>(在此记录，以便之后补充)。</p>
-]]></content>
-      
-        <categories>
-            
-            <category> 计算机网络 </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> 计算机网络 </tag>
-            
-            <tag> 网络协议 </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[网络攻防——ip地址]]></title>
-      <url>/2018/02/18/%E7%BD%91%E7%BB%9C%E6%94%BB%E9%98%B2%E2%80%94%E2%80%94ip%E5%9C%B0%E5%9D%80/</url>
-      <content type="html"><![CDATA[<h2 id="这边先预设几个问题"><a href="#这边先预设几个问题" class="headerlink" title="这边先预设几个问题"></a>这边先预设几个问题</h2><ul>
-<li>一个组织分配ip地址的过程(涉及到ISP等概念)</li>
-<li>a,b,c,d,e类的ip地址</li>
-<li>如何知道一个主机的子网掩码，它第一跳的路由地址，dns服务器的地址</li>
-<li>DHCP动态分配地址</li>
-<li>什么是网络地址转换(NAT)</li>
-<li>ipv4和ipv6的区别</li>
-</ul>
-<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>ip地址目前有ipv4和ipv6两种，这里以ipv4举例。ip地址在整个网络中相当于地址的存在，只有知晓了地址，才能知道向哪里送信，信件又使从哪里发出来的。ipv4地址编码长度为32，即32个比特位，即4个字节，每个比特位只有1或者0，所以ipv4总共有2^32个可能的ip地址。(但是很遗憾，尽管看起来很多，ipv4方式的编码ip已经消耗殆尽，所以ipv6孕育而生)</p>
-<p>读者可以使用ipconfig(linux系统使ifconfig)来查看自己的ip地址。读者会发现，显示的ip信息并不是以二进制形式显示，而是十进制。那是为了方便人们阅读，一般使用<strong>点分十进制记法</strong>书写，然而计算机在交流时仍然只认识二进制记法。<br><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">如：</span><br><span class="line">193.32.216.9 的二进制记法是：</span><br><span class="line">11000001 00100000 11011000 00001001</span><br><span class="line">可以看出以8个比特，即一个字节作为一个分隔</span><br></pre></td></tr></table></figure></p>
-<p>在全球因特网中的每台主机和路由器上的每个接口，必须有一个全球唯一的ip地址(在NAT后面的接口除外，NAT即网络地址转换，之后会提及这个概念)。然而，这些地址不能随意地自由选择，一个接口ip地址的一部分需要由其连接的子网来决定。</p>
-<h2 id="标准类别的ip地址"><a href="#标准类别的ip地址" class="headerlink" title="标准类别的ip地址"></a>标准类别的ip地址</h2><p>ip地址由网络地址和主机地址组成。根据网络地址的比特位数，将ip地址分为A,B或C类网络，网络地址的比特位数分别被限制为8,16或24位，这是一种被称为<strong>分类编址</strong>的编址方案。</p>
-<p>在计算机网络中，读者可能看到形如：233.1.1.0/24的ip地址记法，这是子网地址的写法，其中/24记法有时称为<strong>子网掩码</strong>，表示32位比特中的最左侧24比特定义了子网地址，即该子网中所有主机分配到的ip地址的前24位都是相同的，即网络地址相同。比如：<br><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">一个子网的ip地址为：233.1.1.0/24</span><br><span class="line">那么这个子网下的主机的ip地址可能是：233.1.1.1，233.1.1.4 233.1.1.128 ...</span><br></pre></td></tr></table></figure></p>
-<p>在分配子网的时候，不一定使用标准的网络地址。比如一个组织，分类到了一个C类(/24)子网，其仅能容下2^8 - 2 = 254台主机(2^8 = 256，其中的两个地址预留用于特殊的用途)，这对于许多组织来说太小了。然而一个B类(/16)子网可支持多达65534台主机，又太大了。</p>
-<h2 id="组织内主机分配ip地址的过程"><a href="#组织内主机分配ip地址的过程" class="headerlink" title="组织内主机分配ip地址的过程"></a>组织内主机分配ip地址的过程</h2><p>为了获取一块ip地址用于一个组织的子网，网络管理员也许首先会与他的ISP<a href="https://baike.baidu.com/item/ISP/10152" target="_blank" rel="noopener">参考百度百科</a>联系，该ISP可能会从已分配给它的更大的地址块中提供一些地址。这里假设ISP自己已被分配了地址块200.23.16.0/20：<br><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ISP的地址块    200.23.16.0/20    (11001000 00010111 0001)0000 00000000</span><br><span class="line">组织0         200.23.16.0/23     (11001000 00010111 000100)0 00000000</span><br><span class="line">组织1         200.23.18.0/23     (11001000 00010111 0001001)0 00000000</span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
-<p>加入组织0已经得到了子网地址：200.23.16.0/23，这就表示该组织下的所有主机ip地址都是以<strong>11001000 00010111 000100</strong>开头的。系统管理员一般手动配置路由器ip地址，主机地址也能手动配置，但是想象一下：如果一个组织下有数以万计的主机，那么系统管理员已哭晕在厕所。所以这里引出另一个概念DHCP(动态主机配置协议，又称即插即用协议)，主机可以自动获取一个临时的ip地址。这也解释了为什么在公司中，主机重启之后主机的ip地址会改变，因为是临时随机分配的。</p>
-<h2 id="DHCP"><a href="#DHCP" class="headerlink" title="DHCP"></a>DHCP</h2><p>笔者认为这个概念可以重新开一个章节，读者可以跳转参考<a href="https://yunchangwang.github.io/2018/02/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E2%80%94%E2%80%94DHCP/" target="_blank" rel="noopener">计算机网络——DHCP</a></p>
-<h2 id="NAT"><a href="#NAT" class="headerlink" title="NAT"></a>NAT</h2><p>读者可以跳转参考<a href="https://yunchangwang.github.io/2018/02/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E2%80%94%E2%80%94NAT/" target="_blank" rel="noopener">计算机网络——NAT</a></p>
-<h2 id="如何生动形象解释"><a href="#如何生动形象解释" class="headerlink" title="如何生动形象解释"></a>如何生动形象解释</h2><p>这里主要解释了ip地址，子网掩码，网关等概念。<br><br>读者可以参考这篇<a href="https://www.zhihu.com/question/20717354" target="_blank" rel="noopener">知乎文章</a>。</p>
-]]></content>
-      
-        <categories>
-            
-            <category> 网络安全 </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> 网络协议 </tag>
-            
-            <tag> ip地址 </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[生产问题排查指南——排查思路]]></title>
-      <url>/2018/02/12/%E7%94%9F%E4%BA%A7%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5%E6%8C%87%E5%8D%97%E2%80%94%E2%80%94%E6%8E%92%E6%9F%A5%E6%80%9D%E8%B7%AF/</url>
-      <content type="html"><![CDATA[<h2 id="业务指标着手"><a href="#业务指标着手" class="headerlink" title="业务指标着手"></a>业务指标着手</h2><p>需要提出的是，大部分情况还是业务应用本身引发的问题，所以应从业务指标着手。</p>
-<h2 id="查看gc日志"><a href="#查看gc日志" class="headerlink" title="查看gc日志"></a>查看gc日志</h2><ul>
-<li>查看gc是否变得频繁，是否出现大量gc甚至full gc，这意味着内存可能发生了问题。此时应保留现场，保存内存dump。</li>
-<li>一般应用程序中都有配置gc日志，在/usr/local/logs/gc目录下</li>
-<li>需要特别注意，个别major gc可能是正常内存回收，并且gc后的dump也不再体现回收前的内存情况，所以不具有参考性。</li>
-<li>一般使用MAT对内存dump进行分析，找出异常的对象，从而判断代码或者业务设计是否有需要修改的地方。</li>
-</ul>
-<h2 id="查看业务日志"><a href="#查看业务日志" class="headerlink" title="查看业务日志"></a>查看业务日志</h2><p>如果gc正常，吞吐量下降的原因可能有两个。一,外部依赖阻塞，二,服务内部资源紧张，请求排队等待。<br><br>以上两种情况都可能产生蝴蝶效应，服务性能下降，请求排队的同时，内存可能堆积大量对象无法释放，这样就导致出现gc甚至full gc。<br><br>主要关注两类服务，一,错误量最多的服务，二,第一个耗时异常缓慢的服务，根据错误链路找到异常的触发源。<br><br>最好的做法就是预防入手，对于应用性能有准确的评估以及可能遭遇的流量高峰有所预测，这样及早做资源扩展。</p>
-<h2 id="日志查看手册"><a href="#日志查看手册" class="headerlink" title="日志查看手册"></a>日志查看手册</h2><p>读者可以查看xqy撰写的生产环境日志指导手册。</p>
-]]></content>
-      
-        <categories>
-            
-            <category> 生产环境 </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> 问题排查 </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[生产问题排查指南——问题排查方法]]></title>
-      <url>/2018/02/12/%E7%94%9F%E4%BA%A7%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5%E6%8C%87%E5%8D%97%E2%80%94%E2%80%94%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5%E6%96%B9%E6%B3%95/</url>
-      <content type="html"><![CDATA[<h2 id="问题排查方法"><a href="#问题排查方法" class="headerlink" title="问题排查方法"></a>问题排查方法</h2><p>这篇博客主要阐述排查的一些指标，对一些可能造成生产问题的注意点做指导概览。</p>
-<h2 id="指标分类"><a href="#指标分类" class="headerlink" title="指标分类"></a>指标分类</h2><h3 id="基础指标"><a href="#基础指标" class="headerlink" title="基础指标"></a>基础指标</h3><p>基础指标主要有以下几点：<br></p>
-<ul>
-<li>cpu负载：cpu负载高的情况，将直接导致系统吞吐下降。</li>
-<li>磁盘：磁盘I/O是否正常，磁盘硬件是否正常。</li>
-<li>网络：出网入网流量是否正常，网络是否有波动情况。</li>
-<li>中间件负载：中间件负载情况将直接影响调用链路性能。</li>
-</ul>
-<p>如果能确保基础指标没有问题，这将大大加快我们排查的效率。例如，当前一段时间内生产网络出现了大幅度的波动，造成了大量服务延迟。如果你没有预先排除网络指标是否正常，而直接排查应用的服务性能问题，那最终将浪费大量的时间和精力。</p>
-<h3 id="核心指标"><a href="#核心指标" class="headerlink" title="核心指标"></a>核心指标</h3><p>线程<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">线程数量：多线程并行运行的情况下，存在大量线程切换与上下文信息的同步，cpu主要负责这个。</span><br><span class="line">因此线程数量过多，将会直接增加切换与同步的开销，cpu负载增加。</span><br><span class="line"></span><br><span class="line">top1：无论进程还是线程，都应该 关注cpu占用率最高的那一个，有利于快速排查系统高负载的主要原因。</span><br></pre></td></tr></table></figure></p>
-<p>内存<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">系统内存空闲情况：长时间的低空闲内存，容易在大流量到来时，达到系统警戒阈值，触发OOM Killer，中断应用进程。</span><br><span class="line">在其他指标不变的情况下，空闲内存的大小与数据，流量息息相关。</span><br><span class="line">大数据与流量高峰都会加大内存开销，遇到服务阻塞，对象会在内存中堆积无法释放，最终导致内存溢出。</span><br><span class="line"></span><br><span class="line">业务应用内存情况：业务应用会有一块被分配的固定大小的堆内存空间。</span><br><span class="line">但配分的大小不一定总是合理的，一个典型的例子是老年代分配内存过大，新生代分配较小，</span><br><span class="line">大量的对象在老年代中堆积等待回收，在触发回收前，系统长时间处于空闲内存吃紧状态。</span><br></pre></td></tr></table></figure></p>
-<h3 id="业务指标"><a href="#业务指标" class="headerlink" title="业务指标"></a>业务指标</h3><p>gc情况直观体现了应用内存当前的健康程度，频繁gc甚至full gc意味着应用内存出现了问题或者没有给应用分配合理的内存空间。</p>
-<p>任何时候，日志都是问题排查不可或缺的重要指标。核心指标的异常，最终体现在日志上就是大量的系统或者业务异常，服务错误量激增[调用失败，超时]，执行耗时异常缓慢[一次服务耗时10～100s以上]</p>
-<h3 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h3><p>读者可能对于OOM Killer这个概念不太了解，可以参考知乎上的这篇<a href="https://www.zhihu.com/question/21972130" target="_blank" rel="noopener">形象比喻</a>。</p>
-]]></content>
-      
-        <categories>
-            
-            <category> 生产环境 </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> 问题排查 </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[生产问题排查指南——指标查询指令与方法]]></title>
-      <url>/2018/02/12/%E7%94%9F%E4%BA%A7%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5%E6%8C%87%E5%8D%97%E2%80%94%E2%80%94%E6%8C%87%E6%A0%87%E6%9F%A5%E8%AF%A2%E6%8C%87%E4%BB%A4%E4%B8%8E%E6%96%B9%E6%B3%95/</url>
-      <content type="html"><![CDATA[<h2 id="生产问题指标"><a href="#生产问题指标" class="headerlink" title="生产问题指标"></a>生产问题指标</h2><h3 id="cpu"><a href="#cpu" class="headerlink" title="cpu"></a>cpu</h3><p>中央处理器cpu占用率与负载情况是操作系统繁忙程度的一项总要的指标，它直接影响着应用的吞吐。<br><br>top命令经常用来监控linux系统状况，也直观展示了系统cpu使用情况。读者可以参考<a href="https://yunchangwang.github.io/2018/01/26/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94top/" target="_blank" rel="noopener">微服务问题定位——top</a>来查看具体的细节。</p>
-<h3 id="线程"><a href="#线程" class="headerlink" title="线程"></a>线程</h3><p>上面的top命令同时展示了各进程cpu使用情况，一般cpu占用量自上而下排序。我们一般关注cpu占用率最高的那个，大部分情况下它就是我们的应用进程。pid列即为进程的id。<br></p>
-<ul>
-<li>$top -Hp pid[十进制进程id] 可以查看指定进程id中各线程的cpu使用情况。<br></li>
-<li>$printf ‘0x%x\n’ nid[十进制线程id] 将线程的id打印为十六进制，目的是给之后的命令提供十六进制的id。<br></li>
-<li>$jstack pid[进程id] | grep ‘nid[十六进制线程id]’ -C5 –color<br><br>jstack可以查询jvm进程中的线程栈信息，grep可以从中搜索目标线程信息，可以配合源码分析负载高的原因。<br></li>
-<li>$jstack pid[进程id] &gt; jstack.txt[文件] 当然你可以将当前进程栈信息输出到文件，即我们常说的线程dump，然后进行详细分析。</li>
-<li>strace -p nid[线程id] -T strace可以查看操作系统底层的执行情况，包括执行函数和执行耗时等。</li>
-</ul>
-<h3 id="内存"><a href="#内存" class="headerlink" title="内存"></a>内存</h3><p>这里的内存指标分为系统内存和应用内存<br><br>一般读者可以使用free命令查看系统内存的使用情况，读者可以参考<a href="https://yunchangwang.github.io/2018/01/28/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94free/" target="_blank" rel="noopener">微服务问题定位——free</a><br><br>应用内存的查看需要jdk包下的命令：<br></p>
-<ul>
-<li>$jmap -heap pid[进程id]<br><br>jmap可以查看jvm进程的内存分配与使用情况，使用的gc算法等信息。</li>
-<li>$jmap -dump:format=b,file=[导出路径] pid[进程id]<br><br>-dump:format=b,file=可以使用hprof二进制形式输出jvm的heap内容到文件，即我们常说的堆内存dump，然后可以结合MAT[内存分析工具]可以深入分析内存使用情况。<br><br><strong>注意dump是比较消耗资源的。如果现在系统的内存比较吃紧，磁盘i/o较慢，切忌手动dump，可能成为压死骆驼的最后一根稻草。</strong></li>
-<li>-XX:+HeapDumpOnOutOfMemoryError 一般我们会在jvm的启动中添加启动参数，这样发生OOM后jvm能够自动将当时的内存情况dump保留下来。</li>
-<li>zip或者gzip 通常dump文件会较大，应该将原dump文件归档到备份地点或者直接移除，以释放这部分磁盘空间占用。在进行下载时也将极大减少带宽开销。</li>
-</ul>
-<h3 id="磁盘"><a href="#磁盘" class="headerlink" title="磁盘"></a>磁盘</h3><p>读者可以参考：<br></p>
-<ul>
-<li><a href="https://yunchangwang.github.io/2018/01/28/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94df/" target="_blank" rel="noopener">微服务问题定位——df</a><br></li>
-<li><a href="https://yunchangwang.github.io/2018/01/28/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94du/" target="_blank" rel="noopener">微服务问题定位——du</a></li>
-</ul>
-<h3 id="网络"><a href="#网络" class="headerlink" title="网络"></a>网络</h3><ul>
-<li>dstat 是一个综合的多维度指标命令。视图中有cpu使用情况，磁盘读写，网络情况，分页统计，系统中断与上下文切换统计。这里我们主要关注网络指标net/total- 。<br><br>recv：入网流量，send：出网流量。<br><br>当网络传输流量长时间小于实际应用传输数据量大小时，带宽将成为应用性能瓶颈。</li>
-<li>ifstat 读者可以参考<a href="https://yunchangwang.github.io/2018/01/28/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94ifstat/" target="_blank" rel="noopener">微服务问题定位——ifstat</a></li>
-</ul>
-<h3 id="日志"><a href="#日志" class="headerlink" title="日志"></a>日志</h3><p>这里的日志指标分为gc日志和业务日志。<br></p>
-<ul>
-<li>gc日志<br><br>无论minor gc还是major gc，我们主要关注gc回收实际消耗时间，即为日志中的real，即STW[stop the world]时间，如果实际耗时过长，则严重影响应用性能。</li>
-<li>业务日志<br><br>业务日志一般我们关注调用时间过长或者调用失败的请求，<br><br>grep ‘[0-9]{3,}ms’ *.log 查看执行耗时3位数以上的服务<br><br>grep ‘,N’ *.log 查看执行失败的服务</li>
-</ul>
-]]></content>
-      
-        <categories>
-            
-            <category> 生产环境 </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> 问题排查 </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[如何在mac上搭建python环境并使用docx模块]]></title>
-      <url>/2018/02/12/%E5%A6%82%E4%BD%95%E5%9C%A8mac%E4%B8%8A%E6%90%AD%E5%BB%BApython%E7%8E%AF%E5%A2%83%E5%B9%B6%E4%BD%BF%E7%94%A8docx%E6%A8%A1%E5%9D%97/</url>
-      <content type="html"><![CDATA[<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>之前接手到一个处理word文档的项目，需要读取word内容，并对读取的字符串进行一系列的处理。一开始笔者使用java进行处理，需要引入第三方模块——poi。说实话，这个第三方模块对于word的处理不够完善，第一没有很好的写入方式，第二没有很好的样式处理机制，第三没有封装java的io流，仍然需要笔者手动创建和关闭io资源。</p>
-<p>在之后的资料中查询到可以使用python的docx模块很快速处理word文件，使用快捷方便，几行代码就可以实现读写，并且很好的支持word的样式。但是docx模块只支持docx后缀的文档，读者可以先将doc转换docx。</p>
-<h2 id="搭建环境"><a href="#搭建环境" class="headerlink" title="搭建环境"></a>搭建环境</h2><p>搭建平台是macOS10.12.6，一般mac上是自带python的，但是普遍版本较低，目录位置为/Library/Python，以后安装的其他版本也在相同的目录下。</p>
-<p>终端$python –version   查看python的版本。</p>
-<p>这边可以使用pyenv来管理python的各个版本，笔者这边使用IDE(python编译环境)管理的。如果选择pyenv，请<a href="http://www.jianshu.com/p/1927349cb6a2" target="_blank" rel="noopener">参考</a>。即使不使用pyenv，笔者还是要推荐参考博客中提及的brew——mac的统一依赖包管理器。如果选择IDE管理，请到<a href="https://www.jetbrains.com/pycharm/download/#section=mac" target="_blank" rel="noopener">官网</a>下载PyCharm，这种方式不像pyenv可以使用命令下载python的其他版本，读者可以访问<a href="https://www.python.org/" target="_blank" rel="noopener">官网</a>下载其他python版本。</p>
-<h2 id="IDE"><a href="#IDE" class="headerlink" title="IDE"></a>IDE</h2><p>在栏目PyCharm下选择Pereferences，如图选择可以切换编译器的python版本：<br><br><img src="https://raw.githubusercontent.com/yunchangwang/blogs/master/python/ide.png" alt="如图"><br><br>不同的版本切换对代码的编译可能会造成影响。</p>
-<h2 id="引入docx模块"><a href="#引入docx模块" class="headerlink" title="引入docx模块"></a>引入docx模块</h2><p>python处理word也需要引入第三方模块，一般使用pip去下载python的第三方模块。mac里面python自带easy_install。<br><br>$sudo easy_install pip 输入密码下载pip，<strong>笔者强烈建议不要在系统自带的python下折腾，因为mac系统下很多软件都依赖python模块，一些操作可能导致系统的软件打开错误。</strong></p>
-<p>读者可以先去官网下载其他版本，然后设置环境变量，sudo vim /etc/profile，编辑添加export PATH=xxxx:$PATH，其中xxxx为下载后python的路径，参考<strong>搭建环境。</strong></p>
-<p>$python –version 查看版本是否更改，之后执行$sudo easy_install pip，然后在执行$pip install docx模块。</p>
-<p>然后读者就可以在当前python版本的目录下看到pip模块和docx模块了。<br><br><img src="https://raw.githubusercontent.com/yunchangwang/blogs/master/python/version.png" alt="如图"><br><br>之后在PyCharm中切换python的版本，在编写的代码中引入docx模块即可。读者可以参考<a href="https://python-docx.readthedocs.io/en/latest/" target="_blank" rel="noopener">官网手册</a></p>
-]]></content>
-      
-        <categories>
-            
-            <category> python </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> python </tag>
-            
-            <tag> mac </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[jvm——新生代,老年代和持久代]]></title>
-      <url>/2018/02/11/jvm%E2%80%94%E2%80%94%E6%96%B0%E7%94%9F%E4%BB%A3-%E8%80%81%E5%B9%B4%E4%BB%A3%E5%92%8C%E6%8C%81%E4%B9%85%E4%BB%A3/</url>
-      <content type="html"><![CDATA[<h2 id="新生代，老年代和永久代"><a href="#新生代，老年代和永久代" class="headerlink" title="新生代，老年代和永久代"></a>新生代，老年代和永久代</h2><p>java中堆是jvm所管理的最大的一块内存空间，主要用于存放各种类的实例对象。<br><br>jvm中内存的分配有如下公式：<br></p>
-<ul>
-<li>堆 = 年轻代 + 老年代</li>
-<li>年轻代 = eden space(新生代) + from survivor + to survivor</li>
-</ul>
-<p>年轻代默认值保持为堆大小的1/15，特点是对象更新速度快，在短时间内产生大量的死亡对象，并且要产生连续可用的空间。<br><br>所以使用复制清楚算法和并行收集器进行垃圾回收，对年轻代的垃圾回收称作<strong>初级回收(minor gc)</strong>。</p>
-<h3 id="年轻代的工作机制"><a href="#年轻代的工作机制" class="headerlink" title="年轻代的工作机制"></a>年轻代的工作机制</h3><p>jvm，年轻代中每次只会使用eden space和其中一块survivor区域来为程序服务，所以无论如何总有一块survivor区域总是空闲的。<br><br>对象在 eden 中初始化，在经过一次minor gc后，如果对象还存活着，即被引用着，并且能够被另外一块survivor区域所容纳，则使用<strong>复制算法</strong>将这些仍然还存活的对象复制到另外一块survivor区域中。</p>
-<h3 id="年轻代如何变成老年代"><a href="#年轻代如何变成老年代" class="headerlink" title="年轻代如何变成老年代"></a>年轻代如何变成老年代</h3><p>初始化过程与上面一致，在eden中。在minor gc之后，如果对象还存活着，这些对象的年龄+1，当超过某个值(默认为15)这些对象进入老年代。</p>
-<h3 id="老年代的gc"><a href="#老年代的gc" class="headerlink" title="老年代的gc"></a>老年代的gc</h3><p>堆内存的老年代不同于现实生活，老年代中的对象个个都是从survivor中熬过来的，所以老年代中的类不是那么容易死亡的。因此，<strong>full gc(又称major gc)</strong>发生的次数没有minor gc那么频繁，并且一次full gc要比minor gc时间要更长。<br><br>标记-清除算法收集垃圾的时候会产生许多的内存碎片 ( 即不连续的内存空间 )，此后需要为较大的对象分配内存空间时，若无法找到足够的连续的内存空间，就会提前触发一次 GC 的收集动作。</p>
-<h3 id="持久代"><a href="#持久代" class="headerlink" title="持久代"></a>持久代</h3><p>此外还有一个持久代，用于存放静态文件，如java类定义(相当于模版，不是实例对象)、方法、本地方法等。持久代对垃圾回收没有显著影响，但是有些应用可能动态生成或者调用一些class，例如hibernate等，在这种时候需要设置较大的持久代空间来存放这些运行过程中新增的类 。持久代大小通过-XX:MaxPermSize=<n>进行设置。</n></p>
-<h3 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h3><p>有的虚拟机并没有持久代，java8开始持久层也已经被彻底删除了，取代它的是另一个内存区域也被称为<strong>元空间</strong>。<br><br>想要参考更多，读者可以参考这篇<a href="http://blog.csdn.net/sted_zxz/article/details/72476673" target="_blank" rel="noopener">博客</a></p>
-<h3 id="jvm配置项"><a href="#jvm配置项" class="headerlink" title="jvm配置项"></a>jvm配置项</h3><p>jvm配置项可以根据程序的实际要求来配置，如各个代的比例等。<br><br>这边原本应该用表格的形式展示，但是hexo在渲染markdown的表格语法时不支持，待到作者修复这个bug后进行更改。<br><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">* -Xms                  初始堆大小。如：-Xms256m</span><br><span class="line"></span><br><span class="line">* -Xmx                  最大堆大小。如：-Xmx512m </span><br><span class="line">                 </span><br><span class="line">* -Xmn                  新生代大小。通常为 Xmx 的 1/3 或 1/4。新生代 = Eden +</span><br><span class="line">                        2 个 Survivor 空间。实际可用空间为 = Eden + 1 个</span><br><span class="line">                        Survivor，即 90% </span><br><span class="line"></span><br><span class="line">* -Xss                  JDK1.5+ 每个线程堆栈大小为 1M，一般来说如果栈不是很深的</span><br><span class="line">                        话， 1M 是绝对够用了的。 </span><br><span class="line"></span><br><span class="line">* -XX:NewRatio          新生代与老年代的比例，如 –XX:NewRatio=2，</span><br><span class="line">                        则新生代占整个堆空间的1/3，老年代占2/3 </span><br><span class="line">                        </span><br><span class="line">* -XX:SurvivorRatio     新生代中 Eden 与 Survivor 的比值。默认值为 8。</span><br><span class="line">                        即 Eden 占新生代空间的 8/10，另外两个 Survivor 各占  </span><br><span class="line">                        1/10 </span><br><span class="line">                        </span><br><span class="line">* -XX:PermSize          永久代(方法区)的初始大小    </span><br><span class="line"></span><br><span class="line">* -XX:MaxPermSize       永久代(方法区)的最大值  </span><br><span class="line">                           </span><br><span class="line">* -XX:+PrintGCDetails   打印 GC 信息  </span><br><span class="line">                              </span><br><span class="line">* -XX:+HeapDumpOnOutOfMemoryError     让虚拟机在发生内存溢出时 Dump 出当前的内</span><br><span class="line">                                      存堆转储快照，以便分析用</span><br></pre></td></tr></table></figure></p>
-]]></content>
-      
-        <categories>
-            
-            <category> jvm </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> jvm </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[linux编辑器——vim]]></title>
-      <url>/2018/01/31/linux%E7%BC%96%E8%BE%91%E5%99%A8%E2%80%94%E2%80%94vim/</url>
-      <content type="html"><![CDATA[<h1 id="VIM编辑器"><a href="#VIM编辑器" class="headerlink" title="VIM编辑器"></a>VIM编辑器</h1><h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>vi在mac下严格意义上讲不是一个简单的命令，而是unix系列下的自带的<strong>编译器</strong>，笔者没记错发明这编译器的家伙是个<strong>大胡子</strong>，一直致力于软件开源的维护和倡导<br><br>$vi filename 这是开始编译一个文件，有时候需要switch user 即sudo<br></p>
-<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>这边笔者不做过多的介绍<br><br>请看<a href="https://zh.wikipedia.org/wiki/Vi" target="_blank" rel="noopener">维基百科</a><br><br>这里的vim编辑器是vi的一种升级版</p>
-<h2 id="编辑文件"><a href="#编辑文件" class="headerlink" title="编辑文件"></a>编辑文件</h2><p>之前说过基本用法:$vim filename，这边还有其他的用法<br><br>$vim +line filename 编辑文件，并定位到第line行<br><br>$vim + filename 编辑文件，并定位到最后一行<br><br>$vim +/pattern filename 编辑文件，并定位到第一个匹配的位置<br></p>
-<h2 id="关闭文件"><a href="#关闭文件" class="headerlink" title="关闭文件"></a>关闭文件</h2><p>这边需要提及vim的模式(之后补充，这边提及)，打开文件后需要进入输入模式或者其他模式，才能使用一些命令，退出模式后才能关闭文件<br><br>一般按esc按钮来推出vim的模式，然后输入<strong>:</strong>来选择退出的方式<br><br>:q  退出<br><br>:wq 保存并退出<br><br>:q! 不保存并退出<br><br>:w 保存但没有退出，可以继续编辑<br><br>:w! 强行保存<br><br>退出后就回到命令窗口界面了，当然也可以直接编辑模式退出<br><br>如：编辑模式按ZZ即可</p>
-<h2 id="模式"><a href="#模式" class="headerlink" title="模式"></a>模式</h2><p>i 在当前光标所在的字符前面转为输入模式<br><br>a 在当前光标所在的字符后面转为输入模式<br><br>o 在当前光标所在行的下方新建一行，并转为输入模式<br><br>I 在当前光标所在行的行首转为输入模式<br><br>A 在当前光标所在的行尾转为输入模式<br><br>O 在当前光标所在的上方新建一行，并转为输入模式<br><br>以上的命令必须是非编辑状态或者非其他的状态，然后按下相应的按键进入编辑模式</p>
-<h2 id="相关命令"><a href="#相关命令" class="headerlink" title="相关命令"></a>相关命令</h2><h3 id="移动"><a href="#移动" class="headerlink" title="移动"></a>移动</h3><p>很简单，就是键盘上的上下左右键<br><br>w 移至下一个单词词首，中文一般以标点为准跳动<br><br>e 移至当前或下一个单词词尾<br><br>b 移至当前或者前一个单词词首<b><br>nw 移动n个单词</b></p>
-<h3 id="跳转"><a href="#跳转" class="headerlink" title="跳转"></a>跳转</h3><p>0 跳转到光标所在的行首<br><br>^ 跳转到行首的第一个非空白字符<br><br>$ 绝对的行尾<br><br>nG 跳转到第#行<br><br>gg 跳转到第一行行首<br><br>G 跳转到最后一行行首</p>
-<h3 id="翻页"><a href="#翻页" class="headerlink" title="翻页"></a>翻页</h3><p>ctrl+f 向下翻一屏<br><br>ctrl+b 向上翻一屏<br><br>ctrl+d 向下翻半屏<br><br>ctrl+u 向上翻半屏</p>
-<h3 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h3><p>x 删除光标所在处的单个字符<br><br>nx 删除光标所在处及后面共n个单词<br><br>dd 删除光标所在的行<br><br>ndd 删除光标所在行及后面共n行</p>
-<h3 id="粘贴"><a href="#粘贴" class="headerlink" title="粘贴"></a>粘贴</h3><p>p: 如果删除或复制为整行内容，则粘贴至光标所在行的下方，如果复制或删除的内容为非整行，则粘贴至光标所在字符的后面<br><br>P: 如果删除或复制为整行内容，则粘贴至光标所在行的上方，如果复制或删除的内容为非整行，则粘贴至光标所在字符的前面<br><br><strong>以上命令只作用于vim编辑器内部，外面复制的内容不行</strong></p>
-<h3 id="复制"><a href="#复制" class="headerlink" title="复制"></a>复制</h3><p>用法和d命令的用法相同，将d替换成y</p>
-<h3 id="替换"><a href="#替换" class="headerlink" title="替换"></a>替换</h3><p>r 替换单个字符，但是好像不支持中文<br><br>nr 光标后n个字符全部替换<br><br>R 进入替换模式，可直接替换光标所在的字符</p>
-<h3 id="撤销编辑操作"><a href="#撤销编辑操作" class="headerlink" title="撤销编辑操作"></a>撤销编辑操作</h3><p>u 在非模式状态下，撤销前一次的编辑操作<br><br>nu 直接撤销最近的n次编辑操作</p>
-<h3 id="选取"><a href="#选取" class="headerlink" title="选取"></a>选取</h3><p>v 进入选取模式，按字符选取，最多到光标所在的行<br><br>V 进入选取模式，但是按矩形进行选取</p>
-<h3 id="查找"><a href="#查找" class="headerlink" title="查找"></a>查找</h3><p>:/pattern 根据匹配的字符查找<br><br>:?pattern 同上<br><br>n 下一个<br><br>N 上一个</p>
-<h3 id="查找并替换"><a href="#查找并替换" class="headerlink" title="查找并替换"></a>查找并替换</h3><p>headline,footline s#PATTERN#string#g<br><br>n,$s#wyc#王鋆昌#g 替换第n行开始到最后一行中每一行所有wyc为王鋆昌<br><br><a href="https://www.cnblogs.com/jianyungsun/archive/2011/03/20/1989276.html" target="_blank" rel="noopener">参考</a></p>
-<h3 id="编辑多个文件"><a href="#编辑多个文件" class="headerlink" title="编辑多个文件"></a>编辑多个文件</h3><p>vim file1 file2<br><br>:next 切换到下一个文件<br><br>:prev 切换到上一个文件<br><br>:last 切换到最后一个文件<br><br>:first 切换到第一个文件<br><br>:q 退出当前文件<br><br>:qa 全部退出</p>
-<h2 id="未完待续"><a href="#未完待续" class="headerlink" title="未完待续"></a>未完待续</h2><p>vim的使用远非及此，之后还有有涉及会及时补充</p>
-]]></content>
-      
-        <categories>
-            
-            <category> vim </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> linux命令 </tag>
-            
-            <tag> vim </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[linux命令——crontab]]></title>
-      <url>/2018/01/31/linux%E5%91%BD%E4%BB%A4%E2%80%94%E2%80%94crontab/</url>
-      <content type="html"><![CDATA[<h2 id="crontab"><a href="#crontab" class="headerlink" title="crontab"></a>crontab</h2><h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4><p>自定义定时任务<br><br>笔者一般用这个命令来提醒事项，适用于基本每天执行的事项<br></p>
-<h4 id="option参数"><a href="#option参数" class="headerlink" title="option参数"></a>option参数</h4><p>-e 编辑cron脚本文件，可以指定编辑器，默认是vi编辑器<br><br>-l 列出当前用户下的cron任务<br><br>-u 指定cron在哪个用户下执行，默认是当前用户<br></p>
-<h4 id="使用实例"><a href="#使用实例" class="headerlink" title="使用实例"></a>使用实例</h4><p>$brontab -e 执行后跳到编辑器<br><br>你可以在编辑器中书写cron命令，一般的格式是<em> </em> <em> </em> <em> command content<br><br>上面格式中的 </em> 从左至右分别表示分，时，日，月份和年份，content就是自定义的命令了<br><br>如果命令较多，你甚至可以写在一个shell脚本中，执行脚本即可<br><br>比如：15 9 <em> </em> * command sh xxx.sh 每天早上9:15执行xxx.sh脚本</p>
-<h4 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h4><p>一般用$cron -e编辑的脚本，笔者也不知道保存到哪里去了，一般笔者都是写完之后直接执行的<br><br>比如：crontab test.cron即可，test.cron即为编写好的脚本，内容形式与上面的一致</p>
-<h4 id="实用价值"><a href="#实用价值" class="headerlink" title="实用价值"></a>实用价值</h4><p>了解敏捷开发的读者应该知道，部门中可能存在一些管理方式，需要每天执行任务，比如早晨的定时晨会，比如记录一天内的工作时间，等等<br><br>读者可以使用outlook来提醒，或者手机的定时闹钟，笔者选择用crontab命令来显示高逼格<br><br><img src="https://raw.githubusercontent.com/yunchangwang/blogs/master/crontab/crontab.png" alt="如图"><br><br>列出了笔者mac中每天执行的任务，将多个cron任务编辑在同一个.cron文件内，执行就能实现多个任务的并存<br><br>发现cron任务content可以直接命令，也可以shell脚本执行</p>
-]]></content>
-      
-        <categories>
-            
-            <category> linux命令 </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> linux命令 </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[linux命令——awk]]></title>
-      <url>/2018/01/31/linux%E5%91%BD%E4%BB%A4%E2%80%94%E2%80%94awk/</url>
-      <content type="html"><![CDATA[<h2 id="awk"><a href="#awk" class="headerlink" title="awk"></a>awk</h2><h3 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h3><p>awk ‘{pattern + action}’ {filenames}</p>
-<h3 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式"></a>使用方式</h3><p>awk -F 分隔符 ‘{command操作}’<br><br>awk -f awk-script-file input-file(s)<br><br>上面的命令比较有意思，awk-script-file是脚本文件，一般比较复杂的awk命令可以写成一个脚本，然后操作到input-file(s)文件上<br></p>
-<h3 id="内置变量"><a href="#内置变量" class="headerlink" title="内置变量"></a>内置变量</h3><p>ARGC               命令行参数个数<br><br>ARGV               命令行参数排列<br><br>ENVIRON            支持队列中系统环境变量的使用<br><br>FILENAME           awk浏览的文件名<br><br>FNR                浏览文件的记录数<br><br>FS                 设置输入域分隔符，等价于命令行 -F选项<br><br>NF                 浏览记录的域的个数<br><br>NR                 已读的记录数<br><br>OFS                输出域分隔符<br><br>ORS                输出记录分隔符<br><br>RS                 控制记录分隔符</p>
-<h3 id="使用实例"><a href="#使用实例" class="headerlink" title="使用实例"></a>使用实例</h3><p>在xqy的日志使用手册中，有统计所有抛出非业务异常的服务的命令，相信很多开发不知道运行的原理，在此我做一下说明：<br><br>cat common-service-digest.log | grep ‘N,’ | awk -F ( ‘{print $2}’ | awk -F ) ‘{print $1}’ | awk -F , ‘{!a[$1”.”$2”.”$3]++;}END {for (j in a) print j,a[j]}’<br><br><img src="http://localhost:2000/awk/awk.png" alt="输出:"><br><br>这个命令比较长，你可以分开进行执行，比如:<br><br>1.cat common-service-digest.log | grep ‘N,’ 查看调用失败的日志<br><br>2.awk -F ( ‘{print $2}’ 以 （作为分隔符分割日志行，并打印分隔片区2<br><br>比如:<br><br>日志记录:<br><br>[(tax,ICustomerSettingManageService,getAreaCodeBatch,Y,12ms)] (traceId=84ec429fbff64c5bbc43347c8cc72257)被分隔为:<br><br>[(<br><br>tax,ICustomerSettingManageService,getAreaCodeBatch,Y,12ms)]<br><br>(traceId=84ec429fbff64c5bbc43347c8cc72257)<br><br>最后输出:tax,ICustomerSettingManageService,getAreaCodeBatch,Y,24ms)]<br><br>3.awk -F ) ‘{print $1}’ 以 ）作为分隔符分割日志行，并打印分隔片区1<br><br>最后输出:tax,ICustomerSettingManageService,getAreaCodeBatch,Y,12ms<br><br>4.awk -F , ‘{!a[$1”.”$2”.”$3]++;} 以 ,作为分隔符分割日志行，并以$1”.”$2”.”$3为键统计<br><br>5.最后end进行循环输出<br><br><a href="https://www.cnblogs.com/ggjucheng/archive/2013/01/13/2858470.html" target="_blank" rel="noopener">参考</a></p>
-<h3 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h3><p>当中涉及到xqy的日志业务和图片，所以不部署到github</p>
-]]></content>
-      
-        <categories>
-            
-            <category> linux命令 </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> linux命令 </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[linux命令——sed]]></title>
-      <url>/2018/01/31/linux%E5%91%BD%E4%BB%A4%E2%80%94%E2%80%94sed/</url>
-      <content type="html"><![CDATA[<h2 id="sed"><a href="#sed" class="headerlink" title="sed"></a>sed</h2><h3 id="系统"><a href="#系统" class="headerlink" title="系统"></a>系统</h3><p>mac系统用的是原生的bsd系列，而一般的linux系统用的是gnu系统，所以两者在某些命令是有区别的，sed命令位列其中</p>
-<h3 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h3><p>mac上sed的添加和插入文本比较奇葩，需要如此:<br><br>$sed “$line a\ (在\后要加一个空格，然后另起一行，再写需要添加的那一行新的)<br><br>>$value（需要添加新一行的内容）<br><br>>“ $filename(文件名)<br><br>同上，sed i的使用方式亦然</p>
-<h3 id="gnu-sed"><a href="#gnu-sed" class="headerlink" title="gnu-sed"></a>gnu-sed</h3><p>如果无法适应原生bsd系列，可以下载gnu-sed，这个时候brew神器又用到了，直接下载然后配置环境变量即可:<br><br>$brew install gnu-sed<br><br>之后的叙述都是基于gnu-sed说明</p>
-<h3 id="option参数"><a href="#option参数" class="headerlink" title="option参数"></a>option参数</h3><p>-n ：使用安静(silent)模式，在一般 sed 的用法中，所有来自 STDIN 的数据一般都会被列出到终端上，但如果加上 -n 参数后，则只有经过sed 特殊处理的那一行(或者动作)才会被列出来<br><br>-e ：直接在命令列模式上进行 sed 的动作编辑<br><br>-f ：直接将 sed 的动作写在一个文件内， -f filename 则可以运行 filename 内的 sed 动作<br><br>-r ：sed 的动作支持的是延伸型正规表示法的语法。(默认是基础正规表示法语法)<br><br>-i ：直接修改读取的文件内容，而不是输出到终端</p>
-<h3 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h3><p>a ：新增， a 的后面可以接字串，而这些字串会在新的一行出现(目前的下一行)<br><br>c ：取代， c 的后面可以接字串，这些字串可以取代 n1,n2 之间的行<br><br>d ：删除，因为是删除啊，所以 d 后面通常不接任何咚咚<br><br>i ：插入， i 的后面可以接字串，而这些字串会在新的一行出现(目前的上一行)<br><br>p ：列印，亦即将某个选择的数据印出。通常 p 会与参数 sed -n 一起运行<br><br>s ：取代，可以直接进行取代的工作哩！通常这个 s 的动作可以搭配正规表示法</p>
-<h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><p>$sed ‘2a 字符串’ filename —— 第二行下一行添加字符串<br><br>$sed ‘2i 字符串’ filename —— 第二行上一行添加字符串<br><br>以上的命令只能作用在缓存的文件中，其实真实的文件内容并没有被改变<br><br>$sed ‘2a 字符串’ -i  filename —— 这样可以直接修改文件了<br><br>$sed ‘1,2d’ -i filename —— 删除文件1-2行的内容<br><br>sed与nl联合使用可以进行关键字查找:<br><br>$nl filename | sed -n ‘/关键字/p’<br><br>sed支持正则表达的搜索和替换:<br><br>$sed ‘s/正则表达式 or 普通字符串/新字符串/g’ -i filename<br><br>[其他用法:]<a href="https://www.cnblogs.com/ggjucheng/archive/2013/01/13/2856901.html" target="_blank" rel="noopener">https://www.cnblogs.com/ggjucheng/archive/2013/01/13/2856901.html</a></p>
-]]></content>
-      
-        <categories>
-            
-            <category> linux命令 </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> linux命令 </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[linux常用命令——补充]]></title>
-      <url>/2018/01/31/linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E2%80%94%E2%80%94%E8%A1%A5%E5%85%85/</url>
-      <content type="html"><![CDATA[<h1 id="常用命令-补充"><a href="#常用命令-补充" class="headerlink" title="常用命令(补充)"></a>常用命令(补充)</h1><h2 id="grep"><a href="#grep" class="headerlink" title="grep"></a>grep</h2><h3 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h3><p>grep [-acinv][–color=auto] ‘查找字符串’ filename</p>
-<h3 id="option参数"><a href="#option参数" class="headerlink" title="option参数"></a>option参数</h3><p>-c 统计查找字符在文件中出现的次数<b><br>-i 忽略大小写<b><br>-v 反向查找，即显示不在查找内的行，但是根据记录日志的习惯，很少会使用<b><br>–color=auto 对查找的字符进行颜色显示</b></b></b></p>
-<h3 id="联合使用"><a href="#联合使用" class="headerlink" title="联合使用"></a>联合使用</h3><p>ls -l |grep -i filename 列出指定文件/文件夹的属性<br>ps -ef|grep tomcat/java 列出指定的进程信息</p>
-<h2 id="find"><a href="#find" class="headerlink" title="find"></a>find</h2><h3 id="用法-1"><a href="#用法-1" class="headerlink" title="用法"></a>用法</h3><p>find [PATH] [option] [action]</p>
-<h3 id="option参数-1"><a href="#option参数-1" class="headerlink" title="option参数"></a>option参数</h3><p>-mtime n 其中n为数字，表示n天以前，查找n天之前修改过的文件<br>-user name 查找指定所有者的文件<br>-size [+-size] 查重比size大/小的文件</p>
-<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p>$find . -mtime 0 来查找当天修改过的文件，一般可以筛选当天有记录的日志</p>
-<h2 id="tar"><a href="#tar" class="headerlink" title="tar"></a>tar</h2><h3 id="option参数-2"><a href="#option参数-2" class="headerlink" title="option参数"></a>option参数</h3><p>-c ：新建打包文件<br><br>-t ：查看打包文件的内容含有哪些文件名<br><br>-x ：解打包或解压缩的功能，可以搭配-C（大写）指定解压的目录，注意-c,-t,-x不能同时出现在同一条命令中<br><br>-j ：通过bzip2的支持进行压缩/解压缩<br><br>-z ：通过gzip的支持进行压缩/解压缩<br><br>-v ：在压缩/解压缩过程中，将正在处理的文件名显示出来<br><br>-f filename ：filename为要处理的文件<br><br>-C dir ：指定压缩/解压缩的目录dir</p>
-<h3 id="使用实例"><a href="#使用实例" class="headerlink" title="使用实例"></a>使用实例</h3><p>$tar -tzvf xxx.zip 查看指定压缩文件里面的文件内容<br><br>$tar -zxvf xxx.zip 解压缩指定文件<br><br>$tar -cvf  xxx.tar  dir 压缩指定文件夹<br><br>$tar -czvf xxx.tar.gz dir 以gzip的格式进行压缩<br><br>如何使用解压缩命令的option操作，最终还是要看压缩文件的格式的，如-z一般用来支持.gz结尾的压缩包</p>
-<h2 id="kill"><a href="#kill" class="headerlink" title="kill"></a>kill</h2><h3 id="用法-2"><a href="#用法-2" class="headerlink" title="用法"></a>用法</h3><p>kill [选项] [参数]</p>
-<h3 id="option参数-3"><a href="#option参数-3" class="headerlink" title="option参数"></a>option参数</h3><p>-a：当处理当前进程时，不限制命令名和进程号的对应关系<br><br>-l &lt;信息编号&gt;：若不加&lt;信息编号&gt;选项，则-l参数会列出全部的信息名称<br> -p：指定kill 命令只打印相关进程的进程号，而不发送任何信号<br><br>-s &lt;信息名称或编号&gt;：指定要送出的信息<br><br>-u：指定用户</p>
-<h3 id="常用的信号编号"><a href="#常用的信号编号" class="headerlink" title="常用的信号编号"></a>常用的信号编号</h3><p>HUP 1 终端断线 <br><br>INT 2 中断（同 Ctrl + C） <br><br>QUIT 3 退出（同 Ctrl + \）  <br><br>TERM 15 终止  <br><br>KILL 9 强制终止  <br><br>CONT 18 继续（与STOP相反， fg/bg命令） <br><br>STOP 19 暂停（同 Ctrl + Z）<br><br><strong>在mac中18是STOP，19是CONT</strong></p>
-]]></content>
-      
-        <categories>
-            
-            <category> linux命令 </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> linux命令 </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[linux命令文件上传与下载]]></title>
-      <url>/2018/01/31/linux%E5%91%BD%E4%BB%A4%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E4%B8%8E%E4%B8%8B%E8%BD%BD/</url>
-      <content type="html"><![CDATA[<h1 id="文件上传下载"><a href="#文件上传下载" class="headerlink" title="文件上传下载"></a>文件上传下载</h1><h2 id="搭建实践环境"><a href="#搭建实践环境" class="headerlink" title="搭建实践环境"></a>搭建实践环境</h2><p>这边使用笔者自己的电脑和windows电脑进行实践。</p>
-<h3 id="利用ssh打通windows和mac"><a href="#利用ssh打通windows和mac" class="headerlink" title="利用ssh打通windows和mac"></a>利用ssh打通windows和mac</h3><p>打开mac的系统偏好设置中的共享，一般情况下没有界面展示的，需要使用搜索查找共享，<br><img src="https://raw.githubusercontent.com/yunchangwang/blogs/master/ssh/ssh.png" alt="如图"></p>
-<p>然后勾选远程登陆，选择全部用户可访问<br><img src="https://raw.githubusercontent.com/yunchangwang/blogs/master/ssh/ssh2.png" alt="如图"></p>
-<p>在windows上使用ssh连接mac，填写相应的用户名和密码即可<br><img src="https://raw.githubusercontent.com/yunchangwang/blogs/master/ssh/ssh3.png" alt="如图"></p>
-<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>要支持sz，rz两个命令，系统需要安装lrzsz，一般的linux系统是自带的，这里使用mac进行实验，需要安装。<a href="http://xfhnever.com/2015/09/04/mac-rzsz/" target="_blank" rel="noopener">参考</a></p>
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>sz filename，即从系统上下载文件到本地，filename是系统中你选择下载的文件<br><br>rz -b，将本地的文件以二进制的传递方式上传到系统服务器，一般推荐使用二进制传输方式<br><br><a href="http://blog.csdn.net/k346k346/article/details/71515740" target="_blank" rel="noopener">其他参考</a></p>
-]]></content>
-      
-        <categories>
-            
-            <category> linux命令 </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> linux命令 </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[hexo防止敏感数据部署]]></title>
-      <url>/2018/01/30/hexo%E9%98%B2%E6%AD%A2%E6%95%8F%E6%84%9F%E6%95%B0%E6%8D%AE%E9%83%A8%E7%BD%B2/</url>
-      <content type="html"><![CDATA[<h2 id="hexo防止敏感数据部署"><a href="#hexo防止敏感数据部署" class="headerlink" title="hexo防止敏感数据部署"></a>hexo防止敏感数据部署</h2><h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>熟悉hexo的读者都知道，hexo的部署一般执行如下:<br>$hexo clean<br><br>$hexo g<br><br>$hexo d<br><br>如果不按照顺序执行这三步，读者会发现即使增添了page，部署时git也不会显示增添文件的记录，github上也没有提交的代码记录<br><br>其实这涉及到hexo的部署原理，hexo clean 会清除之前构建的代码，具体就是public文件夹；hexo g 会重新生成，这样读者添加的page也就构建在其中，此时新的public文件夹会生成；hexo d 就是将hexo g 改变的文件提交到github上<br><br>所以不执行clean和generate是不会真正意义上修改remote上的代码</p>
-<h3 id="敏感数据"><a href="#敏感数据" class="headerlink" title="敏感数据"></a>敏感数据</h3><p>敏感数据这里指的就是涉及公司业务的文章，因为hexo d 会将文章直接部署到github上，这样就全部公开化了<br><br>这边最好是本地可以访问，github无法访问你的敏感数据，这篇文章的目的就在此<br></p>
-<h3 id="利用-gitignore"><a href="#利用-gitignore" class="headerlink" title="利用.gitignore"></a>利用.gitignore</h3><p>熟悉git的读者，应该都知道可以使用.gitignore文件忽略一些提交<br><br>网上有些说修改.npmignore文件配置(<strong>hexo的根目录下</strong>)可以起到效果，经过测试发现没有起到作用，所以转而到git寻求解决方案<br><br>一般执行如下(当前目录为hexo根目录):<br><br>$cd .deploy_git    <strong>git push的代码都在此文件夹下</strong><br><br>$vim .gitignore<br><br>增加如下配置:<br><br>page name/     <strong>page的名称，hexo n page创建命令中你定义的文章名，如:linux命令性能监控及优化/</strong><br><br>.gitignore     <strong>自己本身</strong><br><br>但是笔者发现代码虽然没有提交到github上，但是hexo博客上有这个新建的标题，点击访问也是github默认的404页面(<strong>因为hexo g过程中一定会将文章标题写入hexo中，.gitignore只能做到忽略提交</strong>)<br></p>
-<h3 id="自定义404"><a href="#自定义404" class="headerlink" title="自定义404"></a>自定义404</h3><p>上面的问题引入了这个小结，github默认的404页面会让读者误以为是网站的问题，其实是不想公开化，所以你可以自定义404页面<br><br>具体的步骤如下(<strong>hexo的根目录下</strong>):<br><br>$hexo n page 404  <strong>source目录下生成404目录</strong><br><br>index.md中增加配置:<br><br>    layout: false       //是否使用布局文件<br>    comments: false     //是否有评论<br>    permalink: /404     //设置链接<br>然后按照hexo部署步骤上传到github上，然后再访问敏感文章链接会跳转到自定义的404页面<br><br>其实根本问题是github上没有代码，但是hexo在generate时将目录还是写入了导致，但是笔者找不到解决忽略写入的方法</p>
-]]></content>
-      
-        <categories>
-            
-            <category> hexo部署 </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> hexo </tag>
-            
-            <tag> git </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[linux命令性能监控及优化]]></title>
-      <url>/2018/01/30/linux%E5%91%BD%E4%BB%A4%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7%E5%8F%8A%E4%BC%98%E5%8C%96/</url>
-      <content type="html"><![CDATA[<h1 id="性能监控和优化"><a href="#性能监控和优化" class="headerlink" title="性能监控和优化"></a>性能监控和优化</h1><h2 id="top"><a href="#top" class="headerlink" title="top"></a>top</h2><p><a href="https://yunchangwang.github.io/2018/01/26/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94top/" target="_blank" rel="noopener">top</a></p>
-<h2 id="free"><a href="#free" class="headerlink" title="free"></a>free</h2><p><a href="https://yunchangwang.github.io/2018/01/28/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94free/" target="_blank" rel="noopener">free</a></p>
-<h2 id="vmstat"><a href="#vmstat" class="headerlink" title="vmstat"></a>vmstat</h2><p>用来统计虚拟内存的使用情况，这边涉及到linux物理内存和虚拟内存的<a href="http://www.cnblogs.com/peida/archive/2012/12/25/2833108.html" target="_blank" rel="noopener">知识点</a>，其实之前我们也提到过，虚拟内存即交换区</p>
-<h3 id="option参数"><a href="#option参数" class="headerlink" title="option参数"></a>option参数</h3><p>-a：显示活跃和非活跃内存<br><br>-f：显示从系统启动至今的fork数量<br><br>-m：显示slabinfo<br><br>-n：只在开始时显示一次各字段名称<br><br>-s：显示内存相关统计信息及多种系统活动数量<br><br>delay：刷新时间间隔。如果不指定，只显示一条结果<br><br>count：刷新次数。如果不指定刷新次数，但指定了刷新时间间隔，这时刷新次数为无穷<br><br>-d：显示磁盘相关统计信息<br><br>-p：显示指定磁盘分区统计信息<br><br>-S：使用指定单位显示。参数有 k 、K 、m 、M ，分别代表1000、1024、1000000、1048576字节（byte）默认单位为K（1024 bytes）<br><br>-V：显示vmstat版本信息</p>
-<h3 id="使用实例"><a href="#使用实例" class="headerlink" title="使用实例"></a>使用实例</h3><p>$vmstat 5 6   在docker上进行试验，在6秒内采集5次数据<br><img src="https://raw.githubusercontent.com/yunchangwang/blogs/master/vmstat/vmstat.png" alt="例图"></p>
-<h3 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h3><p>Procs（进程）：<br><br>r: 运行队列中进程数量<br><br>b: 等待IO的进程数量<br><br>Memory（内存）：<br><br>swpd: 使用虚拟内存大小<br><br>free: 可用内存大小<br><br>buff: 用作缓冲的内存大小<br><br>cache: 用作缓存的内存大小<br><br>Swap：<br><br>si: 每秒从交换区写到内存的大小<br><br>so: 每秒写入交换区的内存大小<br><br>IO：（现在的Linux版本块的大小为1024bytes）<br><br>bi: 每秒读取的块数<br><br>bo: 每秒写入的块数<br><br>系统：<br><br>in: 每秒中断数，包括时钟中断<br><br>cs: 每秒上下文切换数<br><br>CPU（以百分比表示）：<br><br>us: 用户进程执行时间(user time)<br><br>sy: 系统进程执行时间(system time)<br><br>id: 空闲时间(包括IO等待时间),中央处理器的空闲时间  以百分比表示<br><br>wa: 等待IO时间</p>
-<h3 id="需要关注的指标"><a href="#需要关注的指标" class="headerlink" title="需要关注的指标"></a>需要关注的指标</h3><p>如果 r经常大于 4 ，且id经常少于40，表示cpu的负荷很重<br><br>如果bi，bo 长期不等于0，表示内存不足<br><br>如果disk 经常不等于0， 且在 b中的队列 大于3， 表示 io性能不好<br></p>
-]]></content>
-      
-        <categories>
-            
-            <category> linux命令 </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> linux命令 </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[linux常用命令]]></title>
-      <url>/2018/01/30/linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</url>
-      <content type="html"><![CDATA[<h1 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h1><h2 id="pwd"><a href="#pwd" class="headerlink" title="pwd"></a>pwd</h2><p>没什么可说的，当前不知道处于那个目录下时，<a href="http://www.cnblogs.com/peida/archive/2012/10/24/2737730.html" target="_blank" rel="noopener">pwd</a>即可</p>
-<h2 id="mv"><a href="#mv" class="headerlink" title="mv"></a>mv</h2><p><a href="http://www.cnblogs.com/peida/archive/2012/10/27/2743022.html" target="_blank" rel="noopener">mv</a>命令是将一个文件移动到指定的目录，但是在linux可以用来重命名文件</p>
-<h2 id="more"><a href="#more" class="headerlink" title="more"></a>more</h2><p><a href="http://www.cnblogs.com/peida/archive/2012/11/02/2750588.html" target="_blank" rel="noopener">more</a>是具有翻页功能的<a href="http://www.cnblogs.com/peida/archive/2012/10/30/2746968.html" target="_blank" rel="noopener">cat</a>命令</p>
-<h2 id="less"><a href="#less" class="headerlink" title="less"></a>less</h2><p><a href="http://www.cnblogs.com/peida/archive/2012/11/05/2754477.html" target="_blank" rel="noopener">less</a>是一个可以前后分页浏览文件的命令，相比more更加具有弹性</p>
-<h2 id="which"><a href="#which" class="headerlink" title="which"></a>which</h2><p><a href="http://www.cnblogs.com/peida/archive/2012/11/09/2761928.html" target="_blank" rel="noopener">which</a>用于查找命令包所在的路径，没有配置在环境变量中的命令是搜索不到的，因为which只会搜索path下的命令，echo $PATH可以查看</p>
-<h2 id="ls"><a href="#ls" class="headerlink" title="ls"></a>ls</h2><p>ls命令还是很常用的，不做过多描述<br><br>ls g* 模糊列出文件列表，即将g开头的文件列出</p>
-<h2 id="unzip和gzip"><a href="#unzip和gzip" class="headerlink" title="unzip和gzip"></a>unzip和gzip</h2><p>unzip主要用于解压.zip压缩文件 unzip xxx.zip<br><br>gzip file1 file2 … 文件打包压缩为.gz的形式<br><br>对于文件夹的打包或者其他的压缩格式请使用tar命令</p>
-<h2 id="whatis和man"><a href="#whatis和man" class="headerlink" title="whatis和man"></a>whatis和man</h2><p>$whatis command 用于显示命令使用的描述<br><br>$man command 以使用手册的形式显示</p>
-]]></content>
-      
-        <categories>
-            
-            <category> linux命令 </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> linux命令 </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[微服务问题定位——jmap]]></title>
-      <url>/2018/01/29/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94jmap/</url>
-      <content type="html"><![CDATA[<h2 id="jmap"><a href="#jmap" class="headerlink" title="jmap"></a>jmap</h2><h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><ul>
-<li>内存溢出，线上程序运行时内存越来越大，用jmap dump出堆内存的信息，然后进行相关分析</li>
-<li>内存的真实使用大于预期，这是因为设计不合理导致冗余的对象存在内存中，用jmap来查看内存中的对象，分析是否有存在的必要</li>
-<li>jvm优化，利用jmap来查看整个堆的使用情况，根据老年代和新生代的使用比例来划分jvm的各个区域</li>
-</ul>
-<h3 id="使用实例"><a href="#使用实例" class="headerlink" title="使用实例"></a>使用实例</h3><p>在使用jmap连接进程时，启动的jvm版本和jdk版本要一一对应，毕竟jmap是jdk下的命令包<br><br>$ps -ef | grep java 查找系统的java进程<br><br>$jmap -heap pid 打印指定进程堆的摘要信息，包括gc算法<br><br><img src="https://raw.githubusercontent.com/yunchangwang/blogs/master/jmap/jmap.jpg" alt="例图"><br></p>
-<h4 id="参数说明"><a href="#参数说明" class="headerlink" title="参数说明"></a>参数说明</h4><ul>
-<li>Heap Configuration:  <strong>堆配置信息</strong><blockquote>
-<p>MinHeapFreeRatio   <strong>在堆的使用率小于MinHeapFreeRatio(%)的时候进行收缩，当Xmx=Xms的时候此配置无效</strong><br>MaxHeapFreeRatio  <strong>在堆使用率大于MaxHeapFreeRatio(%)的时候进行扩展，当Xmx=Xms的时候此配置无效</strong><br>MaxHeapSize   <strong>堆的最大空间</strong><br>NewSize  <strong>新生代的大小</strong><br>MaxNewSize   <strong>最大的新生代的大小</strong><br>OldSize   <strong>老年代的大小</strong><br>NewRatio   <strong>老年代和新生代的比例</strong><br>SurvivorRatio   <strong>新生代中Eden和和Survivor区的比例</strong><br>PermSize   <strong>永久代的大小</strong><br>MaxPermSize     <strong>久代的最大内存</strong><br>G1HeapRegionSize    <strong>使用G1垃圾收集的区间</strong></p>
-</blockquote>
-</li>
-<li>Heap Usage:   <strong>堆的使用信息</strong></li>
-<li>New Generation (Eden + 1 Survivor Space):   <strong>新生代的大小（Eden区加一个Survivor区的空间信息</strong><blockquote>
-<blockquote>
-<p>capacity  <strong>总内存</strong><br>used  <strong>已使用内存</strong><br>free   <strong>剩余内存</strong><br>13.823827124993642% used     <strong>使用内存占比</strong></p>
-</blockquote>
-</blockquote>
-</li>
-<li>Eden Space:   <strong>Eden区的大小</strong><blockquote>
-<blockquote>
-<p>capacity<br>used<br>free<br>15.178337946947952% used</p>
-</blockquote>
-</blockquote>
-</li>
-<li>From Space:   <strong>第一个Surivivor区的空间信息</strong><blockquote>
-<blockquote>
-<p>capacity<br>used<br>free<br>2.984432830624237% used</p>
-</blockquote>
-</blockquote>
-</li>
-<li>To Space:   <strong>第二个Survivor区的空间信息</strong><blockquote>
-<blockquote>
-<p>capacity<br>used<br>free<br>0.0% used</p>
-</blockquote>
-</blockquote>
-</li>
-<li>concurrent mark-sweep generation:   <strong>CMS垃圾收集占用的空间信息</strong><blockquote>
-<blockquote>
-<p>capacity<br>used<br>free<br>75.36470666527748% used</p>
-</blockquote>
-</blockquote>
-</li>
-<li>Perm Generation:   <strong>永久代的空间信息</strong><blockquote>
-<blockquote>
-<p>capacity<br>used<br>free<br>47.5915253162384% used</p>
-</blockquote>
-</blockquote>
-</li>
-</ul>
-<h4 id="其他功能"><a href="#其他功能" class="headerlink" title="其他功能"></a>其他功能</h4><p><a href="http://guochenglai.com/2016/07/15/java-command3-jmap/" target="_blank" rel="noopener">参考链接</a></p>
-]]></content>
-      
-        <categories>
-            
-            <category> 微服务问题定位 </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> jvm </tag>
-            
-            <tag> 微服务 </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[微服务问题定位——jstack]]></title>
-      <url>/2018/01/29/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94jstack/</url>
-      <content type="html"><![CDATA[<h2 id="jstack"><a href="#jstack" class="headerlink" title="jstack"></a>jstack</h2><h3 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h3><p>查看运用程序jvm的堆栈情况，可以找出线程的运行情况，从而排查一些隐患或者服务卡顿的问题</p>
-<h3 id="具体说明"><a href="#具体说明" class="headerlink" title="具体说明"></a>具体说明</h3><p>jstack用于打印出给定的java进程id或者core file或者远程调试服务的java堆栈信息，如果是在64位机器上，需要指定选项-J-d64<br><br>如果java程序崩溃会生成core文件，jstack工具可以用来获得core文件的java stack和native stack的信息，从而可以轻松知道java程序是如何崩溃和在程序何处发生问题。</p>
-<h3 id="option参数"><a href="#option参数" class="headerlink" title="option参数"></a>option参数</h3><p>-F 当jstack -l pid 没有响应的时候强制打印栈信息<br><br>-l 长队列，打印关于锁的附加信息<br><br>-m 打印java和native c/c++框架的所有栈信息<br></p>
-<h3 id="命令格式"><a href="#命令格式" class="headerlink" title="命令格式"></a>命令格式</h3><p>jstack [option] pid<br><br>jstack [option] executable core<br><br>jstack [option] [server-id@]remote-hostname-or-IP</p>
-<h3 id="命令格式说明"><a href="#命令格式说明" class="headerlink" title="命令格式说明"></a>命令格式说明</h3><p>executable core 产生core dump的java可执行文件<br><br>remote-hostname-or-IP 远程debug服务的主机名或ip<br><br>server-id 唯一id,假如一台主机上多个远程debug服务</p>
-<h3 id="使用实例"><a href="#使用实例" class="headerlink" title="使用实例"></a>使用实例</h3><p>一般需要与<a href="https://yunchangwang.github.io/2018/01/26/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94top/#more" target="_blank" rel="noopener">top</a>命令联用，使用top命令找出异常的进程(<strong>一般是cpu使用异常的进程</strong>)<br><br>通过top -Hp pid来定位该进程下各线程的cpu使用情况<br><br>再通过jstack pid命令打印该线程对应的堆栈情况</p>
-<h3 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h3><ul>
-<li>在top命令中，已经获取到了占用cpu资源较高的线程pid，将该pid转成16进制的值(<strong><a href="https://tool.lu/hexconvert/" target="_blank" rel="noopener">在线转换</a></strong>)，在thread dump中每个线程都有一个nid，找到对应的nid即可<br></li>
-<li>什么是java core和heap dump文件，<a href="http://www.cnblogs.com/jingmoxukong/p/5509196.html" target="_blank" rel="noopener">参考</a></li>
-</ul>
-]]></content>
-      
-        <categories>
-            
-            <category> 微服务问题定位 </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> jvm </tag>
-            
-            <tag> 微服务 </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[gitbook目录折叠]]></title>
-      <url>/2018/01/28/gitbook%E7%9B%AE%E5%BD%95%E6%8A%98%E5%8F%A0/</url>
-      <content type="html"><![CDATA[<h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>在编写gitbook的时候发现目录的数量比较庞大的时候显得<strong>杂乱无章</strong>，因为章节比较多的时候<strong>gitbook对于目录默认是全展开</strong>，很难有目的地寻找，对于管理人和阅读的读者来说很不友好。<strong>(主要是后者，一切都要从用户的角度考虑)</strong><br><br>如果可以将gitbook的目录折叠，那么查找时会更加清晰，笔者在网上找到了插件，只要让gitbook引入即可。</p>
-<h3 id="插件"><a href="#插件" class="headerlink" title="插件"></a>插件</h3><ul>
-<li>插件名称：toggle-chapters</li>
-<li>效果：默认只在目录导航中显示章的标题，而不会显示小节的标题，点击每一章或者每一节会显示当前章或节的子目录，如果有的话，但是同时会收起其它之前展开的章节。</li>
-</ul>
-<p>关于更多的gitbook插件，读者可以参考<a href="http://www.chengweiyang.cn/gitbook/plugins/functional/toggle-chapters.html" target="_blank" rel="noopener">插件网站</a>。<br></p>
-<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><p>在根目录(即与SUMMARY.md同级的目录)下的配置文件 book.json(<strong>如果没有则新建</strong>)中添加插件配置，如图：<br><br><img src="https://raw.githubusercontent.com/yunchangwang/blogs/master/gitbook/plugin.jpg" alt="样图"><br>读者可以<a href="http://www.chengweiyang.cn/gitbook/customize/book.json.html" target="_blank" rel="noopener">参考</a>进行配置，同理你可以在里面添加需要使用的插件。<br><br>配置完成后，可按照一下步骤进行：</p>
-<ul>
-<li>$ cd gitbook根目录</li>
-<li>$ npm install gitbook-plugin-toggle-chapters (此时gitbook的根目录下的node_modules文件夹中已经有了该插件了)</li>
-<li>$ gitbook build</li>
-<li>$ gitbook serve<br>访问 <a href="http://localhost:4000" target="_blank" rel="noopener">http://localhost:4000</a> 看你的插件是否已经生效。</li>
-</ul>
-]]></content>
-      
-        <categories>
-            
-            <category> gitbook </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> gitbook </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[如何在本地搭建gitbook]]></title>
-      <url>/2018/01/28/%E5%A6%82%E4%BD%95%E5%9C%A8%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BAgitbook/</url>
-      <content type="html"><![CDATA[<h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>gitbook更加适用于书写使用手册，不太适合书写一些博客和总结，所以笔者最近在做一些迁移的工作，将之前gitbook上的内容迁移到当前的博客上。<br><br>但是gitbook对于我们的工作还是有适用的地方的。所以在此介绍一下如何本地安装gitbook。</p>
-<h3 id="先决条件"><a href="#先决条件" class="headerlink" title="先决条件"></a>先决条件</h3><p>安装nodejs是先决条件，因为我们需要npm去下载gitbook。<br><br>在mac电脑上，有brew工具的可以直接下载：<br>$brew search nodejs 搜索包仓库中是否有nodejs<br>$brew install nodejs 有就可以直接下载<br><br>你也可以选择去官网上下载最新的nodejs压缩包，解压配置环境变量后即可使用。<br><br><strong>关于brew，读者可以参考<a href="https://www.jianshu.com/p/4e80b42823d5" target="_blank" rel="noopener">简书</a>进行安装。</strong></p>
-<h3 id="搭建"><a href="#搭建" class="headerlink" title="搭建"></a>搭建</h3><p>这里默认大家的电脑上已经安装好了nodejs。<br><br>按照步骤执行以下命令：<br>$npm install gitbook-cli -g  下载gitbook客户端包<br>$gitbook –version  查看gitbook的版本，测试是否可以使用命令<br>$cd /users/Desktop 切换到一个目录，这里笔者切换到了桌面<br>$mkdir gitbook  创建gitbook目录，这个目录就是用来初始化的<br><em>其实上面的两步(切换目录和创建目录)读者可以手动完成。</em><br>$gitbook init  初始化gitbook目录<br>$gitbook build  构建，一般有内容更新时要构建<br>$gitbook serve  开启服务，默认在4000端口监听<br>访问<a href="http://localhost:4000" target="_blank" rel="noopener">http://localhost:4000</a>  开启你的gitbook之路吧！</p>
-<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>你的系统 4000 端口可能已经被占用了，gitbook可以指定端口启动：<br><strong>gitbook serve –port 2000</strong></p>
-<p>另一个问题是笔者在windows上搭建时遇到的：<br>笔者之前在windows上搭建过，出现了一些问题，build的时候总是报错。<br><br>在github官方issues中，官方表示这个是已知的gitbook的bug，高版本的gitbook会出现这个bug。<br>如果你遇到相同的问题，请参考gitbug上的<a href="https://github.com/GitbookIO/gitbook/issues/1309" target="_blank" rel="noopener">解决方法</a>。<br>解决方法是点赞和喝彩最多的。</p>
-]]></content>
-      
-        <categories>
-            
-            <category> gitbook </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> gitbook </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[微服务问题定位——du]]></title>
-      <url>/2018/01/28/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94du/</url>
-      <content type="html"><![CDATA[<h3 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h3><p>du命令也是查看使用空间的，但是与df命令不同的是，du命令是对文件和目录磁盘使用的空间进行查看，而不是针对整个文件系统。</p>
-<h3 id="option-参数"><a href="#option-参数" class="headerlink" title="option 参数"></a>option 参数</h3><p>-a或-all  显示目录中个别文件的大小<br><br>-b或-bytes  显示目录或文件大小时，以byte为单位<br><br>-c或–total  除了显示个别目录或文件的大小外，同时也显示所有目录或文件的总和<br><br>-k或–kilobytes  以KB(1024bytes)为单位输出<br><br>-m或–megabytes  以MB为单位输出<br><br>-s或–summarize  仅显示总计，只列出最后加总的值<br><br>-h或–human-readable  以K，M，G为单位显示，提高信息的可读性<br><br>-x或–one-file-xystem  以一开始处理时的文件系统为准，若遇上其它不同的文件系统目录则略过<br><br>-L&lt;符号链接&gt;或–dereference&lt;符号链接&gt; 显示选项中所指定符号链接的源文件大小<br><br>-S或–separate-dirs   显示个别目录的大小时，并不含其子目录的大小<br><br>-X&lt;文件&gt;或–exclude-from=&lt;文件&gt;  在&lt;文件&gt;指定目录或文件<br><br>–exclude=&lt;目录或文件&gt;         略过指定的目录或文件<br><br>-D或–dereference-args   显示指定符号链接的源文件大小<br><br>-H或–si  与-h参数相同，但是K，M，G是以1000为换算单位<br><br>-l或–count-links   重复计算硬件链接的文件<br><br>读者可以使用<strong>man du</strong>或者<strong>du -help</strong>查看完整的参数列表。</p>
-<h3 id="使用实例"><a href="#使用实例" class="headerlink" title="使用实例"></a>使用实例</h3><p>$du 显示当前目录下以及子目录中所有文件的大小，一般都是使用<strong>-a</strong>参数指定文件的，因为罗列所有的信息读者很难找到相关的。<br><br>$du dir/filename 显示指定目录或者文件，<strong>dir/filename</strong>为系统中的路径。<br><br>$du #1 #2 同时显示多个，空格隔开<br></p>
-]]></content>
-      
-        <categories>
-            
-            <category> 微服务问题定位 </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> linux命令 </tag>
-            
-            <tag> 微服务 </tag>
-            
-            <tag> 磁盘 </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[微服务问题定位——df]]></title>
-      <url>/2018/01/28/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94df/</url>
-      <content type="html"><![CDATA[<h3 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h3><p>用来检查服务器文件系统的磁盘空间占用情况，可以获取硬盘被占了多少空间，目前还剩下多少空间等信息。</p>
-<h3 id="option-参数"><a href="#option-参数" class="headerlink" title="option 参数"></a>option 参数</h3><p>-a 显示全部文件系统列表<br><br>-h 以方便查阅的方式显示，即带有单位的形式<br><br>-H 相当于-h，但是换算的方式变更，这里1k=1000<br><br>-i 显示node信息<br><br>-k 区块为1024字节，即1Kb为一个区块<br><br>-l 只显示本地文件系统<br><br>-m 区块为1048576字节，即1Mb为一个区块<br><br>–no-sync 忽略sync命令<br><br>-P 输出格式为POSIX<br><br>–sync 在取得磁盘信息前先执行sync命令<br><br>-T 文件系统类型<br></p>
-<h4 id="选择参数"><a href="#选择参数" class="headerlink" title="选择参数"></a>选择参数</h4><p>–block-size=&lt;区块大小&gt; 指定区块的大小<br><br>-t &lt;文件系统类型&gt; 只显示选定文件系统的磁盘信息<br><br>-x &lt;文件系统类型&gt; 不显示选定文件系统的磁盘信息<br></p>
-<h3 id="使用实例"><a href="#使用实例" class="headerlink" title="使用实例"></a>使用实例</h3><p><img src="https://raw.githubusercontent.com/yunchangwang/blogs/master/df/df.jpg" alt="例图"><br>第一列 显示各文件系统<br><br>第二列 显示文件系统的共有多少块，这里以512B为一块，换算后即可知道文件系统大小<br><br>第三列 显示已经使用的磁盘大小<br><br>第四列 显示可用的磁盘大小<br><br>关于其他的使用方式，读者可以参考<a href="http://www.cnblogs.com/peida/archive/2012/12/07/2806483.html" target="_blank" rel="noopener">cnblogs</a>了解。<br><br>这边需要说明：已使用的+可使用的 != 总块数，因为缺省的每个分区都预留了少量空间供管理员使用，所以即使普通用户的空间已满，管理员依然可以登录系统解决相关问题。</p>
-]]></content>
-      
-        <categories>
-            
-            <category> 微服务问题定位 </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> linux命令 </tag>
-            
-            <tag> 微服务 </tag>
-            
-            <tag> 磁盘 </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[微服务问题定位——ifstat]]></title>
-      <url>/2018/01/28/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94ifstat/</url>
-      <content type="html"><![CDATA[<h2 id="ifstat"><a href="#ifstat" class="headerlink" title="ifstat"></a>ifstat</h2><h3 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h3><p>监控系统的流量</p>
-<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>ifstat不是系统自带的命令，所以需要进行安装。<br><br>mac系统的读者可以在终端使用命令：<strong>$brew install ifstat</strong>进行安装。<br><br>当然系统首先要安装<strong>brew(mac系统中的包下载工具)</strong>，读者可以参考<a href="https://www.jianshu.com/p/4e80b42823d5" target="_blank" rel="noopener">简书</a>进行安装。</p>
-<h3 id="option-参数"><a href="#option-参数" class="headerlink" title="option 参数"></a>option 参数</h3><p>-l 监测环路网络接口(lo)，缺省情况下不会显示，所谓的环路网络可认为是localhost(127.0.0.1)。读者可以参考<a href="https://www.zhihu.com/question/23940717" target="_blank" rel="noopener">知乎</a>了解相关的解释。<br><br>-a 监测系统所有的网络，比加上-l参数还多一个plip0的接口信息(所谓的并口)<br><br>-z 隐藏流量是无的接口，排查问题时排除无用端口<br><br>-i 指定要监测的接口,后面跟网络接口名<br><br>-s 等于加-d snmp:[comm@][#]host[/nn]] 参数，通过SNMP查询一个远程主机<br><br>-t 在每一行的开头加一个时间 戳,，告诉我们具体的时间<br><br>-T 报告所有监测接口的全部带宽，和-i联用来指定端口<br><br>-S 在同一行更新流量状态，不喜欢屏幕滚动的可以使用<br><br>读者可以使用<strong>man ifstat</strong>或者<strong>ifstat -help</strong>查看完整的参数列表。<br><br>更多详细的命令，读者可参考<a href="http://man.linuxde.net/ifstat" target="_blank" rel="noopener">其他命令</a>了解。</p>
-<h3 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h3><p>如何只查看网卡的流量情况，ifstat足矣。<br><br>详细的流量情况需使用iftop命令，系统依旧不会自带需要下载，mac下的下载方式与ifstat一致。<br><br>读者可以参考<a href="http://www.3mu.me/linux%E6%B5%81%E9%87%8F%E7%9B%91%E6%8E%A7%E5%B7%A5%E5%85%B7iftop%E6%9F%A5%E7%9C%8B%E5%B8%A6%E5%AE%BD%E6%B5%81%E9%87%8F%E5%8F%8A%E4%BD%BF%E7%94%A8%E8%AF%A6%E8%A7%A3/" target="_blank" rel="noopener">实例</a>了解用法。</p>
-]]></content>
-      
-        <categories>
-            
-            <category> 微服务问题定位 </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> linux命令 </tag>
-            
-            <tag> 微服务 </tag>
-            
-            <tag> 网络 </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[微服务问题定位——free]]></title>
-      <url>/2018/01/28/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94free/</url>
-      <content type="html"><![CDATA[<h2 id="free"><a href="#free" class="headerlink" title="free"></a>free</h2><h3 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h3><p>   显示系统使用和空闲的内存情况，包括物理内存和交互区内存(swap)和内核缓冲区内存</p>
-<h3 id="option参数"><a href="#option参数" class="headerlink" title="option参数"></a>option参数</h3><p>   -b  以Byte为单位显示内存使用情况<br><br>   -k  以KB为单位显示内存使用情况<br><br>   -m  以MB为单位显示内存使用情况<br><br>   -g  以GB为单位显示内存使用情况<br><br>   -o 不显示缓冲区调节列<br><br>   -s&lt;间隔秒数&gt; 持续观察内存使用状况<br><br>   -t 显示内存总和列<br><br>   -V 显示版本信息<br><br>   读者可以使用<strong>man free</strong>或者<strong>free -help</strong>查看完整参数列表。</p>
-<h3 id="样例"><a href="#样例" class="headerlink" title="样例"></a>样例</h3><p>   <img src="https://raw.githubusercontent.com/yunchangwang/blogs/master/free/swap.png" alt="图片"><br>   这边关注第二行的<strong>swap的used指标</strong>，如果使用的值较大，则表示系统的内存处于不够使用的情况</p>
-<h3 id="为何swap-used是一个指标"><a href="#为何swap-used是一个指标" class="headerlink" title="为何swap used是一个指标"></a>为何swap used是一个指标</h3><p>   <strong>swap</strong>又称为交换分区，当系统的内存小于<strong>额定值</strong>的时候，内核(OS)会将系统的一部分物理内存释放出来用于当前线程的使用，一般是很久没有操作过的程序会被释放，<strong>释放的物理内存被放入到交换区</strong>，然后等当前线程执行完毕，内存富余时重新放入物理内存。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">例如：物理内存，交换区，当前线程，进程x(目前存在于物理内存中)</span><br><span class="line"></span><br><span class="line">1.当前线程 向 物理内存 申请执行所需的内存空间</span><br><span class="line">2.物理内存 发现没有空间了 查找到 进程x 很久没有操作过</span><br><span class="line">3.物理内存 将 进程x 释放到 交换区</span><br><span class="line">4.物理内存 说 嘿 当前线程 你可以进来执行了</span><br><span class="line">5.当前线程 执行完毕 嘿 我执行完了 让那哥们进来吧</span><br><span class="line">6.物理内存 将 进程x 重新载入</span><br><span class="line"></span><br><span class="line">以上就是简略的过程。</span><br></pre></td></tr></table></figure></p>
-]]></content>
-      
-        <categories>
-            
-            <category> 微服务问题定位 </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> linux命令 </tag>
-            
-            <tag> 微服务 </tag>
-            
-            <tag> 内存相关 </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[微服务问题定位——strace]]></title>
-      <url>/2018/01/28/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94strace/</url>
-      <content type="html"><![CDATA[<h3 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h3><p>   在linux世界，进程不能直接访问硬件设备，当进程需要访问硬件设备(比如读取磁盘文件，接收网络数据等等)时，必须由用户态模式切换至内核态模式，通过系统调用访问硬件设备。<br><br>   strace可以跟踪到一个进程产生的系统调用，包括参数，返回值，执行消耗的时间。</p>
-<h3 id="option参数"><a href="#option参数" class="headerlink" title="option参数"></a>option参数</h3><p>   -c  统计每一系统调用的所执行的时间,次数和出错的次数等<br><br>   -d  输出strace关于标准错误的调试信息<br><br>   -f  跟踪由fork调用所产生的子进程<br><br>   -tt  在输出中的每一行前加上时间信息,微秒级， 时间格式：17:22:58.345879<br><br>   -p pid 跟踪指定的进程pid<br><br>   <strong>以上命令一般都是与-p联用</strong><br><br>   读者可以使用<strong>man strace</strong>或者<strong>strace -help</strong>查看完整的参数列表。</p>
-<h3 id="strace使用"><a href="#strace使用" class="headerlink" title="strace使用"></a>strace使用</h3><p>   strace的使用一般在top命令之后，top命令是用来查看占用cpu异常的进程的。读者可以参考<a href="https://yunchangwang.github.io/2018/01/26/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94top/" target="_blank" rel="noopener">微服务定位——top</a>。<br><br>   找到异常的进程后，使用命令：<strong>top -Hp pid[进程id]</strong>进入进程，找到执行异常的那个线程。使用命令：<strong>strace -p nid[线程id] -T</strong>来查看底层的调用情况。</p>
-<p>   在此贴出网上的一些参考链接<br>   <a href="https://leokongwq.github.io/2016/10/15/strace-learn.html" target="_blank" rel="noopener">strace实例</a><br>   <a href="http://www.cnblogs.com/kongzhongqijing/articles/4913192.html" target="_blank" rel="noopener">strace实例2</a><br></p>
-<h3 id="样例贴图"><a href="#样例贴图" class="headerlink" title="样例贴图"></a>样例贴图</h3><p>   笔者在此贴出strace命令显示的底层执行的信息：<br>   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$strace cat /dev/null</span><br><span class="line">execve(&quot;/bin/cat&quot;, [&quot;cat&quot;, &quot;/dev/null&quot;], [/* 22 vars */]) = 0</span><br><span class="line">brk(0)                                  = 0xab1000</span><br><span class="line">access(&quot;/etc/ld.so.nohwcap&quot;, F_OK)      = -1 ENOENT (No such file or directory)</span><br><span class="line">mmap(NULL, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f29379a7000</span><br><span class="line">access(&quot;/etc/ld.so.preload&quot;, R_OK)      = -1 ENOENT (No such file or directory)</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">每一行都是一条系统调用，等号左边是系统调用的函数名及其参数，右边是该调用的返回值。</span><br><span class="line">strace 显示这些调用的参数并返回符号形式的值。</span><br><span class="line">strace 从内核接收信息，而且不需要以任何特殊的方式来构建内核。</span><br></pre></td></tr></table></figure></p>
-]]></content>
-      
-        <categories>
-            
-            <category> 微服务问题定位 </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> linux命令 </tag>
-            
-            <tag> 微服务 </tag>
-            
-            <tag> 进程,线程 </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[微服务问题定位——top]]></title>
-      <url>/2018/01/26/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94top/</url>
-      <content type="html"><![CDATA[<h3 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h3><p>显示当前系统正在执行的进程的相关信息，包括进程ID、 内存占用率 、CPU占用率等</p>
-<h3 id="option-使用参数"><a href="#option-使用参数" class="headerlink" title="option 使用参数"></a>option 使用参数</h3><p>-b 进入批处理模式  <strong>相当于不停地执行top命令显示信息</strong><br><br>-c 显示完整的command <strong>位于信息的最后一列</strong><br><br>-i &lt;时间&gt; 设置间隔时间  <strong>如-i 5设置5秒钟刷新一次top信息</strong><br><br>-u &lt;用户名&gt; 显示指定用户的信息 <br><br>-p &lt;进程号&gt; 显示指定进程的信息 <br><br>-n &lt;次数&gt; 循环显示的次数 <br><br>读者可以使用<strong>man top</strong>或者<strong>top -help</strong>查看完整的参数列表。</p>
-<h3 id="例图"><a href="#例图" class="headerlink" title="例图"></a>例图</h3><p><img src="https://raw.githubusercontent.com/yunchangwang/blogs/master/top/top.jpg" alt="top信息截图"></p>
-<h3 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h3><ul>
-<li><p>第一行:</p>
-<blockquote>
-<p>13:40:29 — 当前系统时间<br>10 day，2:32 — 机器从开机到目前为止运行的时长<br>20 users — 登陆的用户有20个<br>load average — 分别对应1mins,5mins,15mins的负载情况<br>(<strong>根据一定的算法得到的值，load average／cpu数量&gt;=5说明系统超负荷</strong>)</p>
-</blockquote>
-</li>
-<li><p>第二行</p>
-<blockquote>
-<p>Tasks 系统进程数<br>total — 当前系统进程269个<br>running — 正在运行的1个<br>sleeping — 睡眠的268个<br>stopped — 停止的0个<br>zombie — 僵尸进程0个</p>
-</blockquote>
-</li>
-<li><p>第三行</p>
-<blockquote>
-<p>0.1% us — 用户空间占用CPU的百分比<br>0.0% sy — 内核空间占用CPU的百分比<br>0.0% ni — 改变过优先级的进程占用CPU的百分比<br>99.9% id — 空闲CPU百分比<br>0.0% wa — IO等待占用CPU的百分比<br>0.0% hi — 硬中断（Hardware IRQ）占用CPU的百分比<br>0.0% si — 软中断（Software Interrupts）占用CPU的百分比</p>
-</blockquote>
-</li>
-<li><p>第四行</p>
-<blockquote>
-<p>Mem 物理内存<br>total — 物理内存总量 8GB<br>free — 空闲的内存<br>used — 正在使用的内存<br>buff/cache — 缓存的内存<br>(<strong>used表示现在系统内核控制的内存数，free表示还未进入内核控制的内存数，used还包括了停止使用但可能被重用的内存，所以used使用完的内存不会返还给free，所以free的内存数一定越来越少</strong>)</p>
-</blockquote>
-</li>
-<li><p>第五行</p>
-<blockquote>
-<p>Swap 交换区<br>total — 交换区总量<br>used — 使用的交换区总量<br>free — 空闲交换区总量<br>cached — 缓冲的交换区总量<br>(<strong>swap used经常变化的话说明内存已经不够使用了</strong>)<br>(<strong>系统可使用的内存近似为第四行的free+buff/cache+第五行的cache</strong>)<br>读者可以参考 <a href="http://www.cnblogs.com/kerrycode/p/5246383.html" target="_blank" rel="noopener">参考链接</a>了解</p>
-</blockquote>
-</li>
-<li><p>进程状态监控各项指标</p>
-<blockquote>
-<p>PID — 进程id<br>USER — 进程所有者<br>PR — 进程优先级<br>NI — nice值，负值表示高优先级，正值表示低优先级<br>VIRT — 进程使用的虚拟内存总量，单位kb，VIRT=SWAP+RES<br>RES — 进程使用的、未被换出的物理内存大小，单位kb，RES=CODE+DATA<br>SHR — 共享内存大小，单位kb<br>S — 进程状态，D=不可中断的睡眠状态 R=运行 S=睡眠 T=跟踪/停止 Z=僵尸进程<br>%CPU — 上次更新到现在的CPU时间占用百分比<br>%MEM — 进程使用的物理内存百分比<br>TIME+ — 进程使用的CPU时间总计，单位1/100秒<br>COMMAND — 进程名称（命令名/命令行）</p>
-</blockquote>
-</li>
-</ul>
-<h3 id="top交互"><a href="#top交互" class="headerlink" title="top交互"></a>top交互</h3><p>执行top命令之后即进入top信息展示界面，可以使用命令行进行交互<br></p>
-<ul>
-<li>top界面 按1显示多核cpu的使用情况</li>
-<li>top界面默认按cpu的使用降序排序<br>  使用shift+&gt;和shift+&lt;来改变排序的指标</li>
-<li>top界面 按x高亮排序的指标</li>
-<li>top其他使用技巧<br>  h 显示帮助画面，给出一些简短的命令总结说明<br><br>  k 终止一个进程 <br><br>  i 忽略闲置和僵死进程。这是一个开关式命令 <br><br>  q 退出程序 <br><br>  r 重新安排一个进程的优先级别 <br><br>  S 切换到累计模式 <br><br>  s 改变两次刷新之间的延迟时间（单位为s），如果有小数，就换算成ms。输入0值则系统将不断刷新，默认值是5s <br><br>  f或者F 从当前显示中添加或者删除项目 <br><br>  o或者O 改变显示项目的顺序 <br><br>  l 切换显示平均负载和启动时间信息 <br><br>  m 切换显示内存信息 <br><br>  t 切换显示进程和CPU状态信息 <br><br>  c 切换显示命令名称和完整命令行 <br><br>  M 根据驻留内存大小进行排序 <br><br>  P 根据CPU使用百分比大小进行排序 <br><br>  T 根据时间/累计时间进行排序 <br><br>  W 将当前设置写入~/.toprc文件中 <br></li>
-</ul>
-<h3 id="说明-1"><a href="#说明-1" class="headerlink" title="说明"></a>说明</h3><p>在top命令界面中，几乎不使用交互命令，在排查问题时，一般紧盯cpu使用高的线程即可。</p>
-]]></content>
-      
-        <categories>
-            
-            <category> 微服务问题定位 </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> linux命令 </tag>
-            
-            <tag> 微服务 </tag>
-            
-            <tag> 进程,线程 </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[Hello World]]></title>
-      <url>/2018/01/24/hello-world/</url>
-      <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-]]></content>
-      
-        <categories>
-            
-            <category> 迎新 </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> welcome </tag>
-            
-            <tag> hello </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[梁希森林公园]]></title>
-      <url>/2017/04/04/%E6%A2%81%E5%B8%8C%E6%A3%AE%E6%9E%97%E5%85%AC%E5%9B%AD/</url>
-      <content type="html"><![CDATA[<p>写博客以来，笔者一直用github作为图床，但当图片的大小超过一定值打开github链接就会直接下载，无法作为url链接，所以将图片暂放微博。<br></p>
-<h2 id="我与梁希先生"><a href="#我与梁希先生" class="headerlink" title="我与梁希先生"></a>我与梁希先生<br></h2><p><img src="https://wxt.sinaimg.cn/mw1024/8e845601ly1foe0ksz5yfj21kw11x4qu.jpg?tags=%5B%5D" alt="如图"></p>
-<h2 id="人生得意须尽欢"><a href="#人生得意须尽欢" class="headerlink" title="人生得意须尽欢"></a>人生得意须尽欢</h2><p><img src="https://wx3.sinaimg.cn/mw1024/8e845601ly1foe0l1uaomj21kw11xb2e.jpg" alt="如图"></p>
-<h2 id="流水潺潺"><a href="#流水潺潺" class="headerlink" title="流水潺潺"></a>流水潺潺</h2><p><img src="https://wx1.sinaimg.cn/mw1024/8e845601ly1foe0lwqlwmj21kw11xe87.jpg" alt="如图"></p>
-<h2 id="狗年行大运"><a href="#狗年行大运" class="headerlink" title="狗年行大运"></a>狗年行大运</h2><p><img src="https://wx4.sinaimg.cn/mw1024/8e845601ly1foe0m69i19j21kw11xe88.jpg" alt="如图"></p>
-]]></content>
-      
-        <categories>
-            
-            <category> 生活 </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> 生活 </tag>
-            
-            <tag> 自然环境 </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[跆拳道]]></title>
-      <url>/2016/06/13/%E8%B7%86%E6%8B%B3%E9%81%93/</url>
-      <content type="html"><![CDATA[<h2 id="跆拳道"><a href="#跆拳道" class="headerlink" title="跆拳道"></a>跆拳道</h2><video id="video" controls preload="none" poster="https://wx3.sinaimg.cn/large/8e845601ly1fof5244p2lj20k00zk77d.jpg"><br>  <source id="mp4" src="https://gslb.miaopai.com/stream/b5WaYQVKrhaTCNaia65pMYGFs1KqveY0Zl~ycg__.mp4" type="video/mp4"><br></video>
-
-<p>人不疯狂枉少年</p>
-]]></content>
-      
-        <categories>
-            
-            <category> 生活 </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> 生活 </tag>
-            
-            <tag> 校园 </tag>
-            
-        </tags>
-        
-    </entry>
-    
-  
-  
+<search>
+  <entry>
+    <title><![CDATA[python网络数据采集——使用API]]></title>
+    <url>%2F2018%2F03%2F19%2Fpython%E7%BD%91%E7%BB%9C%E6%95%B0%E6%8D%AE%E9%87%87%E9%9B%86%E2%80%94%E2%80%94%E4%BD%BF%E7%94%A8API%2F</url>
+    <content type="text"><![CDATA[API在网络爬虫的世界里，你可以通过爬取html页面上的信息来收集信息，而使用开放的API接口是另一种方式。这里开放的API接口指的是：服务器可访问的http请求。其实html中的数据也是通过访问http请求获得的，但是这里是直接利用请求返回的数据。为何是可访问的？因为对于http请求，服务器或许是要做验证的，一般的post的请求必须做验证，get请求相对放宽限制。 google API对于API方面的开放，业界没有一家企业做的比google还好了，而且大部分都是免费的，只是每个月需要限制访问的流量。对于API的访问，google是有做校验的，需要相应接口的key，读者可以按照以下的步骤获取(但是首先你必须可以翻墙)： 首先拥有google的账号，没有的话自己去注册 访问api控制台，查询你需要的api 找到对应的api，生成相关的秘钥即可 生成的key，可以去凭证中查看 这里以google的maps接口为例，如下图搜索maps，需要地图相关的API：你可以通过点击API和服务中的库跳转到上图界面：google中你可以在信息中心界面查看你API访问的情况：对于访问时需要的key可以在凭证中查看： 然后你就可以使用key来通过API获取信息了：123456789比如：# 将街道解析成经纬度https://maps.googleapis.com/maps/api/geocode/json?address=1+Science+Park+Boston+MA+02114&amp;key=&lt;你的API key&gt;# 用 Time zone(时区)API 获取任意经纬度的时区信息https://maps.googleapis.com/maps/api/timezone/json?location=42.3677994,-71.0708078&amp;timestamp=1412649030&amp;key=&lt;你的 API key&gt;# 用地点经纬度获取对应的海拔高度https://maps.googleapis.com/maps/api/elevation/json?locations=42.3677994,-71.0708078&amp;key=&lt;你的 API key&gt; 解析json如果使用http访问的API接口，你必然会遇到解析json的问题。python中可以使用自带的json包进行解析。这里以 http://freegeoip.net/json/ 为例，来获取ip地址对应的城市：12345678910import jsonfrom urllib.request import urlopendef getCountry(ipAddress): response = urlopen(&quot;http://freegeoip.net/json/&quot;+ipAddress).read().decode(&apos;utf-8&apos;) responseJson = json.loads(response) return responseJson.get(&quot;country_code&quot;)print(getCountry(&quot;121.97.110.145&quot;)) 对于一些多重复杂的json表达式，loads方法将其解析为key-value的形式：1234567jsonString = &apos;&#123;&quot;arrayOfNums&quot;:[&#123;&quot;number&quot;:0&#125;,&#123;&quot;number&quot;:1&#125;,&#123;&quot;number&quot;:2&#125;], &quot;arrayOfFruits&quot;:&apos; \ &apos;[&#123;&quot;fruit&quot;:&quot;apple&quot;&#125;,&#123;&quot;fruit&quot;:&quot;banana&quot;&#125;,&#123;&quot;fruit&quot;:&quot;pear&quot;&#125;]&#125;&apos;jsonObj = json.loads(jsonString)print(jsonObj.get(&quot;arrayOfNums&quot;))print(jsonObj.get(&quot;arrayOfNums&quot;)[1])print(jsonObj.get(&quot;arrayOfNums&quot;)[1].get(&quot;number&quot;)+jsonObj.get(&quot;arrayOfNums&quot;)[2].get(&quot;number&quot;))print(jsonObj.get(&quot;arrayOfFruits&quot;)[2].get(&quot;fruit&quot;)) wiki百科实践这里我们仍然以wiki作为例子，在wiki百科的历史编辑区中，会记录编辑人员的ip地址，我们用上面的方法再加上网页跳转的形式，来获取相关的地区信息。1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556#! /usr/local/bin/python3# encoding:utf-8from urllib.request import urlopenfrom urllib.error import HTTPErrorfrom bs4 import BeautifulSoupimport jsonimport datetimeimport randomimport rerandom.seed(datetime.datetime.now())def getLinks(articleUrl): html = urlopen(&quot;http://en.wikipedia.org&quot; + articleUrl) bsObj = BeautifulSoup(html, &quot;html.parser&quot;) return bsObj.find(&quot;div&quot;, &#123;&quot;id&quot;: &quot;bodyContent&quot;&#125;).findAll(&quot;a&quot;, href=re.compile(&quot;^(/wiki/)((?!:).)*$&quot;))def getHistoryIPs(pageUrl): # Format of history pages is: http://en.wikipedia.org/w/index.php?title=Title_in_URL&amp;action=history pageUrl = pageUrl.replace(&quot;/wiki/&quot;, &quot;&quot;) historyUrl = &quot;http://en.wikipedia.org/w/index.php?title=&quot;+pageUrl+&quot;&amp;action=history&quot; print(&quot;history url is: &quot; + historyUrl) html = urlopen(historyUrl) bsObj = BeautifulSoup(html, &quot;html.parser&quot;) # finds only the links with class &quot;mw-anonuserlink&quot; which has IP addresses instead of usernames ipAddresses = bsObj.findAll(&quot;a&quot;, &#123;&quot;class&quot;: &quot;mw-anonuserlink&quot;&#125;) addressList = set() for ipAddress in ipAddresses: addressList.add(ipAddress.get_text()) return addressListdef getCountry(ipAddress): try: response = urlopen(&quot;http://freegeoip.net/json/&quot;+ipAddress).read().decode(&apos;utf-8&apos;) except HTTPError: return None responseJson = json.loads(response) return responseJson.get(&quot;country_code&quot;)links = getLinks(&quot;/wiki/Python_(programming_language)&quot;)while(len(links) &gt; 0): for link in links: print(&quot;-------------------&quot;) historyIPs = getHistoryIPs(link.attrs[&quot;href&quot;]) for historyIP in historyIPs: country = getCountry(historyIP) if country is not None: print(historyIP+&quot; is from &quot; + country) newLink = links[random.randint(0, len(links)-1)].attrs[&quot;href&quot;] links = getLinks(newLink) 其实上面的方法再前面的章节中已经提及过，现在增加的只是将html上爬取的信息，再通过API的加工得到最终的信息。只是想要告诉大家，爬虫不只是解析html那么简单。]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python网络爬虫</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[python网络数据采集——链接爬取和跳转]]></title>
+    <url>%2F2018%2F03%2F14%2Fpython%E7%BD%91%E7%BB%9C%E6%95%B0%E6%8D%AE%E9%87%87%E9%9B%86%E2%80%94%E2%80%94%E9%93%BE%E6%8E%A5%E7%88%AC%E5%8F%96%E5%92%8C%E8%B7%B3%E8%BD%AC%2F</url>
+    <content type="text"><![CDATA[网页跳转在网络数据采集中，如果只对单页面进行操作，那么这个爬虫将毫无意义。因为采集的数据往往是分散在不同的网页的，所以对于单页面而言，爬虫需要采集页面中的链接，并且进行跳转。网页跳转，在正在采集的页面中收集新的链接，然后将新的链接传入到采集程序中，如此之后，采集程序就已经在新的页面采集信息了。 举个例子我们以维基百科的一个页面为例，从主页面开始，采集 id 为 mw-content-text 的段落 p 和 id 为 ca-edit 的 span 中的 a 链接标签。读者可以参考以下代码：12345678910111213141516171819202122232425262728from urllib.request import urlopenfrom bs4 import BeautifulSoupimport repages = set()def getLinks(pageUrl): global pages html = urlopen(&quot;http://en.wikipedia.org&quot;+pageUrl) bsObj = BeautifulSoup(html, &quot;html.parser&quot;) # print(bsObj) try: print(bsObj.h1.get_text()) print(bsObj.find(id=&quot;mw-content-text&quot;).find_all(&quot;p&quot;)[0]) print(bsObj.find(id=&quot;ca-edit&quot;).find(&quot;span&quot;).find(&quot;a&quot;).attrs[&apos;href&apos;]) except AttributeError: print(&quot;页面缺少一些属性!不过不用担心!&quot;) for link in bsObj.find_all(&quot;a&quot;, href=re.compile(&quot;^(/wiki/)&quot;)): if &apos;href&apos; in link.attrs: if link.attrs[&apos;href&apos;] not in pages: # 我们遇到了新页面 newPage = link.attrs[&apos;href&apos;] print(&quot;----------------\n&quot;+newPage) pages.add(newPage) getLinks(newPage)getLinks(&quot;&quot;) 程序先从 http://en.wikipedia.org 网页开始，然后查找以 /wiki/ 开头的链接，之后拼接到 http://en.wikipedia.org 形成新的链接。对于重复的链接程序不进行采集，程序中体现了递归的概念，理论上你很难等到程序的结束。 六度空间理论所谓六度空间理论是数学界中的一种猜想，对于一个陌生人，你可以通过至多6个人认识他，即你与陌生人中间的连接点不会超过6个人。我们可以将这个猜想应用到爬虫程序中，即通过一个人的简介，我们可以爬取到另一个人的简介。这里还是以维基百科为例，从 Kevin_Bacon 开始，爬取其他人的信息：123456789101112131415161718from urllib.request import urlopenfrom bs4 import BeautifulSoupimport datetimeimport randomimport rerandom.seed(datetime.datetime.now())def getLinks(articleUrl): html = urlopen(&quot;http://en.wikipedia.org&quot;+articleUrl) bsObj = BeautifulSoup(html, &quot;html.parser&quot;) return bsObj.find(&quot;div&quot;, &#123;&quot;id&quot;: &quot;bodyContent&quot;&#125;).findAll(&quot;a&quot;, href=re.compile(&quot;^(/wiki/)((?!:).)*$&quot;))links = getLinks(&quot;/wiki/Kevin_Bacon&quot;)while len(links) &gt; 0: newArticle = links[random.randint(0, len(links)-1)].attrs[&quot;href&quot;] print(newArticle) links = getLinks(newArticle) 程序中使用随机数字，从新的链接集合中随机选取，并使用新的链接再次爬取。 scrapy写网络爬虫，你不得不重复一些简单的操作：找出页面上所有的链接，区分内链与外链，跳转到新的页面。像这种重复的工作可以交给第三方工具类来处理，scrapy就是这样一款工具。曾经的 scrapy 是一个傲娇的工具，只支持 python2.7 版本，软件的不普遍支持性会导致软件的不可用。好消息就是，现在的 scrapy 在 python3.x 的环境下也是支持的。$pip3 install scrapy 即可下载。如果是python2.x版本的，务必使用pip命令。scrapy 的使用需要重新创建一个工程(在这里演示如何获取网页的title)： $scrapy startproject wikiSpider 创建新工程 在 spiders 目录下创建 ArticleSpider.py文件，名字也可自取 在 item.py 文件中定义类 Article scrapy crawl article 运行程序(这行命令会用条目名称 article 来调用爬虫(不是类名，也不是文件名，而是由 ArticleSpider 的 name = “article” 决定的)) item.py文件中应如此定义：1234567891011121314151617181920# -*- coding: utf-8 -*-# Define here the models for your scraped items## See documentation in:# https://doc.scrapy.org/en/latest/topics/items.html# import scrapyfrom scrapy import Item, Field# class WikispiderItem(scrapy.Item):# # define the fields for your item here like:# # name = scrapy.Field()# passclass Article(Item): # define the fields for your item here like: # name = scrapy.Field() title = Field() scrapy的每个Item(条目)对象表示网站上的一个页面。当然，你可以根据需要定义不同的条目(比如url、content、header image等)，但是现在我只演示收集每页的title字段 (field)。 ArticleSpider.py 文件中写入如下程序：123456789101112131415161718192021222324#! /usr/local/bin/python3# encoding:utf-8from scrapy import Spider# 这里的引用简直有毒 scrapy crawl article# 像这样 from wikiSpider.wikiSpider.items import Article 编译器是正确的，但是终端执行是错误的# 要如此引用 from wikiSpider.items import Article 但是编译器会报错# 所以建议使用相对路径from .. items import Article# from wikiSpider.wikiSpider.items import Articleclass ArticleSpider(Spider): name = &quot;article&quot; allowed_domains = [&quot;en.wikipedia.org&quot;] start_urls = [&quot;http://en.wikipedia.org/wiki/Main_Page&quot;, &quot;http://en.wikipedia.org/wiki/Python_%28programming_language%29&quot;] def parse(self, response): item = Article() title = response.xpath(&apos;//h1/text()&apos;)[0].extract() print(&quot;Title is: &quot;+title) item[&apos;title&apos;] = title return item 注意文件中引入项目的注释。 如果正确，终端中运行的结果应该是：12Title is: Main PageTitle is: Python (programming language)]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python网络爬虫</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[python网络数据采集——BeautifulSoup]]></title>
+    <url>%2F2018%2F03%2F11%2Fpython%E7%BD%91%E7%BB%9C%E6%95%B0%E6%8D%AE%E9%87%87%E9%9B%86%E2%80%94%E2%80%94BeautifulSoup%2F</url>
+    <content type="text"><![CDATA[BeautifulSoupBeautifulSoup 是 python 中最受欢迎的 html 解析库。如果 BeautifulSoup 这个第三方库不能解决问题，读者可以考虑另外两个库：12345678xml：可以用来解析 HTML 和 XML 文档，以非常底层的实现而闻名于世，大部分源代码是用 C 语言写的。虽然学习它需要花一些时间(其实学习曲线越陡峭，表明你可以越快地学会它)，但它在处理绝大多数 HTML 文档时速度都非常快。如果遇到的是引用第三方库处理时遇到的性能瓶颈，可以考虑。HTML parser：这是 Python 自带的解析库(https://docs.python.org/3/library/html.parser.html )。因为它不用安装(只要装了 Python 就有)，所以可以很方便地使用。 find 和 find_all在 BeautifulSoup 中，这两个函数是经常使用的，专门用来查找 html 中指定的标签。接下来笔者用链接：http://www.pythonscraping.com/pages/warandpeace.html 做为例子来使用这两个函数。123456789101112131415#! /usr/local/bin/python3# encoding:utf-8from urllib.request import urlopenfrom bs4 import BeautifulSouphtml = urlopen(&quot;http://www.pythonscraping.com/pages/warandpeace.html&quot;)bsObject = BeautifulSoup(html, &quot;html.parser&quot;)# 使用 findAll 方法查找 指定标签 指定class属性的nameList = bsObject.find_all(&quot;span&quot;, &#123;&quot;class&quot;: &quot;green&quot;&#125;)for name in nameList: print(name.get_text())# 像这样，你就抓取了html中所有的人名# 因为经过分析，发现 span 标签且 class 为 green 的内容都是小说的人名 通过源码你会发现 find_all 方法拥有以下参数：name=None, attrs={}, recursive=True, text=None, limit=None, **kwargs，在此说明一下 以前的 BeautifulSoup 版本方法名是 findAll。在开发的过程中，95%的情况下你只会使用到 name attars 这两个参数，但是在这里还是要说明一下其他参数的作用： name html中tag的名称 比如span h1 你可以传入多个tag的集合来查找 这个集合是一个set结构 attrs 字典集 用来指定 tag的一些属性 比如class width height recursive 表示在查找时 你是否想要递归 到子标签中查找 默认为True 递归 text 直接查找文本 有相同文本的匹配 limit 指定查找的数量 查找的顺序是按照 html 的顺序来的 默认 全部 kwargs 字典集 查找具有指定属性的标签 业界认为是冗余的设计 不推荐使用 并且存在缺陷 比如无法指定class属性 因为class是python的保留关键字123456789hList = bsObject.find_all(&#123;&quot;h1&quot;, &quot;h2&quot;, &quot;h3&quot;&#125;)print(hList)tList = bsObject.find_all(text=&quot;Anna Pavlovna&quot;)print(tList)nameList = bsObject.find_all(class_=&quot;green&quot;)print(nameList)# 但是你可以使用 class_ 来代替 find 的使用方式和 find_all 差不多，只是缺少了参数 limit 而已。 导航树先抛出一个问题：find_all 函数是通过标签的名称和属性来查找标签的，但是如果需要通过标签在文档中的位置来查找标签，该如何？引入导航树(Navigating Trees)的概念就是为何解决这个问题，比如：bsObject.tag.subTag.anotherSubTag。 在这里我们使用虚拟的购物网站：http://www.pythonscraping.com/pages/page3.html 来作为实例。对于使用导航树，你只需要学会处理三个问题： 处理子标签和后代标签 处理兄弟标签 处理父标签 子标签和后代标签12345678from urllib.request import urlopenfrom bs4 import BeautifulSouphtml = urlopen(&quot;http://www.pythonscraping.com/pages/page3.html&quot;)bsObject = BeautifulSoup(html, &quot;html.parser&quot;)for child in bsObject.find(&quot;table&quot;, &#123;&quot;id&quot;: &quot;giftList&quot;&#125;).children: # print(type(child)) print(child) 子标签和后代标签在定义上是不同的：子标签只有一个层级的差距，后代标签则是一个或者多个层级差距。Tag对象 函数 children 和 descendants 分别获取子标签和后代标签。 兄弟标签兄弟标签表示 Tag类型相同且处于同一层级的，Tag对象 函数 next_siblings 和 previous_siblings 分别获取定位标签的上面的所有Tag和下面所有Tag。123456789101112比如：&lt;tr class=&quot;tr1&quot;&gt;&lt;/tr&gt;&lt;tr class=&quot;tr2&quot;&gt;&lt;/tr&gt;&lt;tr class=&quot;tr3&quot;&gt;&lt;/tr&gt;&lt;tr class=&quot;tr4&quot;&gt;&lt;/tr&gt;&lt;tr class=&quot;tr5&quot;&gt;&lt;/tr&gt;现在定位tr3，next_siblings可获取tr4，tr5；previous_siblings可获取tr2，tr1for sibling in bsObject.find(&quot;table&quot;, &#123;&quot;id&quot;: &quot;giftList&quot;&#125;).tr.next_siblings: print(sibling)# 与第一段代码相比，可以发现少了表格标题的tr，因为第一个tr标签不能将自己视为兄弟# 当然也可以使用next_sibling 和 previous_sibling 只不过获取到的是距离最近的那一个 父标签查找父标签在提取信息的过程中是偶尔的情况下才会用到的，如果那个信息比较深入，并且它的子标签有明显的特点方便查找，可以考虑使用。1234567print(bsObject.find(&quot;img&quot;, &#123;&quot;src&quot;: &quot;../img/gifts/img1.jpg&quot;&#125;) .parent.previous_sibling.get_text())# 1.找到Tag类型是 img 的且 src 是 ../img/gifts/img1.jpg# 2.向上寻找到父标签 即 td# 3.找到 td 标签的上一个兄弟标签 还是 td# 4.得到里面的 text 文本，即商品的价格]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python网络爬虫</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[python网络数据采集——网络连接]]></title>
+    <url>%2F2018%2F03%2F09%2Fpython%E7%BD%91%E7%BB%9C%E6%95%B0%E6%8D%AE%E9%87%87%E9%9B%86%E2%80%94%E2%80%94%E7%BD%91%E7%BB%9C%E8%BF%9E%E6%8E%A5%2F</url>
+    <content type="text"><![CDATA[初识urllib要采集信息，首先你需要将html文件抓取到本地，python中使用urllib这个包来进行网络连接，并且进行html的抓取，如果是python2.x版本，使用的是urllib2这个包。下面贴出一段代码，读者可自行运行：123456#! /usr/local/bin/python3# encoding:utf-8from urllib.request import urlopenhtml = urlopen(&quot;http://pythonscraping.com/pages/page1.html&quot;)print(html.read()) 运行BeautifulSoupBeautifulSoup是第三方的python模块，所以需要进行安装，在此只介绍macOS系统的下载方式：12345678910python中一般使用pip来下载第三方的依赖包$sudo easy_install pip 首先确保你的系统中有pip命令$pip install beautifulsoup4 即可下载如果使用的是python3.x版本$pip3 install beautifulsoup4 需要在pip后面加上数字3一般macOS系统自带的是python2.x，在这里推荐使用brew来下载python3$brew search python$brew install python3 即可 BeautifulSoup在代码中的作用相当于html解析器，然后读者可以通过该模块的方法来获取一些html中的标签。在这里贴出BeautifulSoup的代码：123456789#! /usr/local/bin/python3# encoding:utf-8from urllib.request import urlopenfrom bs4 import BeautifulSouphtml = urlopen(&quot;http://pythonscraping.com/pages/page1.html&quot;)bsObj = BeautifulSoup(html, &quot;html.parser&quot;)print(bsObj.h1) BeautifulSoup比较老的版本构造时不需要传入”html.parser” 参数，新的版本中，虽然结果仍然打印了出来，但是在运行过程中会报错。html.parser 是为了告诉BeautifulSoup 我使用的是 html 解析器。读者可以参考官方手册了解更过BeautifulSoup的知识点。 可靠的网络连接像上面写的代码，很有可能抛出异常，谁也不知道这个url是否可靠，如果服务器宕机了怎么办？等等问题，都会使得程序终止。想象一下，你的爬虫在晚上执行，你想早上起来查看收集的数据，但是由于中间的错误，导致之后的程序没有执行，你不得不再等待一天的时间。其实说了这么多，就是在代码层面中捕获异常。可靠的网络连接，要保证程序在运行过程中，即使中途遇到了错误，也能保证余下的代码可执行。大家参考下面的代码来发现不同点：12345678910111213141516171819202122from urllib.request import urlopenfrom urllib.request import HTTPErrorfrom bs4 import BeautifulSoupdef get_h1(url): try: html = urlopen(url) except HTTPError as e: return None else: try: bsObj = BeautifulSoup(html, &quot;html.parser&quot;) h1 = bsObj.h1 except AttributeError as e: return None return h1if __name__ == &apos;__main__&apos;: h1 = get_h1(&quot;http://pythonscraping.com/pages/page1.html&quot;) print(h1) 上面这段代码使用了python中经典的try…exception…else的格式，这样保证了即使发生了异常，也能保证else中的代码被执行。在python中获取异常可以使你的代码更加健壮，也是一个好的习惯。]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python网络爬虫</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[python网络数据采集——简介]]></title>
+    <url>%2F2018%2F03%2F04%2Fpython%E7%BD%91%E7%BB%9C%E6%95%B0%E6%8D%AE%E9%87%87%E9%9B%86%E2%80%94%E2%80%94%E7%AE%80%E4%BB%8B%2F</url>
+    <content type="text"><![CDATA[简介网络数据采集(网络爬虫)，是一种网络数据的采集方式，又称为网页抓屏，数据挖掘，网络收割或者其他类似的版本。网络数据采集是一种通过多种手段收集网络数据的方式，比如通过api交互，当然如果你有毅力可以选择手动摘抄，人们最常用的估计是使用浏览器进行网页的浏览，这其实也是一种网络数据采集。注：之后相关文章都使用网络爬虫这个术语。 意义已经有浏览器了，为何还需要网络爬虫呢？ 首先浏览器的搜索是主流的，你不一定能从中找到有用的信息。 你需要的数据可能来自不同的网站，为了分析和对比。 网站可能没有api(接口)提供给外部使用。 网络爬虫可以解决这些问题，爬取的数据也可以进行保存和更新，你也可以通过特定的方式进行展示，比如图表。实际上，这些都是手动摘抄都可以办到的，但是谁又会整天看着数据有没有改变，然后去更新手头的数据呢？ 扩展之前笔者是学习过一段时间的python基础的，但是笔者糊口的语言是java，python只是笔者业余的爱好罢了。笔者认为python的几大领域为网络数据采集，自动化和大数据分析，所以读者可以在学习了python的基础上选择一个方向再深入的研究。 关于python的基础知识，笔者的笔记并没有开放在网站上，读者可以自行寻找。 关于网络爬虫，笔者认为基本对现在的业务没有什么帮助，因为网络爬虫对于一个产品的稳定性来说一定是大打折扣的(因为谁有能保证你收集的信息来源是否还存在呢？)。但是可以给你的生活带来一些乐趣，人生在世，技多不压身嘛。]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python网络爬虫</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[计算机网络——NAT]]></title>
+    <url>%2F2018%2F02%2F20%2F%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E2%80%94%E2%80%94NAT%2F</url>
+    <content type="text"><![CDATA[简介NAT(Network Address Translation)，网络地址转换。NAT可以看成一个开放到公网(全球因特网)上的公用路由器，用来代理一个子网下的所有主机的请求和应答。NAT在转换的时候，会将主机的ip地址和端口号替换成公用路由器的ip地址和端口，并且维护在一张表中进行一一对应，为了将返回的数据应答到唯一的主机上。 作用由于ipv4规则的ip地址消耗殆尽，不可能为所有的主机都分配真正的公网ip，所以很多主机ip地址都是虚拟的ip地址，并且有统一的代理服务器进行消息的请求和应答。NAT的作用就是将私有的ip地址转换成全球因特网承认的ip地址，私有的ip地址有三种：①10.0.0.0~10.255.255.255/8 ②172.16.0.0~172.31.255.255/12 ③192.168.0.0~192.168.255.255/16 这些IP地址是用于私有的网络。NAT使得一个组织局域网中的主机都能互相访问，但是想要访问公网就只有一条出路，这样也可以保证局域网中信息的安全性。 例子假设用户王某坐在家庭主机10.0.0.1傍边，请求域名为 www.bilibili.com (ip地址为112.49.19.4)的web服务器(端口为80)上的一个web页面。主机10.0.0.1为其指派了任意的端口2233，并将请求的报文发送到LAN中。NAT路由器收到该数据请求，为其生成了新的端口号5000，并将ip地址替换成广域网的ip地址138.76.29.7，然后继续想目标服务器请求。具体步骤如下： 10.0.0.1:2233 发送报文 —&gt; LAN LAN —&gt; NAT路由器 —&gt; 替换成138.76.29.7:5000 并维护一张映射表 138.76.29.7:5000 发送请求报文 —&gt; 112.49.19.4:80 返回数据到WAN —&gt; NAT路由器 NAT路由器从维护的映射表中获取私有ip地址 返回数据 —&gt; LAN —&gt; 10.0.0.1:2233 读者以前可能发现，百度的ip地址和主机的ip地址不同，因为一个是公网的，主机的只是私有的ip地址，中间就是利用了NAT。代理服务器，即NAT在跳转的当中可能存在很多个，即一个请求可能通过n个NAT。]]></content>
+      <categories>
+        <category>计算机网络</category>
+      </categories>
+      <tags>
+        <tag>计算机网络</tag>
+        <tag>网路协议</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[计算机网络——DHCP]]></title>
+    <url>%2F2018%2F02%2F20%2F%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E2%80%94%E2%80%94DHCP%2F</url>
+    <content type="text"><![CDATA[简介DHCP(Dynamic Host Configuration)，即动态主机配置协议。由于DHCP具有能将主机连接进一个网络的网络相关方面的自动能力，故它又常被称为即插即用协议。DHCP协议维护了一张表(存放于DHCP服务器)，用来存放现子网中可以分配的ip，如果有主机离开或者接入子网，则DHCP服务器会更新这张表。 作用一旦一个组织获取了子网的ip地址，网络管理员需要给组织中的主机都配置ip(读者可以参考网络攻防——ip地址了解一个组织内主机ip地址配置过程)。DHCP的问世是为了节省网络管理员手动配置主机ip地址的时间。网络管理员只需要配置DHCP，以使某给定主机每次与网络连接时能得到一个相同的ip地址，或者某主机将被分配一个临时的ip地址，该地址每次与网络连接时也许是不同的。 协议的步骤对于一台新到达的主机而言，DHCP协议是一个4个步骤的过程：1234567891.DHCP服务器发现。一台新的主机接入子网时首要的任务时让DHCP服务器发现它。所以主机会在UDP分组中向端口67发送一个DHCP发现报文，并且这个数据时广播的，因为主机现有的情况是不知道DHCP服务器的具体ip地址的。2.DHCP服务器提供。DHCP服务器收到这个报文时，用一个DHCP提供报文向主机作出应答。这边也是使用的广播的形式，因为在子网中可能存在多个DHCP服务器，主机可以根据各个DHCP服务器返回的信息进行择优选择。3.DHCP请求。主机从一个或多个DHCP服务器中挑选一个，并向选中的服务器提供一个DHCP请求报文进行响应。4.DHCP ACK。服务器用DHCP ACK报文对主机请求报文进行响应，证实所要求的参数。 一旦主机完成了以上的4步，交互便完成了，主机也接入了子网，并拥有了子网中唯一的ip地址。 缺陷从移动性的角度看，DHCP确实有不足之处。因为每当节点连接到一个新的子网时，要从DHCP得到一个新的ip地址，当一个移动节点在子网之间移动时，就不能维持与远程应用之间的TCP连接。之后会研究移动IP(在此记录，以便之后补充)。]]></content>
+      <categories>
+        <category>计算机网络</category>
+      </categories>
+      <tags>
+        <tag>计算机网络</tag>
+        <tag>网络协议</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[网络攻防——ip地址]]></title>
+    <url>%2F2018%2F02%2F18%2F%E7%BD%91%E7%BB%9C%E6%94%BB%E9%98%B2%E2%80%94%E2%80%94ip%E5%9C%B0%E5%9D%80%2F</url>
+    <content type="text"><![CDATA[这边先预设几个问题 一个组织分配ip地址的过程(涉及到ISP等概念) a,b,c,d,e类的ip地址 如何知道一个主机的子网掩码，它第一跳的路由地址，dns服务器的地址 DHCP动态分配地址 什么是网络地址转换(NAT) ipv4和ipv6的区别 基本概念ip地址目前有ipv4和ipv6两种，这里以ipv4举例。ip地址在整个网络中相当于地址的存在，只有知晓了地址，才能知道向哪里送信，信件又使从哪里发出来的。ipv4地址编码长度为32，即32个比特位，即4个字节，每个比特位只有1或者0，所以ipv4总共有2^32个可能的ip地址。(但是很遗憾，尽管看起来很多，ipv4方式的编码ip已经消耗殆尽，所以ipv6孕育而生) 读者可以使用ipconfig(linux系统使ifconfig)来查看自己的ip地址。读者会发现，显示的ip信息并不是以二进制形式显示，而是十进制。那是为了方便人们阅读，一般使用点分十进制记法书写，然而计算机在交流时仍然只认识二进制记法。1234如：193.32.216.9 的二进制记法是：11000001 00100000 11011000 00001001可以看出以8个比特，即一个字节作为一个分隔 在全球因特网中的每台主机和路由器上的每个接口，必须有一个全球唯一的ip地址(在NAT后面的接口除外，NAT即网络地址转换，之后会提及这个概念)。然而，这些地址不能随意地自由选择，一个接口ip地址的一部分需要由其连接的子网来决定。 标准类别的ip地址ip地址由网络地址和主机地址组成。根据网络地址的比特位数，将ip地址分为A,B或C类网络，网络地址的比特位数分别被限制为8,16或24位，这是一种被称为分类编址的编址方案。 在计算机网络中，读者可能看到形如：233.1.1.0/24的ip地址记法，这是子网地址的写法，其中/24记法有时称为子网掩码，表示32位比特中的最左侧24比特定义了子网地址，即该子网中所有主机分配到的ip地址的前24位都是相同的，即网络地址相同。比如：12一个子网的ip地址为：233.1.1.0/24那么这个子网下的主机的ip地址可能是：233.1.1.1，233.1.1.4 233.1.1.128 ... 在分配子网的时候，不一定使用标准的网络地址。比如一个组织，分类到了一个C类(/24)子网，其仅能容下2^8 - 2 = 254台主机(2^8 = 256，其中的两个地址预留用于特殊的用途)，这对于许多组织来说太小了。然而一个B类(/16)子网可支持多达65534台主机，又太大了。 组织内主机分配ip地址的过程为了获取一块ip地址用于一个组织的子网，网络管理员也许首先会与他的ISP参考百度百科联系，该ISP可能会从已分配给它的更大的地址块中提供一些地址。这里假设ISP自己已被分配了地址块200.23.16.0/20：1234ISP的地址块 200.23.16.0/20 (11001000 00010111 0001)0000 00000000组织0 200.23.16.0/23 (11001000 00010111 000100)0 00000000组织1 200.23.18.0/23 (11001000 00010111 0001001)0 00000000... 加入组织0已经得到了子网地址：200.23.16.0/23，这就表示该组织下的所有主机ip地址都是以11001000 00010111 000100开头的。系统管理员一般手动配置路由器ip地址，主机地址也能手动配置，但是想象一下：如果一个组织下有数以万计的主机，那么系统管理员已哭晕在厕所。所以这里引出另一个概念DHCP(动态主机配置协议，又称即插即用协议)，主机可以自动获取一个临时的ip地址。这也解释了为什么在公司中，主机重启之后主机的ip地址会改变，因为是临时随机分配的。 DHCP笔者认为这个概念可以重新开一个章节，读者可以跳转参考计算机网络——DHCP NAT读者可以跳转参考计算机网络——NAT 如何生动形象解释这里主要解释了ip地址，子网掩码，网关等概念。读者可以参考这篇知乎文章。]]></content>
+      <categories>
+        <category>网络安全</category>
+      </categories>
+      <tags>
+        <tag>网络协议</tag>
+        <tag>ip地址</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[生产问题排查指南——排查思路]]></title>
+    <url>%2F2018%2F02%2F12%2F%E7%94%9F%E4%BA%A7%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5%E6%8C%87%E5%8D%97%E2%80%94%E2%80%94%E6%8E%92%E6%9F%A5%E6%80%9D%E8%B7%AF%2F</url>
+    <content type="text"><![CDATA[业务指标着手需要提出的是，大部分情况还是业务应用本身引发的问题，所以应从业务指标着手。 查看gc日志 查看gc是否变得频繁，是否出现大量gc甚至full gc，这意味着内存可能发生了问题。此时应保留现场，保存内存dump。 一般应用程序中都有配置gc日志，在/usr/local/logs/gc目录下 需要特别注意，个别major gc可能是正常内存回收，并且gc后的dump也不再体现回收前的内存情况，所以不具有参考性。 一般使用MAT对内存dump进行分析，找出异常的对象，从而判断代码或者业务设计是否有需要修改的地方。 查看业务日志如果gc正常，吞吐量下降的原因可能有两个。一,外部依赖阻塞，二,服务内部资源紧张，请求排队等待。以上两种情况都可能产生蝴蝶效应，服务性能下降，请求排队的同时，内存可能堆积大量对象无法释放，这样就导致出现gc甚至full gc。主要关注两类服务，一,错误量最多的服务，二,第一个耗时异常缓慢的服务，根据错误链路找到异常的触发源。最好的做法就是预防入手，对于应用性能有准确的评估以及可能遭遇的流量高峰有所预测，这样及早做资源扩展。 日志查看手册读者可以查看xqy撰写的生产环境日志指导手册。]]></content>
+      <categories>
+        <category>生产环境</category>
+      </categories>
+      <tags>
+        <tag>问题排查</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[生产问题排查指南——问题排查方法]]></title>
+    <url>%2F2018%2F02%2F12%2F%E7%94%9F%E4%BA%A7%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5%E6%8C%87%E5%8D%97%E2%80%94%E2%80%94%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5%E6%96%B9%E6%B3%95%2F</url>
+    <content type="text"><![CDATA[问题排查方法这篇博客主要阐述排查的一些指标，对一些可能造成生产问题的注意点做指导概览。 指标分类基础指标基础指标主要有以下几点： cpu负载：cpu负载高的情况，将直接导致系统吞吐下降。 磁盘：磁盘I/O是否正常，磁盘硬件是否正常。 网络：出网入网流量是否正常，网络是否有波动情况。 中间件负载：中间件负载情况将直接影响调用链路性能。 如果能确保基础指标没有问题，这将大大加快我们排查的效率。例如，当前一段时间内生产网络出现了大幅度的波动，造成了大量服务延迟。如果你没有预先排除网络指标是否正常，而直接排查应用的服务性能问题，那最终将浪费大量的时间和精力。 核心指标线程1234线程数量：多线程并行运行的情况下，存在大量线程切换与上下文信息的同步，cpu主要负责这个。因此线程数量过多，将会直接增加切换与同步的开销，cpu负载增加。top1：无论进程还是线程，都应该 关注cpu占用率最高的那一个，有利于快速排查系统高负载的主要原因。 内存1234567系统内存空闲情况：长时间的低空闲内存，容易在大流量到来时，达到系统警戒阈值，触发OOM Killer，中断应用进程。在其他指标不变的情况下，空闲内存的大小与数据，流量息息相关。大数据与流量高峰都会加大内存开销，遇到服务阻塞，对象会在内存中堆积无法释放，最终导致内存溢出。业务应用内存情况：业务应用会有一块被分配的固定大小的堆内存空间。但配分的大小不一定总是合理的，一个典型的例子是老年代分配内存过大，新生代分配较小，大量的对象在老年代中堆积等待回收，在触发回收前，系统长时间处于空闲内存吃紧状态。 业务指标gc情况直观体现了应用内存当前的健康程度，频繁gc甚至full gc意味着应用内存出现了问题或者没有给应用分配合理的内存空间。 任何时候，日志都是问题排查不可或缺的重要指标。核心指标的异常，最终体现在日志上就是大量的系统或者业务异常，服务错误量激增[调用失败，超时]，执行耗时异常缓慢[一次服务耗时10～100s以上] 扩展读者可能对于OOM Killer这个概念不太了解，可以参考知乎上的这篇形象比喻。]]></content>
+      <categories>
+        <category>生产环境</category>
+      </categories>
+      <tags>
+        <tag>问题排查</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[生产问题排查指南——指标查询指令与方法]]></title>
+    <url>%2F2018%2F02%2F12%2F%E7%94%9F%E4%BA%A7%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5%E6%8C%87%E5%8D%97%E2%80%94%E2%80%94%E6%8C%87%E6%A0%87%E6%9F%A5%E8%AF%A2%E6%8C%87%E4%BB%A4%E4%B8%8E%E6%96%B9%E6%B3%95%2F</url>
+    <content type="text"><![CDATA[生产问题指标cpu中央处理器cpu占用率与负载情况是操作系统繁忙程度的一项总要的指标，它直接影响着应用的吞吐。top命令经常用来监控linux系统状况，也直观展示了系统cpu使用情况。读者可以参考微服务问题定位——top来查看具体的细节。 线程上面的top命令同时展示了各进程cpu使用情况，一般cpu占用量自上而下排序。我们一般关注cpu占用率最高的那个，大部分情况下它就是我们的应用进程。pid列即为进程的id。 $top -Hp pid[十进制进程id] 可以查看指定进程id中各线程的cpu使用情况。 $printf ‘0x%x\n’ nid[十进制线程id] 将线程的id打印为十六进制，目的是给之后的命令提供十六进制的id。 $jstack pid[进程id] | grep ‘nid[十六进制线程id]’ -C5 –colorjstack可以查询jvm进程中的线程栈信息，grep可以从中搜索目标线程信息，可以配合源码分析负载高的原因。 $jstack pid[进程id] &gt; jstack.txt[文件] 当然你可以将当前进程栈信息输出到文件，即我们常说的线程dump，然后进行详细分析。 strace -p nid[线程id] -T strace可以查看操作系统底层的执行情况，包括执行函数和执行耗时等。 内存这里的内存指标分为系统内存和应用内存一般读者可以使用free命令查看系统内存的使用情况，读者可以参考微服务问题定位——free应用内存的查看需要jdk包下的命令： $jmap -heap pid[进程id]jmap可以查看jvm进程的内存分配与使用情况，使用的gc算法等信息。 $jmap -dump:format=b,file=[导出路径] pid[进程id]-dump:format=b,file=可以使用hprof二进制形式输出jvm的heap内容到文件，即我们常说的堆内存dump，然后可以结合MAT[内存分析工具]可以深入分析内存使用情况。注意dump是比较消耗资源的。如果现在系统的内存比较吃紧，磁盘i/o较慢，切忌手动dump，可能成为压死骆驼的最后一根稻草。 -XX:+HeapDumpOnOutOfMemoryError 一般我们会在jvm的启动中添加启动参数，这样发生OOM后jvm能够自动将当时的内存情况dump保留下来。 zip或者gzip 通常dump文件会较大，应该将原dump文件归档到备份地点或者直接移除，以释放这部分磁盘空间占用。在进行下载时也将极大减少带宽开销。 磁盘读者可以参考： 微服务问题定位——df 微服务问题定位——du 网络 dstat 是一个综合的多维度指标命令。视图中有cpu使用情况，磁盘读写，网络情况，分页统计，系统中断与上下文切换统计。这里我们主要关注网络指标net/total- 。recv：入网流量，send：出网流量。当网络传输流量长时间小于实际应用传输数据量大小时，带宽将成为应用性能瓶颈。 ifstat 读者可以参考微服务问题定位——ifstat 日志这里的日志指标分为gc日志和业务日志。 gc日志无论minor gc还是major gc，我们主要关注gc回收实际消耗时间，即为日志中的real，即STW[stop the world]时间，如果实际耗时过长，则严重影响应用性能。 业务日志业务日志一般我们关注调用时间过长或者调用失败的请求，grep ‘[0-9]{3,}ms’ *.log 查看执行耗时3位数以上的服务grep ‘,N’ *.log 查看执行失败的服务]]></content>
+      <categories>
+        <category>生产环境</category>
+      </categories>
+      <tags>
+        <tag>问题排查</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[如何在mac上搭建python环境并使用docx模块]]></title>
+    <url>%2F2018%2F02%2F12%2F%E5%A6%82%E4%BD%95%E5%9C%A8mac%E4%B8%8A%E6%90%AD%E5%BB%BApython%E7%8E%AF%E5%A2%83%E5%B9%B6%E4%BD%BF%E7%94%A8docx%E6%A8%A1%E5%9D%97%2F</url>
+    <content type="text"><![CDATA[背景之前接手到一个处理word文档的项目，需要读取word内容，并对读取的字符串进行一系列的处理。一开始笔者使用java进行处理，需要引入第三方模块——poi。说实话，这个第三方模块对于word的处理不够完善，第一没有很好的写入方式，第二没有很好的样式处理机制，第三没有封装java的io流，仍然需要笔者手动创建和关闭io资源。 在之后的资料中查询到可以使用python的docx模块很快速处理word文件，使用快捷方便，几行代码就可以实现读写，并且很好的支持word的样式。但是docx模块只支持docx后缀的文档，读者可以先将doc转换docx。 搭建环境搭建平台是macOS10.12.6，一般mac上是自带python的，但是普遍版本较低，目录位置为/Library/Python，以后安装的其他版本也在相同的目录下。 终端$python –version 查看python的版本。 这边可以使用pyenv来管理python的各个版本，笔者这边使用IDE(python编译环境)管理的。如果选择pyenv，请参考。即使不使用pyenv，笔者还是要推荐参考博客中提及的brew——mac的统一依赖包管理器。如果选择IDE管理，请到官网下载PyCharm，这种方式不像pyenv可以使用命令下载python的其他版本，读者可以访问官网下载其他python版本。 IDE在栏目PyCharm下选择Pereferences，如图选择可以切换编译器的python版本：不同的版本切换对代码的编译可能会造成影响。 引入docx模块python处理word也需要引入第三方模块，一般使用pip去下载python的第三方模块。mac里面python自带easy_install。$sudo easy_install pip 输入密码下载pip，笔者强烈建议不要在系统自带的python下折腾，因为mac系统下很多软件都依赖python模块，一些操作可能导致系统的软件打开错误。 读者可以先去官网下载其他版本，然后设置环境变量，sudo vim /etc/profile，编辑添加export PATH=xxxx:$PATH，其中xxxx为下载后python的路径，参考搭建环境。 $python –version 查看版本是否更改，之后执行$sudo easy_install pip，然后在执行$pip install docx模块。 然后读者就可以在当前python版本的目录下看到pip模块和docx模块了。之后在PyCharm中切换python的版本，在编写的代码中引入docx模块即可。读者可以参考官网手册]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>mac</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[jvm——新生代,老年代和持久代]]></title>
+    <url>%2F2018%2F02%2F11%2Fjvm%E2%80%94%E2%80%94%E6%96%B0%E7%94%9F%E4%BB%A3-%E8%80%81%E5%B9%B4%E4%BB%A3%E5%92%8C%E6%8C%81%E4%B9%85%E4%BB%A3%2F</url>
+    <content type="text"><![CDATA[新生代，老年代和永久代java中堆是jvm所管理的最大的一块内存空间，主要用于存放各种类的实例对象。jvm中内存的分配有如下公式： 堆 = 年轻代 + 老年代 年轻代 = eden space(新生代) + from survivor + to survivor 年轻代默认值保持为堆大小的1/15，特点是对象更新速度快，在短时间内产生大量的死亡对象，并且要产生连续可用的空间。所以使用复制清楚算法和并行收集器进行垃圾回收，对年轻代的垃圾回收称作初级回收(minor gc)。 年轻代的工作机制jvm，年轻代中每次只会使用eden space和其中一块survivor区域来为程序服务，所以无论如何总有一块survivor区域总是空闲的。对象在 eden 中初始化，在经过一次minor gc后，如果对象还存活着，即被引用着，并且能够被另外一块survivor区域所容纳，则使用复制算法将这些仍然还存活的对象复制到另外一块survivor区域中。 年轻代如何变成老年代初始化过程与上面一致，在eden中。在minor gc之后，如果对象还存活着，这些对象的年龄+1，当超过某个值(默认为15)这些对象进入老年代。 老年代的gc堆内存的老年代不同于现实生活，老年代中的对象个个都是从survivor中熬过来的，所以老年代中的类不是那么容易死亡的。因此，full gc(又称major gc)发生的次数没有minor gc那么频繁，并且一次full gc要比minor gc时间要更长。标记-清除算法收集垃圾的时候会产生许多的内存碎片 ( 即不连续的内存空间 )，此后需要为较大的对象分配内存空间时，若无法找到足够的连续的内存空间，就会提前触发一次 GC 的收集动作。 持久代此外还有一个持久代，用于存放静态文件，如java类定义(相当于模版，不是实例对象)、方法、本地方法等。持久代对垃圾回收没有显著影响，但是有些应用可能动态生成或者调用一些class，例如hibernate等，在这种时候需要设置较大的持久代空间来存放这些运行过程中新增的类 。持久代大小通过-XX:MaxPermSize=进行设置。 补充有的虚拟机并没有持久代，java8开始持久层也已经被彻底删除了，取代它的是另一个内存区域也被称为元空间。想要参考更多，读者可以参考这篇博客 jvm配置项jvm配置项可以根据程序的实际要求来配置，如各个代的比例等。这边原本应该用表格的形式展示，但是hexo在渲染markdown的表格语法时不支持，待到作者修复这个bug后进行更改。1234567891011121314151617181920212223242526* -Xms 初始堆大小。如：-Xms256m* -Xmx 最大堆大小。如：-Xmx512m * -Xmn 新生代大小。通常为 Xmx 的 1/3 或 1/4。新生代 = Eden + 2 个 Survivor 空间。实际可用空间为 = Eden + 1 个 Survivor，即 90% * -Xss JDK1.5+ 每个线程堆栈大小为 1M，一般来说如果栈不是很深的 话， 1M 是绝对够用了的。 * -XX:NewRatio 新生代与老年代的比例，如 –XX:NewRatio=2， 则新生代占整个堆空间的1/3，老年代占2/3 * -XX:SurvivorRatio 新生代中 Eden 与 Survivor 的比值。默认值为 8。 即 Eden 占新生代空间的 8/10，另外两个 Survivor 各占 1/10 * -XX:PermSize 永久代(方法区)的初始大小 * -XX:MaxPermSize 永久代(方法区)的最大值 * -XX:+PrintGCDetails 打印 GC 信息 * -XX:+HeapDumpOnOutOfMemoryError 让虚拟机在发生内存溢出时 Dump 出当前的内 存堆转储快照，以便分析用]]></content>
+      <categories>
+        <category>jvm</category>
+      </categories>
+      <tags>
+        <tag>jvm</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[linux编辑器——vim]]></title>
+    <url>%2F2018%2F01%2F31%2Flinux%E7%BC%96%E8%BE%91%E5%99%A8%E2%80%94%E2%80%94vim%2F</url>
+    <content type="text"><![CDATA[VIM编辑器背景vi在mac下严格意义上讲不是一个简单的命令，而是unix系列下的自带的编译器，笔者没记错发明这编译器的家伙是个大胡子，一直致力于软件开源的维护和倡导$vi filename 这是开始编译一个文件，有时候需要switch user 即sudo 简介这边笔者不做过多的介绍请看维基百科这里的vim编辑器是vi的一种升级版 编辑文件之前说过基本用法:$vim filename，这边还有其他的用法$vim +line filename 编辑文件，并定位到第line行$vim + filename 编辑文件，并定位到最后一行$vim +/pattern filename 编辑文件，并定位到第一个匹配的位置 关闭文件这边需要提及vim的模式(之后补充，这边提及)，打开文件后需要进入输入模式或者其他模式，才能使用一些命令，退出模式后才能关闭文件一般按esc按钮来推出vim的模式，然后输入:来选择退出的方式:q 退出:wq 保存并退出:q! 不保存并退出:w 保存但没有退出，可以继续编辑:w! 强行保存退出后就回到命令窗口界面了，当然也可以直接编辑模式退出如：编辑模式按ZZ即可 模式i 在当前光标所在的字符前面转为输入模式a 在当前光标所在的字符后面转为输入模式o 在当前光标所在行的下方新建一行，并转为输入模式I 在当前光标所在行的行首转为输入模式A 在当前光标所在的行尾转为输入模式O 在当前光标所在的上方新建一行，并转为输入模式以上的命令必须是非编辑状态或者非其他的状态，然后按下相应的按键进入编辑模式 相关命令移动很简单，就是键盘上的上下左右键w 移至下一个单词词首，中文一般以标点为准跳动e 移至当前或下一个单词词尾b 移至当前或者前一个单词词首nw 移动n个单词 跳转0 跳转到光标所在的行首^ 跳转到行首的第一个非空白字符$ 绝对的行尾nG 跳转到第#行gg 跳转到第一行行首G 跳转到最后一行行首 翻页ctrl+f 向下翻一屏ctrl+b 向上翻一屏ctrl+d 向下翻半屏ctrl+u 向上翻半屏 删除x 删除光标所在处的单个字符nx 删除光标所在处及后面共n个单词dd 删除光标所在的行ndd 删除光标所在行及后面共n行 粘贴p: 如果删除或复制为整行内容，则粘贴至光标所在行的下方，如果复制或删除的内容为非整行，则粘贴至光标所在字符的后面P: 如果删除或复制为整行内容，则粘贴至光标所在行的上方，如果复制或删除的内容为非整行，则粘贴至光标所在字符的前面以上命令只作用于vim编辑器内部，外面复制的内容不行 复制用法和d命令的用法相同，将d替换成y 替换r 替换单个字符，但是好像不支持中文nr 光标后n个字符全部替换R 进入替换模式，可直接替换光标所在的字符 撤销编辑操作u 在非模式状态下，撤销前一次的编辑操作nu 直接撤销最近的n次编辑操作 选取v 进入选取模式，按字符选取，最多到光标所在的行V 进入选取模式，但是按矩形进行选取 查找:/pattern 根据匹配的字符查找:?pattern 同上n 下一个N 上一个 查找并替换headline,footline s#PATTERN#string#gn,$s#wyc#王鋆昌#g 替换第n行开始到最后一行中每一行所有wyc为王鋆昌参考 编辑多个文件vim file1 file2:next 切换到下一个文件:prev 切换到上一个文件:last 切换到最后一个文件:first 切换到第一个文件:q 退出当前文件:qa 全部退出 未完待续vim的使用远非及此，之后还有有涉及会及时补充]]></content>
+      <categories>
+        <category>vim</category>
+      </categories>
+      <tags>
+        <tag>linux命令</tag>
+        <tag>vim</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[linux命令——crontab]]></title>
+    <url>%2F2018%2F01%2F31%2Flinux%E5%91%BD%E4%BB%A4%E2%80%94%E2%80%94crontab%2F</url>
+    <content type="text"><![CDATA[crontab作用自定义定时任务笔者一般用这个命令来提醒事项，适用于基本每天执行的事项 option参数-e 编辑cron脚本文件，可以指定编辑器，默认是vi编辑器-l 列出当前用户下的cron任务-u 指定cron在哪个用户下执行，默认是当前用户 使用实例$brontab -e 执行后跳到编辑器你可以在编辑器中书写cron命令，一般的格式是 command content上面格式中的 从左至右分别表示分，时，日，月份和年份，content就是自定义的命令了如果命令较多，你甚至可以写在一个shell脚本中，执行脚本即可比如：15 9 * command sh xxx.sh 每天早上9:15执行xxx.sh脚本 扩展一般用$cron -e编辑的脚本，笔者也不知道保存到哪里去了，一般笔者都是写完之后直接执行的比如：crontab test.cron即可，test.cron即为编写好的脚本，内容形式与上面的一致 实用价值了解敏捷开发的读者应该知道，部门中可能存在一些管理方式，需要每天执行任务，比如早晨的定时晨会，比如记录一天内的工作时间，等等读者可以使用outlook来提醒，或者手机的定时闹钟，笔者选择用crontab命令来显示高逼格列出了笔者mac中每天执行的任务，将多个cron任务编辑在同一个.cron文件内，执行就能实现多个任务的并存发现cron任务content可以直接命令，也可以shell脚本执行]]></content>
+      <categories>
+        <category>linux命令</category>
+      </categories>
+      <tags>
+        <tag>linux命令</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[linux命令——awk]]></title>
+    <url>%2F2018%2F01%2F31%2Flinux%E5%91%BD%E4%BB%A4%E2%80%94%E2%80%94awk%2F</url>
+    <content type="text"><![CDATA[awk用法awk ‘{pattern + action}’ {filenames} 使用方式awk -F 分隔符 ‘{command操作}’awk -f awk-script-file input-file(s)上面的命令比较有意思，awk-script-file是脚本文件，一般比较复杂的awk命令可以写成一个脚本，然后操作到input-file(s)文件上 内置变量ARGC 命令行参数个数ARGV 命令行参数排列ENVIRON 支持队列中系统环境变量的使用FILENAME awk浏览的文件名FNR 浏览文件的记录数FS 设置输入域分隔符，等价于命令行 -F选项NF 浏览记录的域的个数NR 已读的记录数OFS 输出域分隔符ORS 输出记录分隔符RS 控制记录分隔符 使用实例在xqy的日志使用手册中，有统计所有抛出非业务异常的服务的命令，相信很多开发不知道运行的原理，在此我做一下说明：cat common-service-digest.log | grep ‘N,’ | awk -F ( ‘{print $2}’ | awk -F ) ‘{print $1}’ | awk -F , ‘{!a[$1”.”$2”.”$3]++;}END {for (j in a) print j,a[j]}’这个命令比较长，你可以分开进行执行，比如:1.cat common-service-digest.log | grep ‘N,’ 查看调用失败的日志2.awk -F ( ‘{print $2}’ 以 （作为分隔符分割日志行，并打印分隔片区2比如:日志记录:[(tax,ICustomerSettingManageService,getAreaCodeBatch,Y,12ms)] (traceId=84ec429fbff64c5bbc43347c8cc72257)被分隔为:[(tax,ICustomerSettingManageService,getAreaCodeBatch,Y,12ms)](traceId=84ec429fbff64c5bbc43347c8cc72257)最后输出:tax,ICustomerSettingManageService,getAreaCodeBatch,Y,24ms)]3.awk -F ) ‘{print $1}’ 以 ）作为分隔符分割日志行，并打印分隔片区1最后输出:tax,ICustomerSettingManageService,getAreaCodeBatch,Y,12ms4.awk -F , ‘{!a[$1”.”$2”.”$3]++;} 以 ,作为分隔符分割日志行，并以$1”.”$2”.”$3为键统计5.最后end进行循环输出参考 说明当中涉及到xqy的日志业务和图片，所以不部署到github]]></content>
+      <categories>
+        <category>linux命令</category>
+      </categories>
+      <tags>
+        <tag>linux命令</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[linux命令——sed]]></title>
+    <url>%2F2018%2F01%2F31%2Flinux%E5%91%BD%E4%BB%A4%E2%80%94%E2%80%94sed%2F</url>
+    <content type="text"><![CDATA[sed系统mac系统用的是原生的bsd系列，而一般的linux系统用的是gnu系统，所以两者在某些命令是有区别的，sed命令位列其中 区别mac上sed的添加和插入文本比较奇葩，需要如此:$sed “$line a\ (在\后要加一个空格，然后另起一行，再写需要添加的那一行新的)>$value（需要添加新一行的内容）>“ $filename(文件名)同上，sed i的使用方式亦然 gnu-sed如果无法适应原生bsd系列，可以下载gnu-sed，这个时候brew神器又用到了，直接下载然后配置环境变量即可:$brew install gnu-sed之后的叙述都是基于gnu-sed说明 option参数-n ：使用安静(silent)模式，在一般 sed 的用法中，所有来自 STDIN 的数据一般都会被列出到终端上，但如果加上 -n 参数后，则只有经过sed 特殊处理的那一行(或者动作)才会被列出来-e ：直接在命令列模式上进行 sed 的动作编辑-f ：直接将 sed 的动作写在一个文件内， -f filename 则可以运行 filename 内的 sed 动作-r ：sed 的动作支持的是延伸型正规表示法的语法。(默认是基础正规表示法语法)-i ：直接修改读取的文件内容，而不是输出到终端 方法a ：新增， a 的后面可以接字串，而这些字串会在新的一行出现(目前的下一行)c ：取代， c 的后面可以接字串，这些字串可以取代 n1,n2 之间的行d ：删除，因为是删除啊，所以 d 后面通常不接任何咚咚i ：插入， i 的后面可以接字串，而这些字串会在新的一行出现(目前的上一行)p ：列印，亦即将某个选择的数据印出。通常 p 会与参数 sed -n 一起运行s ：取代，可以直接进行取代的工作哩！通常这个 s 的动作可以搭配正规表示法 实例$sed ‘2a 字符串’ filename —— 第二行下一行添加字符串$sed ‘2i 字符串’ filename —— 第二行上一行添加字符串以上的命令只能作用在缓存的文件中，其实真实的文件内容并没有被改变$sed ‘2a 字符串’ -i filename —— 这样可以直接修改文件了$sed ‘1,2d’ -i filename —— 删除文件1-2行的内容sed与nl联合使用可以进行关键字查找:$nl filename | sed -n ‘/关键字/p’sed支持正则表达的搜索和替换:$sed ‘s/正则表达式 or 普通字符串/新字符串/g’ -i filename[其他用法:]https://www.cnblogs.com/ggjucheng/archive/2013/01/13/2856901.html]]></content>
+      <categories>
+        <category>linux命令</category>
+      </categories>
+      <tags>
+        <tag>linux命令</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[linux常用命令——补充]]></title>
+    <url>%2F2018%2F01%2F31%2Flinux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E2%80%94%E2%80%94%E8%A1%A5%E5%85%85%2F</url>
+    <content type="text"><![CDATA[常用命令(补充)grep用法grep [-acinv][–color=auto] ‘查找字符串’ filename option参数-c 统计查找字符在文件中出现的次数-i 忽略大小写-v 反向查找，即显示不在查找内的行，但是根据记录日志的习惯，很少会使用–color=auto 对查找的字符进行颜色显示 联合使用ls -l |grep -i filename 列出指定文件/文件夹的属性ps -ef|grep tomcat/java 列出指定的进程信息 find用法find [PATH] [option] [action] option参数-mtime n 其中n为数字，表示n天以前，查找n天之前修改过的文件-user name 查找指定所有者的文件-size [+-size] 查重比size大/小的文件 使用$find . -mtime 0 来查找当天修改过的文件，一般可以筛选当天有记录的日志 taroption参数-c ：新建打包文件-t ：查看打包文件的内容含有哪些文件名-x ：解打包或解压缩的功能，可以搭配-C（大写）指定解压的目录，注意-c,-t,-x不能同时出现在同一条命令中-j ：通过bzip2的支持进行压缩/解压缩-z ：通过gzip的支持进行压缩/解压缩-v ：在压缩/解压缩过程中，将正在处理的文件名显示出来-f filename ：filename为要处理的文件-C dir ：指定压缩/解压缩的目录dir 使用实例$tar -tzvf xxx.zip 查看指定压缩文件里面的文件内容$tar -zxvf xxx.zip 解压缩指定文件$tar -cvf xxx.tar dir 压缩指定文件夹$tar -czvf xxx.tar.gz dir 以gzip的格式进行压缩如何使用解压缩命令的option操作，最终还是要看压缩文件的格式的，如-z一般用来支持.gz结尾的压缩包 kill用法kill [选项] [参数] option参数-a：当处理当前进程时，不限制命令名和进程号的对应关系-l &lt;信息编号&gt;：若不加&lt;信息编号&gt;选项，则-l参数会列出全部的信息名称 -p：指定kill 命令只打印相关进程的进程号，而不发送任何信号-s &lt;信息名称或编号&gt;：指定要送出的信息-u：指定用户 常用的信号编号HUP 1 终端断线 INT 2 中断（同 Ctrl + C） QUIT 3 退出（同 Ctrl + \） TERM 15 终止 KILL 9 强制终止 CONT 18 继续（与STOP相反， fg/bg命令） STOP 19 暂停（同 Ctrl + Z）在mac中18是STOP，19是CONT]]></content>
+      <categories>
+        <category>linux命令</category>
+      </categories>
+      <tags>
+        <tag>linux命令</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[linux命令文件上传与下载]]></title>
+    <url>%2F2018%2F01%2F31%2Flinux%E5%91%BD%E4%BB%A4%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E4%B8%8E%E4%B8%8B%E8%BD%BD%2F</url>
+    <content type="text"><![CDATA[文件上传下载搭建实践环境这边使用笔者自己的电脑和windows电脑进行实践。 利用ssh打通windows和mac打开mac的系统偏好设置中的共享，一般情况下没有界面展示的，需要使用搜索查找共享， 然后勾选远程登陆，选择全部用户可访问 在windows上使用ssh连接mac，填写相应的用户名和密码即可 安装要支持sz，rz两个命令，系统需要安装lrzsz，一般的linux系统是自带的，这里使用mac进行实验，需要安装。参考 使用sz filename，即从系统上下载文件到本地，filename是系统中你选择下载的文件rz -b，将本地的文件以二进制的传递方式上传到系统服务器，一般推荐使用二进制传输方式其他参考]]></content>
+      <categories>
+        <category>linux命令</category>
+      </categories>
+      <tags>
+        <tag>linux命令</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[hexo防止敏感数据部署]]></title>
+    <url>%2F2018%2F01%2F30%2Fhexo%E9%98%B2%E6%AD%A2%E6%95%8F%E6%84%9F%E6%95%B0%E6%8D%AE%E9%83%A8%E7%BD%B2%2F</url>
+    <content type="text"><![CDATA[hexo防止敏感数据部署原理熟悉hexo的读者都知道，hexo的部署一般执行如下:$hexo clean$hexo g$hexo d如果不按照顺序执行这三步，读者会发现即使增添了page，部署时git也不会显示增添文件的记录，github上也没有提交的代码记录其实这涉及到hexo的部署原理，hexo clean 会清除之前构建的代码，具体就是public文件夹；hexo g 会重新生成，这样读者添加的page也就构建在其中，此时新的public文件夹会生成；hexo d 就是将hexo g 改变的文件提交到github上所以不执行clean和generate是不会真正意义上修改remote上的代码 敏感数据敏感数据这里指的就是涉及公司业务的文章，因为hexo d 会将文章直接部署到github上，这样就全部公开化了这边最好是本地可以访问，github无法访问你的敏感数据，这篇文章的目的就在此 利用.gitignore熟悉git的读者，应该都知道可以使用.gitignore文件忽略一些提交网上有些说修改.npmignore文件配置(hexo的根目录下)可以起到效果，经过测试发现没有起到作用，所以转而到git寻求解决方案一般执行如下(当前目录为hexo根目录):$cd .deploy_git git push的代码都在此文件夹下$vim .gitignore增加如下配置:page name/ page的名称，hexo n page创建命令中你定义的文章名，如:linux命令性能监控及优化/.gitignore 自己本身但是笔者发现代码虽然没有提交到github上，但是hexo博客上有这个新建的标题，点击访问也是github默认的404页面(因为hexo g过程中一定会将文章标题写入hexo中，.gitignore只能做到忽略提交) 自定义404上面的问题引入了这个小结，github默认的404页面会让读者误以为是网站的问题，其实是不想公开化，所以你可以自定义404页面具体的步骤如下(hexo的根目录下):$hexo n page 404 source目录下生成404目录index.md中增加配置: layout: false //是否使用布局文件 comments: false //是否有评论 permalink: /404 //设置链接然后按照hexo部署步骤上传到github上，然后再访问敏感文章链接会跳转到自定义的404页面其实根本问题是github上没有代码，但是hexo在generate时将目录还是写入了导致，但是笔者找不到解决忽略写入的方法]]></content>
+      <categories>
+        <category>hexo部署</category>
+      </categories>
+      <tags>
+        <tag>hexo</tag>
+        <tag>git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[linux命令性能监控及优化]]></title>
+    <url>%2F2018%2F01%2F30%2Flinux%E5%91%BD%E4%BB%A4%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7%E5%8F%8A%E4%BC%98%E5%8C%96%2F</url>
+    <content type="text"><![CDATA[性能监控和优化toptop freefree vmstat用来统计虚拟内存的使用情况，这边涉及到linux物理内存和虚拟内存的知识点，其实之前我们也提到过，虚拟内存即交换区 option参数-a：显示活跃和非活跃内存-f：显示从系统启动至今的fork数量-m：显示slabinfo-n：只在开始时显示一次各字段名称-s：显示内存相关统计信息及多种系统活动数量delay：刷新时间间隔。如果不指定，只显示一条结果count：刷新次数。如果不指定刷新次数，但指定了刷新时间间隔，这时刷新次数为无穷-d：显示磁盘相关统计信息-p：显示指定磁盘分区统计信息-S：使用指定单位显示。参数有 k 、K 、m 、M ，分别代表1000、1024、1000000、1048576字节（byte）默认单位为K（1024 bytes）-V：显示vmstat版本信息 使用实例$vmstat 5 6 在docker上进行试验，在6秒内采集5次数据 说明Procs（进程）：r: 运行队列中进程数量b: 等待IO的进程数量Memory（内存）：swpd: 使用虚拟内存大小free: 可用内存大小buff: 用作缓冲的内存大小cache: 用作缓存的内存大小Swap：si: 每秒从交换区写到内存的大小so: 每秒写入交换区的内存大小IO：（现在的Linux版本块的大小为1024bytes）bi: 每秒读取的块数bo: 每秒写入的块数系统：in: 每秒中断数，包括时钟中断cs: 每秒上下文切换数CPU（以百分比表示）：us: 用户进程执行时间(user time)sy: 系统进程执行时间(system time)id: 空闲时间(包括IO等待时间),中央处理器的空闲时间 以百分比表示wa: 等待IO时间 需要关注的指标如果 r经常大于 4 ，且id经常少于40，表示cpu的负荷很重如果bi，bo 长期不等于0，表示内存不足如果disk 经常不等于0， 且在 b中的队列 大于3， 表示 io性能不好]]></content>
+      <categories>
+        <category>linux命令</category>
+      </categories>
+      <tags>
+        <tag>linux命令</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[linux常用命令]]></title>
+    <url>%2F2018%2F01%2F30%2Flinux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%2F</url>
+    <content type="text"><![CDATA[常用命令pwd没什么可说的，当前不知道处于那个目录下时，pwd即可 mvmv命令是将一个文件移动到指定的目录，但是在linux可以用来重命名文件 moremore是具有翻页功能的cat命令 lessless是一个可以前后分页浏览文件的命令，相比more更加具有弹性 whichwhich用于查找命令包所在的路径，没有配置在环境变量中的命令是搜索不到的，因为which只会搜索path下的命令，echo $PATH可以查看 lsls命令还是很常用的，不做过多描述ls g* 模糊列出文件列表，即将g开头的文件列出 unzip和gzipunzip主要用于解压.zip压缩文件 unzip xxx.zipgzip file1 file2 … 文件打包压缩为.gz的形式对于文件夹的打包或者其他的压缩格式请使用tar命令 whatis和man$whatis command 用于显示命令使用的描述$man command 以使用手册的形式显示]]></content>
+      <categories>
+        <category>linux命令</category>
+      </categories>
+      <tags>
+        <tag>linux命令</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[微服务问题定位——jmap]]></title>
+    <url>%2F2018%2F01%2F29%2F%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94jmap%2F</url>
+    <content type="text"><![CDATA[jmap使用场景 内存溢出，线上程序运行时内存越来越大，用jmap dump出堆内存的信息，然后进行相关分析 内存的真实使用大于预期，这是因为设计不合理导致冗余的对象存在内存中，用jmap来查看内存中的对象，分析是否有存在的必要 jvm优化，利用jmap来查看整个堆的使用情况，根据老年代和新生代的使用比例来划分jvm的各个区域 使用实例在使用jmap连接进程时，启动的jvm版本和jdk版本要一一对应，毕竟jmap是jdk下的命令包$ps -ef | grep java 查找系统的java进程$jmap -heap pid 打印指定进程堆的摘要信息，包括gc算法 参数说明 Heap Configuration: 堆配置信息 MinHeapFreeRatio 在堆的使用率小于MinHeapFreeRatio(%)的时候进行收缩，当Xmx=Xms的时候此配置无效MaxHeapFreeRatio 在堆使用率大于MaxHeapFreeRatio(%)的时候进行扩展，当Xmx=Xms的时候此配置无效MaxHeapSize 堆的最大空间NewSize 新生代的大小MaxNewSize 最大的新生代的大小OldSize 老年代的大小NewRatio 老年代和新生代的比例SurvivorRatio 新生代中Eden和和Survivor区的比例PermSize 永久代的大小MaxPermSize 久代的最大内存G1HeapRegionSize 使用G1垃圾收集的区间 Heap Usage: 堆的使用信息 New Generation (Eden + 1 Survivor Space): 新生代的大小（Eden区加一个Survivor区的空间信息 capacity 总内存used 已使用内存free 剩余内存13.823827124993642% used 使用内存占比 Eden Space: Eden区的大小 capacityusedfree15.178337946947952% used From Space: 第一个Surivivor区的空间信息 capacityusedfree2.984432830624237% used To Space: 第二个Survivor区的空间信息 capacityusedfree0.0% used concurrent mark-sweep generation: CMS垃圾收集占用的空间信息 capacityusedfree75.36470666527748% used Perm Generation: 永久代的空间信息 capacityusedfree47.5915253162384% used 其他功能参考链接]]></content>
+      <categories>
+        <category>微服务问题定位</category>
+      </categories>
+      <tags>
+        <tag>jvm</tag>
+        <tag>微服务</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[微服务问题定位——jstack]]></title>
+    <url>%2F2018%2F01%2F29%2F%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94jstack%2F</url>
+    <content type="text"><![CDATA[jstack功能查看运用程序jvm的堆栈情况，可以找出线程的运行情况，从而排查一些隐患或者服务卡顿的问题 具体说明jstack用于打印出给定的java进程id或者core file或者远程调试服务的java堆栈信息，如果是在64位机器上，需要指定选项-J-d64如果java程序崩溃会生成core文件，jstack工具可以用来获得core文件的java stack和native stack的信息，从而可以轻松知道java程序是如何崩溃和在程序何处发生问题。 option参数-F 当jstack -l pid 没有响应的时候强制打印栈信息-l 长队列，打印关于锁的附加信息-m 打印java和native c/c++框架的所有栈信息 命令格式jstack [option] pidjstack [option] executable corejstack [option] [server-id@]remote-hostname-or-IP 命令格式说明executable core 产生core dump的java可执行文件remote-hostname-or-IP 远程debug服务的主机名或ipserver-id 唯一id,假如一台主机上多个远程debug服务 使用实例一般需要与top命令联用，使用top命令找出异常的进程(一般是cpu使用异常的进程)通过top -Hp pid来定位该进程下各线程的cpu使用情况再通过jstack pid命令打印该线程对应的堆栈情况 扩展 在top命令中，已经获取到了占用cpu资源较高的线程pid，将该pid转成16进制的值(在线转换)，在thread dump中每个线程都有一个nid，找到对应的nid即可 什么是java core和heap dump文件，参考]]></content>
+      <categories>
+        <category>微服务问题定位</category>
+      </categories>
+      <tags>
+        <tag>jvm</tag>
+        <tag>微服务</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[gitbook目录折叠]]></title>
+    <url>%2F2018%2F01%2F28%2Fgitbook%E7%9B%AE%E5%BD%95%E6%8A%98%E5%8F%A0%2F</url>
+    <content type="text"><![CDATA[背景在编写gitbook的时候发现目录的数量比较庞大的时候显得杂乱无章，因为章节比较多的时候gitbook对于目录默认是全展开，很难有目的地寻找，对于管理人和阅读的读者来说很不友好。(主要是后者，一切都要从用户的角度考虑)如果可以将gitbook的目录折叠，那么查找时会更加清晰，笔者在网上找到了插件，只要让gitbook引入即可。 插件 插件名称：toggle-chapters 效果：默认只在目录导航中显示章的标题，而不会显示小节的标题，点击每一章或者每一节会显示当前章或节的子目录，如果有的话，但是同时会收起其它之前展开的章节。 关于更多的gitbook插件，读者可以参考插件网站。 配置在根目录(即与SUMMARY.md同级的目录)下的配置文件 book.json(如果没有则新建)中添加插件配置，如图：读者可以参考进行配置，同理你可以在里面添加需要使用的插件。配置完成后，可按照一下步骤进行： $ cd gitbook根目录 $ npm install gitbook-plugin-toggle-chapters (此时gitbook的根目录下的node_modules文件夹中已经有了该插件了) $ gitbook build $ gitbook serve访问 http://localhost:4000 看你的插件是否已经生效。]]></content>
+      <categories>
+        <category>gitbook</category>
+      </categories>
+      <tags>
+        <tag>gitbook</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[如何在本地搭建gitbook]]></title>
+    <url>%2F2018%2F01%2F28%2F%E5%A6%82%E4%BD%95%E5%9C%A8%E6%9C%AC%E5%9C%B0%E6%90%AD%E5%BB%BAgitbook%2F</url>
+    <content type="text"><![CDATA[介绍gitbook更加适用于书写使用手册，不太适合书写一些博客和总结，所以笔者最近在做一些迁移的工作，将之前gitbook上的内容迁移到当前的博客上。但是gitbook对于我们的工作还是有适用的地方的。所以在此介绍一下如何本地安装gitbook。 先决条件安装nodejs是先决条件，因为我们需要npm去下载gitbook。在mac电脑上，有brew工具的可以直接下载：$brew search nodejs 搜索包仓库中是否有nodejs$brew install nodejs 有就可以直接下载你也可以选择去官网上下载最新的nodejs压缩包，解压配置环境变量后即可使用。关于brew，读者可以参考简书进行安装。 搭建这里默认大家的电脑上已经安装好了nodejs。按照步骤执行以下命令：$npm install gitbook-cli -g 下载gitbook客户端包$gitbook –version 查看gitbook的版本，测试是否可以使用命令$cd /users/Desktop 切换到一个目录，这里笔者切换到了桌面$mkdir gitbook 创建gitbook目录，这个目录就是用来初始化的其实上面的两步(切换目录和创建目录)读者可以手动完成。$gitbook init 初始化gitbook目录$gitbook build 构建，一般有内容更新时要构建$gitbook serve 开启服务，默认在4000端口监听访问http://localhost:4000 开启你的gitbook之路吧！ 问题你的系统 4000 端口可能已经被占用了，gitbook可以指定端口启动：gitbook serve –port 2000 另一个问题是笔者在windows上搭建时遇到的：笔者之前在windows上搭建过，出现了一些问题，build的时候总是报错。在github官方issues中，官方表示这个是已知的gitbook的bug，高版本的gitbook会出现这个bug。如果你遇到相同的问题，请参考gitbug上的解决方法。解决方法是点赞和喝彩最多的。]]></content>
+      <categories>
+        <category>gitbook</category>
+      </categories>
+      <tags>
+        <tag>gitbook</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[微服务问题定位——du]]></title>
+    <url>%2F2018%2F01%2F28%2F%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94du%2F</url>
+    <content type="text"><![CDATA[功能du命令也是查看使用空间的，但是与df命令不同的是，du命令是对文件和目录磁盘使用的空间进行查看，而不是针对整个文件系统。 option 参数-a或-all 显示目录中个别文件的大小-b或-bytes 显示目录或文件大小时，以byte为单位-c或–total 除了显示个别目录或文件的大小外，同时也显示所有目录或文件的总和-k或–kilobytes 以KB(1024bytes)为单位输出-m或–megabytes 以MB为单位输出-s或–summarize 仅显示总计，只列出最后加总的值-h或–human-readable 以K，M，G为单位显示，提高信息的可读性-x或–one-file-xystem 以一开始处理时的文件系统为准，若遇上其它不同的文件系统目录则略过-L&lt;符号链接&gt;或–dereference&lt;符号链接&gt; 显示选项中所指定符号链接的源文件大小-S或–separate-dirs 显示个别目录的大小时，并不含其子目录的大小-X&lt;文件&gt;或–exclude-from=&lt;文件&gt; 在&lt;文件&gt;指定目录或文件–exclude=&lt;目录或文件&gt; 略过指定的目录或文件-D或–dereference-args 显示指定符号链接的源文件大小-H或–si 与-h参数相同，但是K，M，G是以1000为换算单位-l或–count-links 重复计算硬件链接的文件读者可以使用man du或者du -help查看完整的参数列表。 使用实例$du 显示当前目录下以及子目录中所有文件的大小，一般都是使用-a参数指定文件的，因为罗列所有的信息读者很难找到相关的。$du dir/filename 显示指定目录或者文件，dir/filename为系统中的路径。$du #1 #2 同时显示多个，空格隔开]]></content>
+      <categories>
+        <category>微服务问题定位</category>
+      </categories>
+      <tags>
+        <tag>linux命令</tag>
+        <tag>微服务</tag>
+        <tag>磁盘</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[微服务问题定位——df]]></title>
+    <url>%2F2018%2F01%2F28%2F%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94df%2F</url>
+    <content type="text"><![CDATA[功能用来检查服务器文件系统的磁盘空间占用情况，可以获取硬盘被占了多少空间，目前还剩下多少空间等信息。 option 参数-a 显示全部文件系统列表-h 以方便查阅的方式显示，即带有单位的形式-H 相当于-h，但是换算的方式变更，这里1k=1000-i 显示node信息-k 区块为1024字节，即1Kb为一个区块-l 只显示本地文件系统-m 区块为1048576字节，即1Mb为一个区块–no-sync 忽略sync命令-P 输出格式为POSIX–sync 在取得磁盘信息前先执行sync命令-T 文件系统类型 选择参数–block-size=&lt;区块大小&gt; 指定区块的大小-t &lt;文件系统类型&gt; 只显示选定文件系统的磁盘信息-x &lt;文件系统类型&gt; 不显示选定文件系统的磁盘信息 使用实例第一列 显示各文件系统第二列 显示文件系统的共有多少块，这里以512B为一块，换算后即可知道文件系统大小第三列 显示已经使用的磁盘大小第四列 显示可用的磁盘大小关于其他的使用方式，读者可以参考cnblogs了解。这边需要说明：已使用的+可使用的 != 总块数，因为缺省的每个分区都预留了少量空间供管理员使用，所以即使普通用户的空间已满，管理员依然可以登录系统解决相关问题。]]></content>
+      <categories>
+        <category>微服务问题定位</category>
+      </categories>
+      <tags>
+        <tag>linux命令</tag>
+        <tag>微服务</tag>
+        <tag>磁盘</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[微服务问题定位——ifstat]]></title>
+    <url>%2F2018%2F01%2F28%2F%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94ifstat%2F</url>
+    <content type="text"><![CDATA[ifstat功能监控系统的流量 安装ifstat不是系统自带的命令，所以需要进行安装。mac系统的读者可以在终端使用命令：$brew install ifstat进行安装。当然系统首先要安装brew(mac系统中的包下载工具)，读者可以参考简书进行安装。 option 参数-l 监测环路网络接口(lo)，缺省情况下不会显示，所谓的环路网络可认为是localhost(127.0.0.1)。读者可以参考知乎了解相关的解释。-a 监测系统所有的网络，比加上-l参数还多一个plip0的接口信息(所谓的并口)-z 隐藏流量是无的接口，排查问题时排除无用端口-i 指定要监测的接口,后面跟网络接口名-s 等于加-d snmp:[comm@][#]host[/nn]] 参数，通过SNMP查询一个远程主机-t 在每一行的开头加一个时间 戳,，告诉我们具体的时间-T 报告所有监测接口的全部带宽，和-i联用来指定端口-S 在同一行更新流量状态，不喜欢屏幕滚动的可以使用读者可以使用man ifstat或者ifstat -help查看完整的参数列表。更多详细的命令，读者可参考其他命令了解。 扩展如何只查看网卡的流量情况，ifstat足矣。详细的流量情况需使用iftop命令，系统依旧不会自带需要下载，mac下的下载方式与ifstat一致。读者可以参考实例了解用法。]]></content>
+      <categories>
+        <category>微服务问题定位</category>
+      </categories>
+      <tags>
+        <tag>linux命令</tag>
+        <tag>微服务</tag>
+        <tag>网络</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[微服务问题定位——free]]></title>
+    <url>%2F2018%2F01%2F28%2F%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94free%2F</url>
+    <content type="text"><![CDATA[free功能 显示系统使用和空闲的内存情况，包括物理内存和交互区内存(swap)和内核缓冲区内存 option参数 -b 以Byte为单位显示内存使用情况 -k 以KB为单位显示内存使用情况 -m 以MB为单位显示内存使用情况 -g 以GB为单位显示内存使用情况 -o 不显示缓冲区调节列 -s&lt;间隔秒数&gt; 持续观察内存使用状况 -t 显示内存总和列 -V 显示版本信息 读者可以使用man free或者free -help查看完整参数列表。 样例 这边关注第二行的swap的used指标，如果使用的值较大，则表示系统的内存处于不够使用的情况 为何swap used是一个指标 swap又称为交换分区，当系统的内存小于额定值的时候，内核(OS)会将系统的一部分物理内存释放出来用于当前线程的使用，一般是很久没有操作过的程序会被释放，释放的物理内存被放入到交换区，然后等当前线程执行完毕，内存富余时重新放入物理内存。12345678910例如：物理内存，交换区，当前线程，进程x(目前存在于物理内存中)1.当前线程 向 物理内存 申请执行所需的内存空间2.物理内存 发现没有空间了 查找到 进程x 很久没有操作过3.物理内存 将 进程x 释放到 交换区4.物理内存 说 嘿 当前线程 你可以进来执行了5.当前线程 执行完毕 嘿 我执行完了 让那哥们进来吧6.物理内存 将 进程x 重新载入以上就是简略的过程。]]></content>
+      <categories>
+        <category>微服务问题定位</category>
+      </categories>
+      <tags>
+        <tag>linux命令</tag>
+        <tag>微服务</tag>
+        <tag>内存相关</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[微服务问题定位——strace]]></title>
+    <url>%2F2018%2F01%2F28%2F%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94strace%2F</url>
+    <content type="text"><![CDATA[功能 在linux世界，进程不能直接访问硬件设备，当进程需要访问硬件设备(比如读取磁盘文件，接收网络数据等等)时，必须由用户态模式切换至内核态模式，通过系统调用访问硬件设备。 strace可以跟踪到一个进程产生的系统调用，包括参数，返回值，执行消耗的时间。 option参数 -c 统计每一系统调用的所执行的时间,次数和出错的次数等 -d 输出strace关于标准错误的调试信息 -f 跟踪由fork调用所产生的子进程 -tt 在输出中的每一行前加上时间信息,微秒级， 时间格式：17:22:58.345879 -p pid 跟踪指定的进程pid 以上命令一般都是与-p联用 读者可以使用man strace或者strace -help查看完整的参数列表。 strace使用 strace的使用一般在top命令之后，top命令是用来查看占用cpu异常的进程的。读者可以参考微服务定位——top。 找到异常的进程后，使用命令：top -Hp pid[进程id]进入进程，找到执行异常的那个线程。使用命令：strace -p nid[线程id] -T来查看底层的调用情况。 在此贴出网上的一些参考链接 strace实例 strace实例2 样例贴图 笔者在此贴出strace命令显示的底层执行的信息： 1234567891011$strace cat /dev/nullexecve(&quot;/bin/cat&quot;, [&quot;cat&quot;, &quot;/dev/null&quot;], [/* 22 vars */]) = 0brk(0) = 0xab1000access(&quot;/etc/ld.so.nohwcap&quot;, F_OK) = -1 ENOENT (No such file or directory)mmap(NULL, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f29379a7000access(&quot;/etc/ld.so.preload&quot;, R_OK) = -1 ENOENT (No such file or directory)...每一行都是一条系统调用，等号左边是系统调用的函数名及其参数，右边是该调用的返回值。strace 显示这些调用的参数并返回符号形式的值。strace 从内核接收信息，而且不需要以任何特殊的方式来构建内核。]]></content>
+      <categories>
+        <category>微服务问题定位</category>
+      </categories>
+      <tags>
+        <tag>linux命令</tag>
+        <tag>微服务</tag>
+        <tag>进程,线程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[微服务问题定位——top]]></title>
+    <url>%2F2018%2F01%2F26%2F%E5%BE%AE%E6%9C%8D%E5%8A%A1%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94top%2F</url>
+    <content type="text"><![CDATA[功能显示当前系统正在执行的进程的相关信息，包括进程ID、 内存占用率 、CPU占用率等 option 使用参数-b 进入批处理模式 相当于不停地执行top命令显示信息-c 显示完整的command 位于信息的最后一列-i &lt;时间&gt; 设置间隔时间 如-i 5设置5秒钟刷新一次top信息-u &lt;用户名&gt; 显示指定用户的信息 -p &lt;进程号&gt; 显示指定进程的信息 -n &lt;次数&gt; 循环显示的次数 读者可以使用man top或者top -help查看完整的参数列表。 例图 说明 第一行: 13:40:29 — 当前系统时间10 day，2:32 — 机器从开机到目前为止运行的时长20 users — 登陆的用户有20个load average — 分别对应1mins,5mins,15mins的负载情况(根据一定的算法得到的值，load average／cpu数量&gt;=5说明系统超负荷) 第二行 Tasks 系统进程数total — 当前系统进程269个running — 正在运行的1个sleeping — 睡眠的268个stopped — 停止的0个zombie — 僵尸进程0个 第三行 0.1% us — 用户空间占用CPU的百分比0.0% sy — 内核空间占用CPU的百分比0.0% ni — 改变过优先级的进程占用CPU的百分比99.9% id — 空闲CPU百分比0.0% wa — IO等待占用CPU的百分比0.0% hi — 硬中断（Hardware IRQ）占用CPU的百分比0.0% si — 软中断（Software Interrupts）占用CPU的百分比 第四行 Mem 物理内存total — 物理内存总量 8GBfree — 空闲的内存used — 正在使用的内存buff/cache — 缓存的内存(used表示现在系统内核控制的内存数，free表示还未进入内核控制的内存数，used还包括了停止使用但可能被重用的内存，所以used使用完的内存不会返还给free，所以free的内存数一定越来越少) 第五行 Swap 交换区total — 交换区总量used — 使用的交换区总量free — 空闲交换区总量cached — 缓冲的交换区总量(swap used经常变化的话说明内存已经不够使用了)(系统可使用的内存近似为第四行的free+buff/cache+第五行的cache)读者可以参考 参考链接了解 进程状态监控各项指标 PID — 进程idUSER — 进程所有者PR — 进程优先级NI — nice值，负值表示高优先级，正值表示低优先级VIRT — 进程使用的虚拟内存总量，单位kb，VIRT=SWAP+RESRES — 进程使用的、未被换出的物理内存大小，单位kb，RES=CODE+DATASHR — 共享内存大小，单位kbS — 进程状态，D=不可中断的睡眠状态 R=运行 S=睡眠 T=跟踪/停止 Z=僵尸进程%CPU — 上次更新到现在的CPU时间占用百分比%MEM — 进程使用的物理内存百分比TIME+ — 进程使用的CPU时间总计，单位1/100秒COMMAND — 进程名称（命令名/命令行） top交互执行top命令之后即进入top信息展示界面，可以使用命令行进行交互 top界面 按1显示多核cpu的使用情况 top界面默认按cpu的使用降序排序 使用shift+&gt;和shift+&lt;来改变排序的指标 top界面 按x高亮排序的指标 top其他使用技巧 h 显示帮助画面，给出一些简短的命令总结说明 k 终止一个进程 i 忽略闲置和僵死进程。这是一个开关式命令 q 退出程序 r 重新安排一个进程的优先级别 S 切换到累计模式 s 改变两次刷新之间的延迟时间（单位为s），如果有小数，就换算成ms。输入0值则系统将不断刷新，默认值是5s f或者F 从当前显示中添加或者删除项目 o或者O 改变显示项目的顺序 l 切换显示平均负载和启动时间信息 m 切换显示内存信息 t 切换显示进程和CPU状态信息 c 切换显示命令名称和完整命令行 M 根据驻留内存大小进行排序 P 根据CPU使用百分比大小进行排序 T 根据时间/累计时间进行排序 W 将当前设置写入~/.toprc文件中 说明在top命令界面中，几乎不使用交互命令，在排查问题时，一般紧盯cpu使用高的线程即可。]]></content>
+      <categories>
+        <category>微服务问题定位</category>
+      </categories>
+      <tags>
+        <tag>linux命令</tag>
+        <tag>微服务</tag>
+        <tag>进程,线程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Hello World]]></title>
+    <url>%2F2018%2F01%2F24%2Fhello-world%2F</url>
+    <content type="text"><![CDATA[Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick StartCreate a new post1$ hexo new "My New Post" More info: Writing Run server1$ hexo server More info: Server Generate static files1$ hexo generate More info: Generating Deploy to remote sites1$ hexo deploy More info: Deployment]]></content>
+      <categories>
+        <category>迎新</category>
+      </categories>
+      <tags>
+        <tag>welcome</tag>
+        <tag>hello</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[梁希森林公园]]></title>
+    <url>%2F2017%2F04%2F04%2F%E6%A2%81%E5%B8%8C%E6%A3%AE%E6%9E%97%E5%85%AC%E5%9B%AD%2F</url>
+    <content type="text"><![CDATA[写博客以来，笔者一直用github作为图床，但当图片的大小超过一定值打开github链接就会直接下载，无法作为url链接，所以将图片暂放微博。 我与梁希先生 人生得意须尽欢 流水潺潺 狗年行大运]]></content>
+      <categories>
+        <category>生活</category>
+      </categories>
+      <tags>
+        <tag>生活</tag>
+        <tag>自然环境</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[跆拳道]]></title>
+    <url>%2F2016%2F06%2F13%2F%E8%B7%86%E6%8B%B3%E9%81%93%2F</url>
+    <content type="text"><![CDATA[跆拳道 人不疯狂枉少年]]></content>
+      <categories>
+        <category>生活</category>
+      </categories>
+      <tags>
+        <tag>生活</tag>
+        <tag>校园</tag>
+      </tags>
+  </entry>
 </search>
