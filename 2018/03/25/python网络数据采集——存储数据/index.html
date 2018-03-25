@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="python网络爬虫," />
 
 
 
@@ -79,16 +79,18 @@
 
 
 
-<meta name="description" content="君埋泉下泥销骨 我寄人间朝与暮 沧海桑田 也输 一纸流年 我曾 把那 蒹葭 叹几遍 才留得 风花雪月几更天">
-<meta property="og:type" content="website">
-<meta property="og:title" content="wyc-blog">
-<meta property="og:url" content="http://yoursite.com/archives/2018/page/3/index.html">
+<meta name="description" content="文件下载12345678910111213抛出一个问题：对于爬虫而言，链接中的文件是下载呢，还是只是保存url链接，使用时直接链路？这里我总结我所知道的优缺点：不下载优点：1.爬虫运行更快，耗费的流量更少2.可以节省很多的存储空间3.存储url的代码更容易写，不需要实现文件下载代码4.降低目标主机服务器的负载缺点：1.盗链，每个网站可能会实施防盗链措施2.文件仍然在别人服务器上，跟着别人的节凑走3">
+<meta name="keywords" content="python网络爬虫">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python网络数据采集——存储数据">
+<meta property="og:url" content="http://yoursite.com/2018/03/25/python网络数据采集——存储数据/index.html">
 <meta property="og:site_name" content="wyc-blog">
-<meta property="og:description" content="君埋泉下泥销骨 我寄人间朝与暮 沧海桑田 也输 一纸流年 我曾 把那 蒹葭 叹几遍 才留得 风花雪月几更天">
+<meta property="og:description" content="文件下载12345678910111213抛出一个问题：对于爬虫而言，链接中的文件是下载呢，还是只是保存url链接，使用时直接链路？这里我总结我所知道的优缺点：不下载优点：1.爬虫运行更快，耗费的流量更少2.可以节省很多的存储空间3.存储url的代码更容易写，不需要实现文件下载代码4.降低目标主机服务器的负载缺点：1.盗链，每个网站可能会实施防盗链措施2.文件仍然在别人服务器上，跟着别人的节凑走3">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-03-25T10:02:10.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="wyc-blog">
-<meta name="twitter:description" content="君埋泉下泥销骨 我寄人间朝与暮 沧海桑田 也输 一纸流年 我曾 把那 蒹葭 叹几遍 才留得 风花雪月几更天">
+<meta name="twitter:title" content="python网络数据采集——存储数据">
+<meta name="twitter:description" content="文件下载12345678910111213抛出一个问题：对于爬虫而言，链接中的文件是下载呢，还是只是保存url链接，使用时直接链路？这里我总结我所知道的优缺点：不下载优点：1.爬虫运行更快，耗费的流量更少2.可以节省很多的存储空间3.存储url的代码更容易写，不需要实现文件下载代码4.降低目标主机服务器的负载缺点：1.盗链，每个网站可能会实施防盗链措施2.文件仍然在别人服务器上，跟着别人的节凑走3">
 
 
 
@@ -118,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/archives/2018/page/3/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/03/25/python网络数据采集——存储数据/"/>
 
 
 
 
 
-  <title>归档 | wyc-blog</title>
+  <title>python网络数据采集——存储数据 | wyc-blog</title>
   
 
 
@@ -143,7 +145,7 @@
     
   
 
-  <div class="container sidebar-position-right page-archive">
+  <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -281,410 +283,178 @@
           <div id="content" class="content">
             
 
+  <div id="posts" class="posts-expand">
+    
+
+  
+
   
   
   
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
 
-      <span class="archive-page-counter">
-        
-        
-         
-        
-        OK! 目前共计 36 篇日志。 继续努力。
-      </span>
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/25/python网络数据采集——存储数据/">
 
-      
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wyc">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/yunchangwang/blogs/master/admin/head.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="wyc-blog">
+    </span>
+
+    
+      <header class="post-header">
 
         
         
+          <h1 class="post-title" itemprop="name headline">python网络数据采集——存储数据</h1>
         
 
-        
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-25T17:06:25+08:00">
+                2018-03-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
           
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2018">2018</h1>
-          </div>
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/01/30/hexo防止敏感数据部署/" itemprop="url">
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
               
-                <span itemprop="name">hexo防止敏感数据部署</span>
+                <span class="post-meta-item-text">分类于</span>
               
-            </a>
-        
-      </h2>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
+                  </a>
+                </span>
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-01-30T18:39:43+08:00"
-              content="2018-01-30" >
-          01-30
-        </time>
-      </div>
+                
+                
+              
+            </span>
+          
 
-    </header>
-  </article>
+          
+            
+          
 
+          
+          
 
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/01/30/linux命令性能监控及优化/" itemprop="url">
-              
-                <span itemprop="name">linux命令性能监控及优化</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-01-30T12:31:38+08:00"
-              content="2018-01-30" >
-          01-30
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
       
 
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/01/30/linux常用命令/" itemprop="url">
-              
-                <span itemprop="name">linux常用命令</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-01-30T10:55:07+08:00"
-              content="2018-01-30" >
-          01-30
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
+      
+        <h2 id="文件下载"><a href="#文件下载" class="headerlink" title="文件下载"></a>文件下载</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">抛出一个问题：</span><br><span class="line">对于爬虫而言，链接中的文件是下载呢，还是只是保存url链接，使用时直接链路？</span><br><span class="line"></span><br><span class="line">这里我总结我所知道的优缺点：</span><br><span class="line">不下载优点：</span><br><span class="line">1.爬虫运行更快，耗费的流量更少</span><br><span class="line">2.可以节省很多的存储空间</span><br><span class="line">3.存储url的代码更容易写，不需要实现文件下载代码</span><br><span class="line">4.降低目标主机服务器的负载</span><br><span class="line">缺点：</span><br><span class="line">1.盗链，每个网站可能会实施防盗链措施</span><br><span class="line">2.文件仍然在别人服务器上，跟着别人的节凑走</span><br><span class="line">3.盗链的图片容易改变</span><br></pre></td></tr></table></figure>
+<p>在python中可以引入 urlretrieve 进行文件的直接下载，在下载之前找到链接是必须的，这就要使用之前的 find 函数了。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">from urllib.request import urlopen</span><br><span class="line">from urllib.request import urlretrieve</span><br><span class="line">from bs4 import BeautifulSoup</span><br><span class="line"></span><br><span class="line">html = urlopen(&quot;http://www.pythonscraping.com/&quot;)</span><br><span class="line">bsObject = BeautifulSoup(html, &quot;html.parser&quot;)</span><br><span class="line">b = bsObject.find(&quot;a&quot;, &#123;&quot;id&quot;: &quot;logo&quot;&#125;)</span><br><span class="line">img = b.find(&quot;img&quot;)</span><br><span class="line">location = img[&quot;src&quot;]</span><br><span class="line">print(location)</span><br><span class="line">urlretrieve(location, &quot;logo.jpg&quot;)</span><br></pre></td></tr></table></figure></p>
+<p>用爬虫下载文件会使你的电脑处于危险的环境当中，因为不知道下载的文件是否恶意软件。<br>如果不能确定下载的文件是否安全，请不要轻易尝试这个.py脚本。</p>
+<h2 id="以csv格式存储"><a href="#以csv格式存储" class="headerlink" title="以csv格式存储"></a>以csv格式存储</h2><p>csv，Comma-Separated Values，逗号分隔值，是存储表格数据的常用格式，如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">fruit,cost</span><br><span class="line">apple,1.00</span><br><span class="line">banana,0.30</span><br><span class="line">pear,1.25</span><br></pre></td></tr></table></figure></p>
+<p>参考以下代码，如何将数据写入到csv格式文件中：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"># 这边在引入的时候要注意，千万不要引入 python3 框架中的模块</span><br><span class="line">import _csv as csv</span><br><span class="line"># import os</span><br><span class="line"></span><br><span class="line">path = &quot;./csv/test.csv&quot;</span><br><span class="line"># if not os.path.exists(path):</span><br><span class="line">#     os.mkdir(path)</span><br><span class="line"></span><br><span class="line">with open(path, &apos;w+&apos;) as csvFile:</span><br><span class="line">    try:</span><br><span class="line">        writer = csv.writer(csvFile)</span><br><span class="line">        writer.writerow((&apos;number&apos;, &apos;number plus 2&apos;, &apos;number times 2&apos;))</span><br><span class="line">        for i in range(10):</span><br><span class="line">            writer.writerow((i, i+2, i*2))</span><br><span class="line">    finally:</span><br><span class="line">        csvFile.close()</span><br></pre></td></tr></table></figure></p>
+<p>python 中新建文件的机制考虑的非常周到，如果文件不存在则会创建。然后注意引入代码上面的注释，python3 框架中也存在csv模块，应该引入内置申明中的包。</p>
+<p>csv 的数据形式和html中的表格数据展示相似，所以一般用来存储爬取到的表格中的数据。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">import _csv as csv</span><br><span class="line">from urllib.request import urlopen</span><br><span class="line">from bs4 import BeautifulSoup</span><br><span class="line"></span><br><span class="line">html = urlopen(&quot;http://en.wikipedia.org/wiki/Comparison_of_text_editors&quot;)</span><br><span class="line">bsObj = BeautifulSoup(html, &quot;html.parser&quot;)</span><br><span class="line"># 获取页面上的第一个表格</span><br><span class="line">table = bsObj.find_all(&quot;table&quot;, &#123;&quot;class&quot;: &quot;wikitable&quot;&#125;)[0]</span><br><span class="line"># print(table)</span><br><span class="line">rows = table.find_all(&quot;tr&quot;)</span><br><span class="line"># print(rows)</span><br><span class="line"></span><br><span class="line">path = &quot;./csv/table.csv&quot;</span><br><span class="line">with open(path, &quot;wt&quot;, newline=&quot;&quot;, encoding=&quot;utf-8&quot;) as csvFile:</span><br><span class="line">    writer = csv.writer(csvFile)</span><br><span class="line">    try:</span><br><span class="line">        for row in rows:</span><br><span class="line">            csvRow = []</span><br><span class="line">            for cell in row.find_all(&#123;&quot;td&quot;, &quot;th&quot;&#125;):</span><br><span class="line">                csvRow.append(cell.get_text())</span><br><span class="line">            writer.writerow(csvRow)</span><br><span class="line">    finally:</span><br><span class="line">        csvFile.close()</span><br></pre></td></tr></table></figure></p>
+<h2 id="mysql整合"><a href="#mysql整合" class="headerlink" title="mysql整合"></a>mysql整合</h2><p>之所以需要mysql，因为爬取的数据不能光在内存中处理，还需要进行持久化处理。因为我们可能需要将数据进行展示或者进行后一步的处理。</p>
+<p>关于mysql的下载，自行google。<br>macOS系统 可以使用 brew install mysql命令下载。<br>这里使用 pymysql 这个第三方工具整合 mysql ，可以使用pip进行下载。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">import pymysql</span><br><span class="line"></span><br><span class="line"># 打开数据库</span><br><span class="line">db = pymysql.connect(&quot;localhost&quot;, &quot;root&quot;, None, &quot;wyc&quot;)</span><br><span class="line"></span><br><span class="line"># 创建游标</span><br><span class="line">cursor = db.cursor()</span><br><span class="line"></span><br><span class="line"># 执行sql语句</span><br><span class="line">cursor.execute(&quot;select version()&quot;)</span><br><span class="line"></span><br><span class="line"># 打印信息</span><br><span class="line">print(cursor.fetchone())</span><br><span class="line"></span><br><span class="line"># 关闭数据库</span><br><span class="line">db.close()</span><br></pre></td></tr></table></figure></p>
+<p>这段程序有两个对象:连接对象(conn )和光标对象(cur )，一个连接可以有很多个光标。一个光标跟踪一种状态 (state)信息，用完光标和连接之后，千万记得把它们关闭。如果不关闭就会导致连接泄漏 (connection leak)。</p>
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/01/29/微服务问题定位——jmap/" itemprop="url">
-              
-                <span itemprop="name">微服务问题定位——jmap</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-01-29T23:54:55+08:00"
-              content="2018-01-29" >
-          01-29
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/01/29/微服务问题定位——jstack/" itemprop="url">
-              
-                <span itemprop="name">微服务问题定位——jstack</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-01-29T08:46:37+08:00"
-              content="2018-01-29" >
-          01-29
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/01/28/gitbook目录折叠/" itemprop="url">
-              
-                <span itemprop="name">gitbook目录折叠</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-01-28T17:13:39+08:00"
-              content="2018-01-28" >
-          01-28
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/01/28/如何在本地搭建gitbook/" itemprop="url">
-              
-                <span itemprop="name">如何在本地搭建gitbook</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-01-28T16:37:38+08:00"
-              content="2018-01-28" >
-          01-28
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/01/28/微服务问题定位——du/" itemprop="url">
-              
-                <span itemprop="name">微服务问题定位——du</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-01-28T16:25:21+08:00"
-              content="2018-01-28" >
-          01-28
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/01/28/微服务问题定位——df/" itemprop="url">
-              
-                <span itemprop="name">微服务问题定位——df</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-01-28T16:19:46+08:00"
-              content="2018-01-28" >
-          01-28
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/01/28/微服务问题定位——ifstat/" itemprop="url">
-              
-                <span itemprop="name">微服务问题定位——ifstat</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-01-28T16:15:20+08:00"
-              content="2018-01-28" >
-          01-28
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
     </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/python网络爬虫/" rel="tag"># python网络爬虫</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/19/python网络数据采集——使用API/" rel="next" title="python网络数据采集——使用API">
+                <i class="fa fa-chevron-left"></i> python网络数据采集——使用API
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
-
-  
-  <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/archives/2018/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/archives/2018/">1</a><a class="page-number" href="/archives/2018/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/archives/2018/page/4/">4</a><a class="extend next" rel="next" href="/archives/2018/page/4/"><i class="fa fa-angle-right"></i></a>
-  </nav>
+  </article>
 
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -692,6 +462,17 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+      
+        <div onclick="showGitment()" id="gitment-display-button">显示 Gitment 评论</div>
+        <div id="gitment-container" style="display:none"></div>
+      
+    </div>
+
+  
+
 
         </div>
         
@@ -712,8 +493,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -787,6 +577,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#文件下载"><span class="nav-number">1.</span> <span class="nav-text">文件下载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#以csv格式存储"><span class="nav-number">2.</span> <span class="nav-text">以csv格式存储</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mysql整合"><span class="nav-number">3.</span> <span class="nav-text">mysql整合</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -920,6 +726,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
