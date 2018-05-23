@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="mysql," />
+  <meta name="keywords" content="," />
 
 
 
@@ -81,9 +81,9 @@
 
 <meta name="description" content="mysql基础参数不用的mysql版本，加锁的过程不一样；mysql的数据库引擎和事务隔离方式也对分析死锁有帮助。这里涉及的mysql基础参数的查询方式与此次错误无关。1234567891011121314151617181920212223mysql&amp;gt;select version(); # 查询mysql的版本+-----------+| version() |+-----------+|">
 <meta name="keywords" content="mysql">
-<meta property="og:type" content="article">
+<meta property="og:type" content="website">
 <meta property="og:title" content="mysql死锁——insert操作死锁">
-<meta property="og:url" content="http://yoursite.com/2018/05/21/mysql死锁——insert操作死锁/index.html">
+<meta property="og:url" content="http://yoursite.com/mysql死锁——insert操作死锁.html">
 <meta property="og:site_name" content="wyc-blog">
 <meta property="og:description" content="mysql基础参数不用的mysql版本，加锁的过程不一样；mysql的数据库引擎和事务隔离方式也对分析死锁有帮助。这里涉及的mysql基础参数的查询方式与此次错误无关。1234567891011121314151617181920212223mysql&amp;gt;select version(); # 查询mysql的版本+-----------+| version() |+-----------+|">
 <meta property="og:locale" content="zh-CN">
@@ -120,7 +120,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/05/21/mysql死锁——insert操作死锁/"/>
+  <link rel="canonical" href="http://yoursite.com/mysql死锁——insert操作死锁.html"/>
 
 
 
@@ -285,108 +285,24 @@
 
   <div id="posts" class="posts-expand">
     
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/21/mysql死锁——insert操作死锁/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="wyc">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/yunchangwang/blogs/master/admin/head.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="wyc-blog">
-    </span>
-
     
+    
+    <div class="post-block page">
       <header class="post-header">
 
-        
-        
-          <h1 class="post-title" itemprop="name headline">mysql死锁——insert操作死锁</h1>
-        
+	<h1 class="post-title" itemprop="name headline">mysql死锁——insert操作死锁</h1>
 
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-21T20:46:42+08:00">
-                2018-05-21
-              </time>
-            
 
-            
 
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/DBA/" itemprop="url" rel="index">
-                    <span itemprop="name">DBA</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
+</header>
 
       
       
-
       
-        <h2 id="mysql基础参数"><a href="#mysql基础参数" class="headerlink" title="mysql基础参数"></a>mysql基础参数</h2><p>不用的mysql版本，加锁的过程不一样；mysql的数据库引擎和事务隔离方式也对分析死锁有帮助。这里涉及的mysql基础参数的查询方式与此次错误无关。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt;select version(); # 查询mysql的版本</span><br><span class="line">+-----------+</span><br><span class="line">| version() |</span><br><span class="line">+-----------+</span><br><span class="line">| 5.7.9-log |</span><br><span class="line">+-----------+</span><br><span class="line"># 这个是测试环境mysql版本</span><br><span class="line"></span><br><span class="line">mysql&gt;show variables like &apos;%engine%&apos;; # 查询mysql的数据库引擎</span><br><span class="line">+----------------------------+--------+</span><br><span class="line">| Variable_name              | Value  |</span><br><span class="line">+----------------------------+--------+</span><br><span class="line">| default_storage_engine     | InnoDB |</span><br><span class="line">| default_tmp_storage_engine | InnoDB |</span><br><span class="line">| storage_engine             | InnoDB |</span><br><span class="line">+----------------------------+--------+</span><br><span class="line"></span><br><span class="line">mysql&gt;select @@global.tx_isolation, @@session.tx_isolation, @@tx_isolation; # 查询mysql的事务隔离方式</span><br><span class="line">+-----------------------+------------------------+-----------------+</span><br><span class="line">| @@global.tx_isolation | @@session.tx_isolation | @@tx_isolation  |</span><br><span class="line">+-----------------------+------------------------+-----------------+</span><br><span class="line">| REPEATABLE-READ       | REPEATABLE-READ        | REPEATABLE-READ |</span><br><span class="line">+-----------------------+------------------------+-----------------+</span><br></pre></td></tr></table></figure></p>
+      <div class="post-body">
+        
+        
+          <h2 id="mysql基础参数"><a href="#mysql基础参数" class="headerlink" title="mysql基础参数"></a>mysql基础参数</h2><p>不用的mysql版本，加锁的过程不一样；mysql的数据库引擎和事务隔离方式也对分析死锁有帮助。这里涉及的mysql基础参数的查询方式与此次错误无关。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt;select version(); # 查询mysql的版本</span><br><span class="line">+-----------+</span><br><span class="line">| version() |</span><br><span class="line">+-----------+</span><br><span class="line">| 5.7.9-log |</span><br><span class="line">+-----------+</span><br><span class="line"># 这个是测试环境mysql版本</span><br><span class="line"></span><br><span class="line">mysql&gt;show variables like &apos;%engine%&apos;; # 查询mysql的数据库引擎</span><br><span class="line">+----------------------------+--------+</span><br><span class="line">| Variable_name              | Value  |</span><br><span class="line">+----------------------------+--------+</span><br><span class="line">| default_storage_engine     | InnoDB |</span><br><span class="line">| default_tmp_storage_engine | InnoDB |</span><br><span class="line">| storage_engine             | InnoDB |</span><br><span class="line">+----------------------------+--------+</span><br><span class="line"></span><br><span class="line">mysql&gt;select @@global.tx_isolation, @@session.tx_isolation, @@tx_isolation; # 查询mysql的事务隔离方式</span><br><span class="line">+-----------------------+------------------------+-----------------+</span><br><span class="line">| @@global.tx_isolation | @@session.tx_isolation | @@tx_isolation  |</span><br><span class="line">+-----------------------+------------------------+-----------------+</span><br><span class="line">| REPEATABLE-READ       | REPEATABLE-READ        | REPEATABLE-READ |</span><br><span class="line">+-----------------------+------------------------+-----------------+</span><br></pre></td></tr></table></figure></p>
 <h2 id="InnoDB锁类型"><a href="#InnoDB锁类型" class="headerlink" title="InnoDB锁类型"></a>InnoDB锁类型</h2><p>InnoDB的锁类型有很多，根据网上的博客，笔者在此进行整理。或者读者可以参考<a href="https://blog.csdn.net/zhanghongzheng3213/article/details/53436240" target="_blank" rel="noopener">csdn</a>。</p>
 <h3 id="1-基本锁"><a href="#1-基本锁" class="headerlink" title="1.基本锁"></a><strong>1.基本锁</strong></h3><p>1.1共享锁(Shared Locks：S锁)<br>   mysql允许持有S锁的事务读取一行，加了S锁的记录允许其他事务再加上S锁，但加不了X锁(参考下方)。<br>1.2排他锁(Exclusive Locks：X锁)<br>   mysql允许持有X锁的事务更新或删除一行，加了X锁的记录不允许其他事务再加上S锁或者X锁。</p>
 <h3 id="2-记录锁-Record-Locks"><a href="#2-记录锁-Record-Locks" class="headerlink" title="2.记录锁(Record Locks)"></a><strong>2.记录锁(Record Locks)</strong></h3><p>   记录锁, 仅仅锁住索引记录的一行。<br>   <strong>单条索引记录上加锁，Record lock锁住的永远是索引，而非记录本身</strong>，即使该表上没有任何索引，那么innodb会在后台创建一个隐藏的聚集主键索引，那么锁住的就是这个隐藏的聚集主键索引。所以说当一条sql没有走任何索引时，那么将会在每一条聚集索引后面加X锁，这个类似于表锁，但原理上和表锁应该是完全不同的。</p>
@@ -405,67 +321,15 @@
 <h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>从日志上看是并发情况下，gen_id方法引起的错误。该方法只有在测试环境下存在，release环境和prod环境使用的阿里云的自增机制，资源不在同一个库里。guox推测线上不会出现这样的问题，release发布之后拭目以待。</p>
 <p>长久的解决方案：将测试环境的自增机制的资源放到其他的库中；或者修改交互方案，改变ajax并发的请求，使用循环http请求的方式(以前的业务一般都是这种方式，所以从来没有暴露过死锁的问题)。</p>
 
+        
+      </div>
+      
+      
       
     </div>
     
     
     
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/mysql/" rel="tag"># mysql</a>
-          
-        </div>
-      
-
-      
-      
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2018/04/11/关于jackson转化json的原理/" rel="next" title="关于jackson转化json的原理">
-                <i class="fa fa-chevron-left"></i> 关于jackson转化json的原理
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/07/26/软件开发不只写代码那么简单——程序员的8种境界/" rel="prev" title="软件开发不只写代码那么简单——程序员的8种境界">
-                软件开发不只写代码那么简单——程序员的8种境界 <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-
-    <div class="post-spread">
-      
-    </div>
   </div>
 
 
@@ -534,7 +398,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-count">52</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -545,7 +409,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -556,7 +420,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">26</span>
+                  <span class="site-state-item-count">25</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
