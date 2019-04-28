@@ -296,7 +296,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/12/生产问题排查指南——问题排查方法/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/11/关于jackson转化json的原理/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="wyc">
@@ -315,7 +315,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/02/12/生产问题排查指南——问题排查方法/" itemprop="url">生产问题排查指南——问题排查方法</a></h1>
+                <a class="post-title-link" href="/2018/04/11/关于jackson转化json的原理/" itemprop="url">关于jackson转化json的原理</a></h1>
         
 
         <div class="post-meta">
@@ -327,8 +327,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-12T18:17:37+08:00">
-                2018-02-12
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-11T11:26:15+08:00">
+                2018-04-11
               </time>
             
 
@@ -350,8 +350,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/生产环境/" itemprop="url" rel="index">
-                    <span itemprop="name">生产环境</span>
+                  <a href="/categories/spring/" itemprop="url" rel="index">
+                    <span itemprop="name">spring</span>
                   </a>
                 </span>
 
@@ -389,15 +389,11 @@
       
         
           
-          问题排查方法这篇博客主要阐述排查的一些指标，对一些可能造成生产问题的注意点做指导概览。
-指标分类基础指标基础指标主要有以下几点：
-
-cpu负载：cpu负载高的情况，将直接导致系统吞吐下降。
-磁盘：磁盘
+          背景web工程中，数据交互是不可避免的，相比xml，json是现在流行的数据交互。在调试接口中，发现返回字段的大小写不是我所期望的，原本应该返回的nNum字段变成了nnum，这样就导致和前端约定的有出
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/02/12/生产问题排查指南——问题排查方法/#more" rel="contents">
+            <a class="btn" href="/2018/04/11/关于jackson转化json的原理/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -448,7 +444,7 @@ cpu负载：cpu负载高的情况，将直接导致系统吞吐下降。
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/12/生产问题排查指南——指标查询指令与方法/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/25/python网络数据采集——存储数据/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="wyc">
@@ -467,7 +463,7 @@ cpu负载：cpu负载高的情况，将直接导致系统吞吐下降。
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/02/12/生产问题排查指南——指标查询指令与方法/" itemprop="url">生产问题排查指南——指标查询指令与方法</a></h1>
+                <a class="post-title-link" href="/2018/03/25/python网络数据采集——存储数据/" itemprop="url">python网络数据采集——存储数据</a></h1>
         
 
         <div class="post-meta">
@@ -479,156 +475,8 @@ cpu负载：cpu负载高的情况，将直接导致系统吞吐下降。
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-12T18:16:25+08:00">
-                2018-02-12
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/生产环境/" itemprop="url" rel="index">
-                    <span itemprop="name">生产环境</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          生产问题指标cpu中央处理器cpu占用率与负载情况是操作系统繁忙程度的一项总要的指标，它直接影响着应用的吞吐。top命令经常用来监控linux系统状况，也直观展示了系统cpu使用情况。读者可以参考微服
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/02/12/生产问题排查指南——指标查询指令与方法/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/12/如何在mac上搭建python环境并使用docx模块/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="wyc">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/yunchangwang/blogs/master/admin/head.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="wyc-blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/02/12/如何在mac上搭建python环境并使用docx模块/" itemprop="url">如何在mac上搭建python环境并使用docx模块</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-12T16:12:03+08:00">
-                2018-02-12
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-25T17:06:25+08:00">
+                2018-03-25
               </time>
             
 
@@ -689,11 +537,11 @@ cpu负载：cpu负载高的情况，将直接导致系统吞吐下降。
       
         
           
-          背景之前接手到一个处理word文档的项目，需要读取word内容，并对读取的字符串进行一系列的处理。一开始笔者使用java进行处理，需要引入第三方模块——poi。说实话，这个第三方模块对于word的处理
+          文件下载12345678910111213抛出一个问题：对于爬虫而言，链接中的文件是下载呢，还是只是保存url链接，使用时直接链路？这里我总结我所知道的优缺点：不下载优点：1.爬虫运行更快，耗费的流量
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/02/12/如何在mac上搭建python环境并使用docx模块/#more" rel="contents">
+            <a class="btn" href="/2018/03/25/python网络数据采集——存储数据/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -744,7 +592,7 @@ cpu负载：cpu负载高的情况，将直接导致系统吞吐下降。
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/11/jvm——新生代-老年代和持久代/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/19/python网络数据采集——使用API/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="wyc">
@@ -763,7 +611,7 @@ cpu负载：cpu负载高的情况，将直接导致系统吞吐下降。
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/02/11/jvm——新生代-老年代和持久代/" itemprop="url">jvm——新生代,老年代和持久代</a></h1>
+                <a class="post-title-link" href="/2018/03/19/python网络数据采集——使用API/" itemprop="url">python网络数据采集——使用API</a></h1>
         
 
         <div class="post-meta">
@@ -775,8 +623,8 @@ cpu负载：cpu负载高的情况，将直接导致系统吞吐下降。
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-11T11:42:19+08:00">
-                2018-02-11
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-19T16:54:48+08:00">
+                2018-03-19
               </time>
             
 
@@ -798,8 +646,8 @@ cpu负载：cpu负载高的情况，将直接导致系统吞吐下降。
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/jvm/" itemprop="url" rel="index">
-                    <span itemprop="name">jvm</span>
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
                   </a>
                 </span>
 
@@ -837,14 +685,11 @@ cpu负载：cpu负载高的情况，将直接导致系统吞吐下降。
       
         
           
-          新生代，老年代和永久代java中堆是jvm所管理的最大的一块内存空间，主要用于存放各种类的实例对象。jvm中内存的分配有如下公式：
-
-堆 = 年轻代 + 老年代
-年轻代 = eden space(新生
+          API在网络爬虫的世界里，你可以通过爬取html页面上的信息来收集信息，而使用开放的API接口是另一种方式。这里开放的API接口指的是：服务器可访问的http请求。其实html中的数据也是通过访问ht
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/02/11/jvm——新生代-老年代和持久代/#more" rel="contents">
+            <a class="btn" href="/2018/03/19/python网络数据采集——使用API/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -895,7 +740,7 @@ cpu负载：cpu负载高的情况，将直接导致系统吞吐下降。
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/31/linux编辑器——vim/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/14/python网络数据采集——链接爬取和跳转/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="wyc">
@@ -914,7 +759,7 @@ cpu负载：cpu负载高的情况，将直接导致系统吞吐下降。
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/01/31/linux编辑器——vim/" itemprop="url">linux编辑器——vim</a></h1>
+                <a class="post-title-link" href="/2018/03/14/python网络数据采集——链接爬取和跳转/" itemprop="url">python网络数据采集——链接爬取和跳转</a></h1>
         
 
         <div class="post-meta">
@@ -926,8 +771,8 @@ cpu负载：cpu负载高的情况，将直接导致系统吞吐下降。
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-31T18:59:31+08:00">
-                2018-01-31
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-14T08:53:10+08:00">
+                2018-03-14
               </time>
             
 
@@ -949,8 +794,8 @@ cpu负载：cpu负载高的情况，将直接导致系统吞吐下降。
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/vim/" itemprop="url" rel="index">
-                    <span itemprop="name">vim</span>
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
                   </a>
                 </span>
 
@@ -988,11 +833,11 @@ cpu负载：cpu负载高的情况，将直接导致系统吞吐下降。
       
         
           
-          VIM编辑器背景vi在mac下严格意义上讲不是一个简单的命令，而是unix系列下的自带的编译器，笔者没记错发明这编译器的家伙是个大胡子，一直致力于软件开源的维护和倡导$vi filename 这是开始
+          网页跳转在网络数据采集中，如果只对单页面进行操作，那么这个爬虫将毫无意义。因为采集的数据往往是分散在不同的网页的，所以对于单页面而言，爬虫需要采集页面中的链接，并且进行跳转。网页跳转，在正在采集的页面
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/01/31/linux编辑器——vim/#more" rel="contents">
+            <a class="btn" href="/2018/03/14/python网络数据采集——链接爬取和跳转/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1043,7 +888,7 @@ cpu负载：cpu负载高的情况，将直接导致系统吞吐下降。
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/31/linux命令——crontab/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/11/python网络数据采集——BeautifulSoup/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="wyc">
@@ -1062,7 +907,7 @@ cpu负载：cpu负载高的情况，将直接导致系统吞吐下降。
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/01/31/linux命令——crontab/" itemprop="url">linux命令——crontab</a></h1>
+                <a class="post-title-link" href="/2018/03/11/python网络数据采集——BeautifulSoup/" itemprop="url">python网络数据采集——BeautifulSoup</a></h1>
         
 
         <div class="post-meta">
@@ -1074,8 +919,8 @@ cpu负载：cpu负载高的情况，将直接导致系统吞吐下降。
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-31T18:29:49+08:00">
-                2018-01-31
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-11T11:27:57+08:00">
+                2018-03-11
               </time>
             
 
@@ -1097,8 +942,8 @@ cpu负载：cpu负载高的情况，将直接导致系统吞吐下降。
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/linux命令/" itemprop="url" rel="index">
-                    <span itemprop="name">linux命令</span>
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
                   </a>
                 </span>
 
@@ -1136,12 +981,11 @@ cpu负载：cpu负载高的情况，将直接导致系统吞吐下降。
       
         
           
-          crontab作用自定义定时任务笔者一般用这个命令来提醒事项，适用于基本每天执行的事项
-option参数-e 编辑cron脚本文件，可以指定编辑器，默认是vi编辑器-l 列出当前用户下的cron任务-
+          BeautifulSoupBeautifulSoup 是 python 中最受欢迎的 html 解析库。如果 BeautifulSoup 这个第三方库不能解决问题，读者可以考虑另外两个库：123456
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/01/31/linux命令——crontab/#more" rel="contents">
+            <a class="btn" href="/2018/03/11/python网络数据采集——BeautifulSoup/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1192,7 +1036,7 @@ option参数-e 编辑cron脚本文件，可以指定编辑器，默认是vi编�
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/31/linux命令——awk/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/09/python网络数据采集——网络连接/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="wyc">
@@ -1211,7 +1055,7 @@ option参数-e 编辑cron脚本文件，可以指定编辑器，默认是vi编�
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/01/31/linux命令——awk/" itemprop="url">linux命令——awk</a></h1>
+                <a class="post-title-link" href="/2018/03/09/python网络数据采集——网络连接/" itemprop="url">python网络数据采集——网络连接</a></h1>
         
 
         <div class="post-meta">
@@ -1223,8 +1067,8 @@ option参数-e 编辑cron脚本文件，可以指定编辑器，默认是vi编�
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-31T16:36:00+08:00">
-                2018-01-31
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-09T20:27:29+08:00">
+                2018-03-09
               </time>
             
 
@@ -1246,8 +1090,8 @@ option参数-e 编辑cron脚本文件，可以指定编辑器，默认是vi编�
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/linux命令/" itemprop="url" rel="index">
-                    <span itemprop="name">linux命令</span>
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
                   </a>
                 </span>
 
@@ -1285,12 +1129,11 @@ option参数-e 编辑cron脚本文件，可以指定编辑器，默认是vi编�
       
         
           
-          awk用法awk ‘{pattern + action}’ {filenames}
-使用方式awk -F 分隔符 ‘{command操作}’awk -f awk-script-file input-f
+          初识urllib要采集信息，首先你需要将html文件抓取到本地，python中使用urllib这个包来进行网络连接，并且进行html的抓取，如果是python2.x版本，使用的是urllib2这个包。
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/01/31/linux命令——awk/#more" rel="contents">
+            <a class="btn" href="/2018/03/09/python网络数据采集——网络连接/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1341,7 +1184,7 @@ option参数-e 编辑cron脚本文件，可以指定编辑器，默认是vi编�
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/31/linux命令——sed/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/04/python网络数据采集——简介/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="wyc">
@@ -1360,7 +1203,7 @@ option参数-e 编辑cron脚本文件，可以指定编辑器，默认是vi编�
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/01/31/linux命令——sed/" itemprop="url">linux命令——sed</a></h1>
+                <a class="post-title-link" href="/2018/03/04/python网络数据采集——简介/" itemprop="url">python网络数据采集——简介</a></h1>
         
 
         <div class="post-meta">
@@ -1372,8 +1215,8 @@ option参数-e 编辑cron脚本文件，可以指定编辑器，默认是vi编�
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-31T16:30:16+08:00">
-                2018-01-31
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-04T15:21:34+08:00">
+                2018-03-04
               </time>
             
 
@@ -1395,8 +1238,8 @@ option参数-e 编辑cron脚本文件，可以指定编辑器，默认是vi编�
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/linux命令/" itemprop="url" rel="index">
-                    <span itemprop="name">linux命令</span>
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
                   </a>
                 </span>
 
@@ -1434,12 +1277,11 @@ option参数-e 编辑cron脚本文件，可以指定编辑器，默认是vi编�
       
         
           
-          sed系统mac系统用的是原生的bsd系列，而一般的linux系统用的是gnu系统，所以两者在某些命令是有区别的，sed命令位列其中
-区别mac上sed的添加和插入文本比较奇葩，需要如此:$sed “
+          简介网络数据采集(网络爬虫)，是一种网络数据的采集方式，又称为网页抓屏，数据挖掘，网络收割或者其他类似的版本。网络数据采集是一种通过多种手段收集网络数据的方式，比如通过api交互，当然如果你有毅力可以
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/01/31/linux命令——sed/#more" rel="contents">
+            <a class="btn" href="/2018/03/04/python网络数据采集——简介/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1490,7 +1332,7 @@ option参数-e 编辑cron脚本文件，可以指定编辑器，默认是vi编�
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/31/linux常用命令——补充/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/20/计算机网络——NAT/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="wyc">
@@ -1509,7 +1351,7 @@ option参数-e 编辑cron脚本文件，可以指定编辑器，默认是vi编�
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/01/31/linux常用命令——补充/" itemprop="url">linux常用命令——补充</a></h1>
+                <a class="post-title-link" href="/2018/02/20/计算机网络——NAT/" itemprop="url">计算机网络——NAT</a></h1>
         
 
         <div class="post-meta">
@@ -1521,8 +1363,8 @@ option参数-e 编辑cron脚本文件，可以指定编辑器，默认是vi编�
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-31T16:18:32+08:00">
-                2018-01-31
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-20T16:46:49+08:00">
+                2018-02-20
               </time>
             
 
@@ -1544,8 +1386,8 @@ option参数-e 编辑cron脚本文件，可以指定编辑器，默认是vi编�
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/linux命令/" itemprop="url" rel="index">
-                    <span itemprop="name">linux命令</span>
+                  <a href="/categories/计算机网络/" itemprop="url" rel="index">
+                    <span itemprop="name">计算机网络</span>
                   </a>
                 </span>
 
@@ -1583,12 +1425,11 @@ option参数-e 编辑cron脚本文件，可以指定编辑器，默认是vi编�
       
         
           
-          常用命令(补充)grep用法grep [-acinv][–color=auto] ‘查找字符串’ filename
-option参数-c 统计查找字符在文件中出现的次数-i 忽略大小写-v 反向查找，
+          简介NAT(Network Address Translation)，网络地址转换。NAT可以看成一个开放到公网(全球因特网)上的公用路由器，用来代理一个子网下的所有主机的请求和应答。NAT在转换的时
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/01/31/linux常用命令——补充/#more" rel="contents">
+            <a class="btn" href="/2018/02/20/计算机网络——NAT/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1639,7 +1480,7 @@ option参数-c 统计查找字符在文件中出现的次数-i 忽略大小写-v
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/31/linux命令文件上传与下载/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/20/计算机网络——DHCP/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="wyc">
@@ -1658,7 +1499,7 @@ option参数-c 统计查找字符在文件中出现的次数-i 忽略大小写-v
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/01/31/linux命令文件上传与下载/" itemprop="url">linux命令文件上传与下载</a></h1>
+                <a class="post-title-link" href="/2018/02/20/计算机网络——DHCP/" itemprop="url">计算机网络——DHCP</a></h1>
         
 
         <div class="post-meta">
@@ -1670,8 +1511,8 @@ option参数-c 统计查找字符在文件中出现的次数-i 忽略大小写-v
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-31T13:52:56+08:00">
-                2018-01-31
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-20T16:46:32+08:00">
+                2018-02-20
               </time>
             
 
@@ -1693,8 +1534,8 @@ option参数-c 统计查找字符在文件中出现的次数-i 忽略大小写-v
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/linux命令/" itemprop="url" rel="index">
-                    <span itemprop="name">linux命令</span>
+                  <a href="/categories/计算机网络/" itemprop="url" rel="index">
+                    <span itemprop="name">计算机网络</span>
                   </a>
                 </span>
 
@@ -1732,13 +1573,164 @@ option参数-c 统计查找字符在文件中出现的次数-i 忽略大小写-v
       
         
           
-          文件上传下载搭建实践环境这边使用笔者自己的电脑和windows电脑进行实践。
-利用ssh打通windows和mac打开mac的系统偏好设置中的共享，一般情况下没有界面展示的，需要使用搜索查找共享，
-然
+          简介DHCP(Dynamic Host Configuration)，即动态主机配置协议。由于DHCP具有能将主机连接进一个网络的网络相关方面的自动能力，故它又常被称为即插即用协议。DHCP协议维护了
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/01/31/linux命令文件上传与下载/#more" rel="contents">
+            <a class="btn" href="/2018/02/20/计算机网络——DHCP/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/18/网络攻防——ip地址/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wyc">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/yunchangwang/blogs/master/admin/head.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="wyc-blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/02/18/网络攻防——ip地址/" itemprop="url">网络攻防——ip地址</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-18T21:44:56+08:00">
+                2018-02-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/网络安全/" itemprop="url" rel="index">
+                    <span itemprop="name">网络安全</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          这边先预设几个问题
+一个组织分配ip地址的过程(涉及到ISP等概念)
+a,b,c,d,e类的ip地址
+如何知道一个主机的子网掩码，它第一跳的路由地址，dns服务器的地址
+DHCP动态分配地址
+什么是网
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/02/18/网络攻防——ip地址/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1780,7 +1772,7 @@ option参数-c 统计查找字符在文件中出现的次数-i 忽略大小写-v
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1830,7 +1822,7 @@ option参数-c 统计查找字符在文件中出现的次数-i 忽略大小写-v
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">56</span>
+                  <span class="site-state-item-count">67</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1841,7 +1833,7 @@ option参数-c 统计查找字符在文件中出现的次数-i 忽略大小写-v
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-count">19</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -1852,7 +1844,7 @@ option参数-c 统计查找字符在文件中出现的次数-i 忽略大小写-v
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-count">28</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
