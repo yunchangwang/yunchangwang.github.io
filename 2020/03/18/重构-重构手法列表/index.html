@@ -1,0 +1,1551 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/favicon.ico?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="非技术总结," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="重构技巧列表重新组织函数   技巧名称 说明 动机 备注     extract method 将代码放进独立的函数中，并让函数名解释该函数的用途 1.如果每个函数的粒度都很小，那么被复用的概率更大；2.高层的函数读起来像一系列注释(注释后的代码更容易提炼)；3.函数粒度小也更容易被覆写 提炼函数   inline method 函数本体和名称一样通俗易懂，在函数调用点插入函数本体 提取函数固然好">
+<meta name="keywords" content="非技术总结">
+<meta property="og:type" content="article">
+<meta property="og:title" content="重构-重构手法列表">
+<meta property="og:url" content="http://yoursite.com/2020/03/18/重构-重构手法列表/index.html">
+<meta property="og:site_name" content="wyc-blog">
+<meta property="og:description" content="重构技巧列表重新组织函数   技巧名称 说明 动机 备注     extract method 将代码放进独立的函数中，并让函数名解释该函数的用途 1.如果每个函数的粒度都很小，那么被复用的概率更大；2.高层的函数读起来像一系列注释(注释后的代码更容易提炼)；3.函数粒度小也更容易被覆写 提炼函数   inline method 函数本体和名称一样通俗易懂，在函数调用点插入函数本体 提取函数固然好">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-03-18T13:02:04.874Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="重构-重构手法列表">
+<meta name="twitter:description" content="重构技巧列表重新组织函数   技巧名称 说明 动机 备注     extract method 将代码放进独立的函数中，并让函数名解释该函数的用途 1.如果每个函数的粒度都很小，那么被复用的概率更大；2.高层的函数读起来像一系列注释(注释后的代码更容易提炼)；3.函数粒度小也更容易被覆写 提炼函数   inline method 函数本体和名称一样通俗易懂，在函数调用点插入函数本体 提取函数固然好">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"right","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/03/18/重构-重构手法列表/"/>
+
+
+
+
+
+  <title>重构-重构手法列表 | wyc-blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">wyc-blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">道法自然</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/18/重构-重构手法列表/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wyc">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/yunchangwang/blogs/master/admin/head.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="wyc-blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">重构-重构手法列表</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-18T20:57:10+08:00">
+                2020-03-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/书籍整理/" itemprop="url" rel="index">
+                    <span itemprop="name">书籍整理</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="重构技巧列表"><a href="#重构技巧列表" class="headerlink" title="重构技巧列表"></a>重构技巧列表</h1><h2 id="重新组织函数"><a href="#重新组织函数" class="headerlink" title="重新组织函数"></a>重新组织函数</h2><table>
+<thead>
+<tr>
+<th>技巧名称</th>
+<th>说明</th>
+<th>动机</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>extract method</td>
+<td>将代码放进独立的函数中，并让函数名解释该函数的用途</td>
+<td>1.如果每个函数的粒度都很小，那么被复用的概率更大；2.高层的函数读起来像一系列注释(注释后的代码更容易提炼)；3.函数粒度小也更容易被覆写</td>
+<td>提炼函数</td>
+</tr>
+<tr>
+<td>inline method</td>
+<td>函数本体和名称一样通俗易懂，在函数调用点插入函数本体</td>
+<td>提取函数固然好，但非必要的间接性会增加阅读成本</td>
+<td>内联函数</td>
+</tr>
+<tr>
+<td>inline temp</td>
+<td>将所有对某个临时变量的引用替换为对他赋值的查询语句(不适合耗费性能的操作)</td>
+<td>多半可视为replace temp with query 的一部分使用；妨碍其他重构手法，使用内联</td>
+<td>内联临时变量</td>
+</tr>
+<tr>
+<td>replace temp with query</td>
+<td>程序以一个临时变量来保存某一表达式的运行结果，将表达式提炼到独立函数中去，将这个临时变量替换为对新函数的调用</td>
+<td>1.临时变量都是暂时的，所以只能在所属函数内使用；2.因为使用域的限制导致想要再次访问该临时变量则需要重复劳作；3.该技巧可以给 extract method 做准备</td>
+<td>已查询取代临时变量</td>
+</tr>
+<tr>
+<td>introduce explaining variable</td>
+<td>将一个复杂表达式（或其中一部分）的结果放进一个临时变量，以此变量名称来解释表达式用途</td>
+<td>1.表达式有可能非常复杂而难以阅读，临时变量可以将表达式分解为比较容易管理的形式；2.在条件语句中，可以用此重构手法将条件子句进行提炼</td>
+<td>引入解释性变量</td>
+</tr>
+<tr>
+<td>split temporary variable</td>
+<td>你的程序有某个临时变量被赋值超过一次，它既不是循环变量也不是用于收集统计的，针对每次赋值创建一个独立变量</td>
+<td>1.表达式有可能非常复杂而难以阅读，临时变量可以将表达式分解为比较容易管理的形式；2.在条件语句中，可以用此重构手法将条件子句进行提炼</td>
+<td>分解临时变量</td>
+</tr>
+<tr>
+<td>remove assignments to parameters</td>
+<td>代码对一个参数进行赋值，以一个临时变量取代该参数的位置</td>
+<td>对参数进行赋值，会降低代码的清晰度</td>
+<td>移除对参数的赋值</td>
+</tr>
+<tr>
+<td>replace method with mehtod object</td>
+<td>你有一个大型函数，其中对局部变量的使用使你无法采用extract method，将函数移动到一个类中，并将局部变量变成对象内字段，在同一个类中拆解函数</td>
+<td>针对某个函数中局部变量泛滥成灾的现象</td>
+<td>以函数对象取代函数</td>
+</tr>
+<tr>
+<td>substitute algorithm</td>
+<td>将函数本体替换成另一种算法</td>
+<td>解决问题有好几种方法，解决一个问题有更清晰简单的方式时，替换成新的方法吧</td>
+<td>替换算法</td>
+</tr>
+</tbody>
+</table>
+<h2 id="在对象之间搬移特性"><a href="#在对象之间搬移特性" class="headerlink" title="在对象之间搬移特性"></a>在对象之间搬移特性</h2><table>
+<thead>
+<tr>
+<th>技巧名称</th>
+<th>说明</th>
+<th>动机</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>move method</td>
+<td>有个函数与所驻类之外的另一个类交流更多，在最常引用该函数的类型建立一个行为一样的函数，将旧函数变成一个委托函数</td>
+<td>重构理论的重要支柱，如果一个类的行为太多或者某个行为和另外的类高度耦合，那么这些行为就要考虑移动了（寻找这样的函数：使用另一个领域比使用所驻类领域对象还要多）</td>
+<td>搬移函数</td>
+</tr>
+<tr>
+<td>move field</td>
+<td>程序中的某个字段被另一个类使用的次数更加频繁，将该字段搬移到使用次数更频繁的类中</td>
+<td>随着系统的发展，你会发现自己需要新的类，并将现有的工作责任拖到新的类中</td>
+<td>搬移字段</td>
+</tr>
+<tr>
+<td>extract class</td>
+<td>某个类做了两个类应该做的事情，新建一个类将字段和方法移动到新类中</td>
+<td>一个类应该是清楚的抽象，处理一些明确的责任，随着系统的不断状态，类会变得过于复杂（先考虑职责，在将不同职责的字段和函数提炼到新的类中）</td>
+<td>提炼类</td>
+</tr>
+<tr>
+<td>inline class</td>
+<td>某个类没有做太多的事情，将这种类所得的特性搬移到另一个类中</td>
+<td>一个类不在承担足够的责任，不在有独立存在的理由（一开始庞大，可能由于重构导致单薄），将这个类的特性迁移到使用它最多的类中</td>
+<td>将类内联化</td>
+</tr>
+<tr>
+<td>hide delegate</td>
+<td>客户通过一个委托类来调用另一个对象</td>
+<td>调用客户不想因委托的变化而进行修改，在委托类上建立客户所需要的所有行数，客户可通过委托类调用另一个类</td>
+<td>隐藏委托关系</td>
+</tr>
+<tr>
+<td>remove middle man</td>
+<td>某个类做了太多的简单委托，让客户直接调用受托类</td>
+<td>针对 hide delegate 付出的代价，每当客户要使用受托类的新特性，我们不得不在中间服务中增加简单的函数，随着受托类越来越庞大，这一过程痛苦不堪</td>
+<td>移除中间人</td>
+</tr>
+<tr>
+<td>introduce local extension</td>
+<td>你需要为服务提供一些额外函数，但是你无法修改这个类</td>
+<td>继承这个类，并且利用父类的函数，提供额外的功能</td>
+<td>引入本地扩展</td>
+</tr>
+</tbody>
+</table>
+<h2 id="重新组织数据"><a href="#重新组织数据" class="headerlink" title="重新组织数据"></a>重新组织数据</h2><table>
+<thead>
+<tr>
+<th>技巧名称</th>
+<th>说明</th>
+<th>动机</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>self encapsulate field</td>
+<td>即使在类内，为这个字段设置取值/设值方法，并以这些函数访问这些字段</td>
+<td>截然不同的观点：1.类内可以自由访问，2.即使在类内也应该通过函数访问；先使用观点1，当访问存在装饰时使用观点2</td>
+<td>自封装字段</td>
+</tr>
+<tr>
+<td>replace data value with object</td>
+<td>你有一个数据项，需要与其他数据和行为一起使用才有意义，将数据项变成对象</td>
+<td>如果某个字段出现了特殊的行为，短时间可以分散在各个类中，但是坏味道从此开始，你需要将这个字段封装成类，将特殊的行为包装在内</td>
+<td>以对象取代数据值</td>
+</tr>
+<tr>
+<td>chanage value to reference</td>
+<td>从一个类衍生出来的各种相等的实例，将他们替换成相同的对象</td>
+<td>并不好区分，引用对象在系统中就是独一份的</td>
+<td>将值对象改为引用对象</td>
+</tr>
+<tr>
+<td>replace array to object</td>
+<td>你有一个数组，其中的元素各自代表不同的东西</td>
+<td>数组应该只用于以某种顺序容纳一组相似对象</td>
+<td>以对象替换数组</td>
+</tr>
+<tr>
+<td>duplicate observed data</td>
+<td>有一些数据置于gui组件中，而领域函数需要访问这些数据，将数据复制一份到领域对象中，使用观察者模式更新这些数据</td>
+<td>一个良好的系统，需要将界面数据和处理业务的代码分开，但有时候数据无法分割（比如基于swing的界面编程）</td>
+<td>复制被监制的数据</td>
+</tr>
+<tr>
+<td>replace magic number with sysbolic constant</td>
+<td></td>
+<td>魔法值，即有特殊意义，却又不能明确表现出这种意义的数字</td>
+<td>以字面常量替换魔法值</td>
+</tr>
+<tr>
+<td>replace type code with class</td>
+<td></td>
+<td>针对类型码数值的传参，编译器看到并进行检查的始终是背后的那个code，大大降低代码的可读性，从而成为bug之源</td>
+<td>以类取代类型码</td>
+</tr>
+<tr>
+<td>replace type code with subclass</td>
+<td>有一个不可变的类型码，它会影响类的行为，以子类取代这个类型码</td>
+<td>如果类型码不会影响行为，用上面方法（replace type code with class）即可；如果类型码会影响行为，最好是借助多态来处理变化行为</td>
+<td>以子类取代类型码</td>
+</tr>
+<tr>
+<td>replace type code with state/strategy</td>
+<td>有一个影响类行为的类型码，在对象的生命周期中发生变化，无法通过继承去消除它</td>
+<td>本重构和replace type code with subclass相似，但是类型码在对象生命周期中变化/宿主类无法被继承，可以使用该重构</td>
+<td>以状态模式/策略模式替换类型代码</td>
+</tr>
+<tr>
+<td>replace subclass with field</td>
+<td>各个子类的唯一差别只在 返回常量函数 的差别上，在超类中增加一个相应的字段，然后销毁子类</td>
+<td>增加子类的目的是为了增加新的特性/改变其行为，如果子类中只有常量函数，那么考虑去除这样的子类避免因继承带来的额外复杂性</td>
+<td>以字段取代子类</td>
+</tr>
+</tbody>
+</table>
+<h2 id="简化条件表达式"><a href="#简化条件表达式" class="headerlink" title="简化条件表达式"></a>简化条件表达式</h2><table>
+<thead>
+<tr>
+<th>技巧名称</th>
+<th>说明</th>
+<th>动机</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>decompose conditional</td>
+<td>你有一个复杂的条件语句，从段落中分别提炼出独立的函数</td>
+<td>1.负责的条件语句是导致复杂度上升的原因之一；2.针对不同的条件分支，我们可以写测试来执行不同的分支行为，但是不明白为什么这样执行；3.分解出独立的函数，并根据分支行为给函数命名，这样可以大大提升可读性</td>
+<td>分解条件表达式</td>
+</tr>
+<tr>
+<td>consolidate conditional expression</td>
+<td>你有一系列条件表达式，都等到相同的结果</td>
+<td>检查条件各不相同，但最终行为却一致，合并成一个条件并提炼成函数表达式</td>
+<td>合并条件表达式</td>
+</tr>
+<tr>
+<td>consolidate duplicate conditional fragments</td>
+<td>在各条件分支中有着相同的一段代码</td>
+<td>一组条件表达式的所有分支上都执行了同一段代码，将这段代码搬移到条件表达式外面</td>
+<td>合并重复的条件片段</td>
+</tr>
+<tr>
+<td>remove control flag</td>
+<td>在一系列布尔表达式中，某个变量带有控制标记的作用（这个变量可以结束某个流程）</td>
+<td>java中可以使用continue/break语句替换</td>
+<td>移除控制标记</td>
+</tr>
+<tr>
+<td>replace nested conditional with guard clauses</td>
+<td>函数中的条件逻辑使人难以看清正常的执行路径（条件语句嵌套）</td>
+<td>条件表达有两种形式：1.条件语句所有分支都属于正常行为；2.条件中只有一种情况是正常行为，其他情况不常见；其中后者可以使用该重构</td>
+<td>移除控制标记</td>
+</tr>
+<tr>
+<td>replace conditional with polymorphism</td>
+<td>有个条件表达式，根据对象类型的不同而选择不同的行为</td>
+<td>多态的存在可以使你不必编写明显的条件语句（但是继承也会增加复杂性，要预测行为是否经常增加减少来判断是否真的适合多态来替换）</td>
+<td>以多态取代条件表达式</td>
+</tr>
+<tr>
+<td>introduce assertion</td>
+<td>某一段代码需要对程序状态作出某种假设</td>
+<td>当条件为真时某段代码才能正常运行，引入断言来排除不正常的情况（先行判断不正常情况发生时是否确实当作异常处理）</td>
+<td>引入断言</td>
+</tr>
+</tbody>
+</table>
+<h2 id="简化函数调用"><a href="#简化函数调用" class="headerlink" title="简化函数调用"></a>简化函数调用</h2><table>
+<thead>
+<tr>
+<th>技巧名称</th>
+<th>说明</th>
+<th>动机</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>rename method</td>
+<td>函数的名称未能揭示函数的用途</td>
+<td>极力提倡的一种编程风格，将复杂的处理过程分解成小函数，但是如果处理不好使你费尽周折却弄不清楚这些小函数各自的职责，所以给函数一个通俗易懂的名字</td>
+<td>函数改名</td>
+</tr>
+<tr>
+<td>add parameter</td>
+<td>某个函数的改动需要更多的信息</td>
+<td>不多说</td>
+<td>添加参数</td>
+</tr>
+<tr>
+<td>remove parameter</td>
+<td>某个函数已经不再使用某个参数</td>
+<td>程序员不太愿意删除无用参数。千万不要打这样的如意算盘：多余的参数在程序中不会引发任何的问题，未来的时间可能还用得上</td>
+<td>移除参数</td>
+</tr>
+<tr>
+<td>separate query from modifier</td>
+<td>某个函数既返回了对象状态值又修改了对象状态值</td>
+<td>如果一个函数没有任何副作用，即只有单一职责的接口（对于某些业务查询和更新行为确实会存在并存），我们可以任意调用它而不用操心太多地方</td>
+<td>分离查询函数和修改函数</td>
+</tr>
+<tr>
+<td>paramaterize method</td>
+<td>若干函数做了类似的工作</td>
+<td>你可能会发现这样的函数：有着类似的行为，但是因为某些值导致行为些许的不同，将这些值作为参数传入合并这些行为类似的函数</td>
+<td>令函数携带参数</td>
+</tr>
+<tr>
+<td>replace paramater with explicit methods</td>
+<td>有一个函数，行为完全取决与传入的参数</td>
+<td>针对不同的分支行为建立不同的函数，调用方不用再考虑传入赋予参数什么值调用（与paramaterize method 恰恰相反）</td>
+<td>以明确函数取代参数</td>
+</tr>
+<tr>
+<td>preserve whole object</td>
+<td>你从某个对象中取出若干值作为某个函数的参数</td>
+<td>改用传整个对象，1.减少参数列表，长的参数列表也是降低代码可读性的祸首；2.函数需要多余信息时参数列表可以不用跟着变更；</td>
+<td>保持对象完整</td>
+</tr>
+<tr>
+<td>replace paramater with methods</td>
+<td>对象调用某个函数，并将获得结果作为函数的参数</td>
+<td>如果获取到的结果只是服务于该函数（后续程序中并没有使用到），那么去掉参数，函数内部直接调用前一个函数</td>
+<td>以函数取代参数</td>
+</tr>
+<tr>
+<td>introduce paramater object</td>
+<td>某些参数总是自然的同时出现</td>
+<td>如果某些参数总是出现的频率非常高，那么他们有可能是属于同一个类属性的，用对象包装它们</td>
+<td>引入参数对象</td>
+</tr>
+<tr>
+<td>hide methods</td>
+<td>如果一个函数从来没有被其他类调用过</td>
+<td>函数的可见度应该符合其作用域范围</td>
+<td>隐藏函数</td>
+</tr>
+</tbody>
+</table>
+<h2 id="处理概括关系"><a href="#处理概括关系" class="headerlink" title="处理概括关系"></a>处理概括关系</h2><table>
+<thead>
+<tr>
+<th>技巧名称</th>
+<th>说明</th>
+<th>动机</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pull up field</td>
+<td>两个子类拥有相同的字段</td>
+<td>如果子类是分别开发的，或者在重构过程中组合起来的，可能存在相同的字段；1.字段名字相同，这种很好区分，2.字段的使用方式相同，这种需要观察字段在函数中的作用。既能够减少重复的字段，还可以将重复的行为提到超类中</td>
+<td>字段上移</td>
+</tr>
+<tr>
+<td>pull up method</td>
+<td>有些函数在各个子类中产生相同的结果</td>
+<td>避免重复行为是很重要的，虽然重复的行为也能照常运行，但是你就会面临修改了一个但是遗漏了另一个的风险</td>
+<td>函数上移</td>
+</tr>
+<tr>
+<td>push down method</td>
+<td>某个超类中的函数只与部分的子类有关</td>
+<td>–</td>
+<td>函数下移</td>
+</tr>
+<tr>
+<td>push down field</td>
+<td>某个超类中的字段只与部分的子类有关</td>
+<td>–</td>
+<td>字段下移</td>
+</tr>
+<tr>
+<td>extract subclass</td>
+<td>类中的某些特性只被某些实例用到</td>
+<td>类中的某些行为只被一部分实例用到，提炼子类也能更清晰地划分出业务行为</td>
+<td>提炼子类</td>
+</tr>
+<tr>
+<td>extract superclass</td>
+<td>两个类有相似的特性</td>
+<td>重复的代码是系统糟糕的东西。不同的地方重复同样的行为，你也会面临修改了一个但是遗漏了另一个的风险</td>
+<td>提炼超类</td>
+</tr>
+<tr>
+<td>extract interface</td>
+<td>若干客户使用类接口的同一子集，或两个类实现的接口有相同的部分</td>
+<td>–</td>
+<td>提炼接口</td>
+</tr>
+<tr>
+<td>collapse hierarchy</td>
+<td>超类和子类无太大的区别</td>
+<td>继承体系的存在可能使其变得过分复杂，如果一个继承体系没有存在的价值，合并是很好的处理方式</td>
+<td>折叠继承体系</td>
+</tr>
+<tr>
+<td>form template method</td>
+<td>有若干子类，存在相似的行为，只是有些细节不相同</td>
+<td>这个重构又是为了消除重复代码。使用模版方法模式，在超类中制定函数的统一行为，行为细节定义为抽象方法，子类各自实现</td>
+<td>塑造模版方法</td>
+</tr>
+<tr>
+<td>replace inheritance with delegation</td>
+<td>某个子类只使用超类接口中的一部分，或者根本不需要继承而来的数据</td>
+<td>子类可以只使用超类功能的一部分。但是这样代码传达的信息和你的意图南辕北辙；继承是有很好的东西，设计模式中强调多用包含关系，少用继承关系（继承体系庞大会造成难以增加新特性/行为）</td>
+<td>以委托替代继承</td>
+</tr>
+<tr>
+<td>replace delegation with inheritance</td>
+<td>和上述重构手法相反</td>
+<td>一般遇到某个类使用了受托类的所有函数，并且花了很大的力气编写了极其简单的委托函数</td>
+<td>以继承替代委托</td>
+</tr>
+</tbody>
+</table>
+<h2 id="大型重构"><a href="#大型重构" class="headerlink" title="大型重构"></a>大型重构</h2><table>
+<thead>
+<tr>
+<th>技巧名称</th>
+<th>说明</th>
+<th>动机</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>tease apert inheritance</td>
+<td>少用继承，多用委托</td>
+<td>庞大复杂的继承体系要小心（java 7 由于 Collections 复杂的继承体系，导致无法新增加特性，只能使用 default 关键字）</td>
+<td>梳理并分解继承体系</td>
+</tr>
+<tr>
+<td>converter procedural design to object</td>
+<td>–</td>
+<td>–</td>
+<td>将过程化设计转为对象设计</td>
+</tr>
+<tr>
+<td>separate domain from presentation</td>
+<td>mvc模式就是很好的例子，jsp就是反例</td>
+<td>–</td>
+<td>将领域对象和表述/显示分离</td>
+</tr>
+</tbody>
+</table>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/非技术总结/" rel="tag"># 非技术总结</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/27/maven基本命令/" rel="next" title="maven基本命令">
+                <i class="fa fa-chevron-left"></i> maven基本命令
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div onclick="showGitment()" id="gitment-display-button">显示 Gitment 评论</div>
+        <div id="gitment-container" style="display:none"></div>
+      
+    </div>
+
+  
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="https://raw.githubusercontent.com/yunchangwang/blogs/master/admin/head.jpeg"
+                alt="wyc" />
+            
+              <p class="site-author-name" itemprop="name">wyc</p>
+              <p class="site-description motion-element" itemprop="description">君埋泉下泥销骨 我寄人间朝与暮 <br/>沧海桑田 也输 一纸流年 <br/>我曾 把那 蒹葭 叹几遍 <br/>才留得 风花雪月几更天</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">68</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/yunchangwang" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#重构技巧列表"><span class="nav-number">1.</span> <span class="nav-text">重构技巧列表</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#重新组织函数"><span class="nav-number">1.1.</span> <span class="nav-text">重新组织函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在对象之间搬移特性"><span class="nav-number">1.2.</span> <span class="nav-text">在对象之间搬移特性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重新组织数据"><span class="nav-number">1.3.</span> <span class="nav-text">重新组织数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#简化条件表达式"><span class="nav-number">1.4.</span> <span class="nav-text">简化条件表达式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#简化函数调用"><span class="nav-number">1.5.</span> <span class="nav-text">简化函数调用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#处理概括关系"><span class="nav-number">1.6.</span> <span class="nav-text">处理概括关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#大型重构"><span class="nav-number">1.7.</span> <span class="nav-text">大型重构</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wyc</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+    <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+    
+        <script type="text/javascript">
+            function showGitment(){
+                document.getElementById("gitment-display-button").style.display = "none";
+                document.getElementById("gitment-container").style.display = "block";
+                var gitment = new Gitment({
+                        id: window.location.pathname, 
+                        owner: 'yunchangwang',
+                        repo: 'yunchangwang.github.io',
+                        oauth: {
+                            client_id: '7ab6c18c70d99efab140',
+                            client_secret: '4ebabe77e3bc53810b57c8fd62ea7dda9b5ba2dd',
+                        }});
+                gitment.render('gitment-container');
+            }
+        </script>
+    
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

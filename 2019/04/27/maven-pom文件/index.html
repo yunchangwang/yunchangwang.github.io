@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="wyc-blog">
 <meta property="og:description" content="超级pom 超级pom  所有的maven项目的pom文件都扩展自超级pom。超级pom定义了一组被所有项目共享的默认设置。你可以在maven安装路径的lib目录的maven-model-builder.jar中找到  最简单的pom123456789101112#初始化的maven项目pom.xml内容如下：&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;q">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-04-28T09:14:00.125Z">
+<meta property="og:updated_time" content="2019-05-12T07:21:37.334Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="maven-pom文件">
 <meta name="twitter:description" content="超级pom 超级pom  所有的maven项目的pom文件都扩展自超级pom。超级pom定义了一组被所有项目共享的默认设置。你可以在maven安装路径的lib目录的maven-model-builder.jar中找到  最简单的pom123456789101112#初始化的maven项目pom.xml内容如下：&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;q">
@@ -395,9 +395,9 @@
 <li>artifactId<br>  定义了maven项目在组中的唯一的id，可以认为是组中子项目唯一标识符</li>
 <li>version<br>  指定了子项目的当前版本</li>
 <li>packaging<br>  指定了项目的打包方式，默认情况下打成jar包</li>
-<li>classifier<br>  用来定义构件输出的一些附属构件，因为附属构件拥有相同的groupId，artifactId，version，需要和真正的项目构件区分开<h3 id="添加依赖"><a href="#添加依赖" class="headerlink" title="添加依赖"></a>添加依赖</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#比如增加junit的依赖</span><br><span class="line">&lt;dependencies&gt;</span><br><span class="line">    &lt;dependency&gt;</span><br><span class="line">        &lt;groupId&gt;junit&lt;/groupId&gt;</span><br><span class="line">        &lt;artifactId&gt;junit&lt;/artifactId&gt;</span><br><span class="line">        &lt;version&gt;RELEASE&lt;/version&gt;</span><br><span class="line">    &lt;/&lt;dependency&gt;</span><br><span class="line">&lt;/dependencies&gt;</span><br><span class="line">#其实就是将第三方项目的坐标添加到&lt;dependency&gt;&lt;/&lt;dependency&gt;标签下</span><br></pre></td></tr></table></figure>
-</li>
+<li>classifier<br>  用来定义构件输出的一些附属构件，因为附属构件拥有相同的groupId，artifactId，version，需要和真正的项目构件区分开</li>
 </ul>
+<h3 id="添加依赖"><a href="#添加依赖" class="headerlink" title="添加依赖"></a>添加依赖</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#比如增加junit的依赖</span><br><span class="line">&lt;dependencies&gt;</span><br><span class="line">    &lt;dependency&gt;</span><br><span class="line">        &lt;groupId&gt;junit&lt;/groupId&gt;</span><br><span class="line">        &lt;artifactId&gt;junit&lt;/artifactId&gt;</span><br><span class="line">        &lt;version&gt;RELEASE&lt;/version&gt;</span><br><span class="line">    &lt;/&lt;dependency&gt;</span><br><span class="line">&lt;/dependencies&gt;</span><br><span class="line">#其实就是将第三方项目的坐标添加到&lt;dependency&gt;&lt;/&lt;dependency&gt;标签下</span><br></pre></td></tr></table></figure>
 <h3 id="依赖排除"><a href="#依赖排除" class="headerlink" title="依赖排除"></a>依赖排除</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#依赖的jar还会依赖其他的jar，有时候会产生冲突，需要排除对其对依赖</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;junit&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;junit&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;RELEASE&lt;/version&gt;</span><br><span class="line">    &lt;exclusions&gt;</span><br><span class="line">        &lt;exclusion&gt;</span><br><span class="line">            &lt;groupId&gt;排除项目的groupId&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;排除项目的artifactId&lt;/artifactId&gt;</span><br><span class="line">        &lt;/exclusion&gt;</span><br><span class="line">    &lt;/exclusions&gt;</span><br><span class="line">&lt;/&lt;dependency&gt;</span><br></pre></td></tr></table></figure>
 <h4 id="依赖范围"><a href="#依赖范围" class="headerlink" title="依赖范围"></a>依赖范围</h4><p>依赖的范围大致分成以下5种：<br></p>
 <ul>
@@ -405,9 +405,99 @@
 <li>test - 测试依赖范围</li>
 <li>provided - 已提供依赖范围</li>
 <li>runtime - 运行时依赖范围</li>
-<li>system - 系统依赖范围<br>依赖范围会对编译，测试，运行时的classpath产生影响：<br><br>| 依赖范围（scope） | 对于编译classpath有效 | 对于测试classpath有效 | 对于运行时classpath有效 | 例子                 |<br>| :———- | :————– | :————– | :————— | :—————– |<br>| compile(默认) | Y               | Y               | Y                | Spring-core        |<br>| test        | –              | Y               | –               | Junit              |<br>| provided    | Y               | Y               | –               | servlet-api        |<br>| runtime     | –              | Y               | Y                | JDBC驱动实现           |<br>| system      | Y               | Y               | –               | 本地的，Maven仓库之外的类库文件 |<br>依赖范围还会对传递性依赖产生影响：<br><br>|          | compile  | test | provided | runtime  |<br>| :——- | :——- | :— | :——- | :——- |<br>| compile  | compile  | —  | —      | runtime  |<br>| test     | test     | —  | —      | test     |<br>| provided | provided | —  | provided | provided |<br>| runtime  | runtime  | —  | —      | runtime  |<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#比如对于Junit的依赖只针对测试的classpath：</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">     &lt;groupId&gt;junit&lt;/groupId&gt;</span><br><span class="line">     &lt;artifactId&gt;junit&lt;/artifactId&gt;</span><br><span class="line">     &lt;version&gt;RELEASE&lt;/version&gt;</span><br><span class="line">     &lt;scope&gt;test&lt;/scope&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
-</li>
+<li>system - 系统依赖范围<br>依赖范围会对编译，测试，运行时的classpath产生影响：<br></li>
 </ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">依赖范围（scope）</th>
+<th style="text-align:left">对于编译classpath有效</th>
+<th style="text-align:left">对于测试classpath有效</th>
+<th style="text-align:left">对于运行时classpath有效</th>
+<th style="text-align:left">例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">compile(默认)</td>
+<td style="text-align:left">Y</td>
+<td style="text-align:left">Y</td>
+<td style="text-align:left">Y</td>
+<td style="text-align:left">Spring-core</td>
+</tr>
+<tr>
+<td style="text-align:left">test</td>
+<td style="text-align:left">–</td>
+<td style="text-align:left">Y</td>
+<td style="text-align:left">–</td>
+<td style="text-align:left">Junit</td>
+</tr>
+<tr>
+<td style="text-align:left">provided</td>
+<td style="text-align:left">Y</td>
+<td style="text-align:left">Y</td>
+<td style="text-align:left">–</td>
+<td style="text-align:left">servlet-api</td>
+</tr>
+<tr>
+<td style="text-align:left">runtime</td>
+<td style="text-align:left">–</td>
+<td style="text-align:left">Y</td>
+<td style="text-align:left">Y</td>
+<td style="text-align:left">JDBC驱动实现</td>
+</tr>
+<tr>
+<td style="text-align:left">system</td>
+<td style="text-align:left">Y</td>
+<td style="text-align:left">Y</td>
+<td style="text-align:left">–</td>
+<td style="text-align:left">本地的，Maven仓库之外的类库文件</td>
+</tr>
+</tbody>
+</table>
+<p>依赖范围还会对传递性依赖产生影响：<br></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left"></th>
+<th style="text-align:left">compile</th>
+<th style="text-align:left">test</th>
+<th style="text-align:left">provided</th>
+<th style="text-align:left">runtime</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">compile</td>
+<td style="text-align:left">compile</td>
+<td style="text-align:left">—</td>
+<td style="text-align:left">—</td>
+<td style="text-align:left">runtime</td>
+</tr>
+<tr>
+<td style="text-align:left">test</td>
+<td style="text-align:left">test</td>
+<td style="text-align:left">—</td>
+<td style="text-align:left">—</td>
+<td style="text-align:left">test</td>
+</tr>
+<tr>
+<td style="text-align:left">provided</td>
+<td style="text-align:left">provided</td>
+<td style="text-align:left">—</td>
+<td style="text-align:left">provided</td>
+<td style="text-align:left">provided</td>
+</tr>
+<tr>
+<td style="text-align:left">runtime</td>
+<td style="text-align:left">runtime</td>
+<td style="text-align:left">—</td>
+<td style="text-align:left">—</td>
+<td style="text-align:left">runtime</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#比如对于Junit的依赖只针对测试的classpath：</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">     &lt;groupId&gt;junit&lt;/groupId&gt;</span><br><span class="line">     &lt;artifactId&gt;junit&lt;/artifactId&gt;</span><br><span class="line">     &lt;version&gt;RELEASE&lt;/version&gt;</span><br><span class="line">     &lt;scope&gt;test&lt;/scope&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
 <h2 id="pom文件继承"><a href="#pom文件继承" class="headerlink" title="pom文件继承"></a>pom文件继承</h2><p>和java中的继承一样，pom文件也可以继承：<br><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;parent&gt;</span><br><span class="line">    &lt;groupId&gt;父模块groupId&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;父模块artifactId&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;父模块version&lt;/version&gt;</span><br><span class="line">    &lt;relativePath&gt;相对路径&lt;/relativePath&gt;</span><br><span class="line">&lt;/parent&gt;</span><br><span class="line">#其中父模块packaging参数必须为pom，由于父模块只是为了消除配置的重复，因此也就不需要src/main/java等目录了</span><br></pre></td></tr></table></figure></p>
 <h2 id="模块聚合"><a href="#模块聚合" class="headerlink" title="模块聚合"></a>模块聚合</h2><p>当一个项目有多个模块的时候，我们需要到各个模块去执行mvn命令进行构建，如何才能在一个模块下构建所有的模块呢？模块聚合配置就是为了解决这个问题：<br><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;modules&gt;</span><br><span class="line">    &lt;module&gt;模块1 name&lt;/module&gt;</span><br><span class="line">    &lt;module&gt;模块2 name&lt;/module&gt;</span><br><span class="line">    ....</span><br><span class="line">&lt;/modules&gt;</span><br><span class="line">#该配置配置在parent pom文件中，只需对parent模块进行maven构建等操作，maven会根据modules配置计算出构建的反应堆，分别进行各个模块的构建</span><br></pre></td></tr></table></figure></p>
 <h2 id="统一的版本管理"><a href="#统一的版本管理" class="headerlink" title="统一的版本管理"></a>统一的版本管理</h2><p>项目多模块的情况下，每个模块可能会依赖同一个jar包，为了防止版本的泛滥，需要有一个版本管理：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;properties&gt;</span><br><span class="line">    &lt;junit.version&gt;4.0.0-RELEASE&lt;/tax.common.version&gt;</span><br><span class="line">    ....</span><br><span class="line">&lt;/properties&gt;</span><br><span class="line">&lt;dependencyManagement&gt;</span><br><span class="line">    &lt;dependencies&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;junit&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;junit&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;$&#123;junit.version&#125;&lt;/version&gt;</span><br><span class="line">            &lt;scope&gt;test&lt;/scope&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">        ....</span><br><span class="line">    &lt;dependencies&gt;</span><br><span class="line">&lt;dependencyManagement&gt;</span><br><span class="line">#maven使用dependencyManagement标签来约束依赖的使用，在dependencyManagement声明的依赖不会实际引入，即能让子模块继承到父模块的依赖配置，又能保证子模块使用的灵活性</span><br></pre></td></tr></table></figure></p>
@@ -541,7 +631,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">67</span>
+                  <span class="site-state-item-count">68</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -626,7 +716,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
