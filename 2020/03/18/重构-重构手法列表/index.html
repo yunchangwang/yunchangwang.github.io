@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="wyc-blog">
 <meta property="og:description" content="重构技巧列表重新组织函数   技巧名称 说明 动机 备注     extract method 将代码放进独立的函数中，并让函数名解释该函数的用途 1.如果每个函数的粒度都很小，那么被复用的概率更大；2.高层的函数读起来像一系列注释(注释后的代码更容易提炼)；3.函数粒度小也更容易被覆写 提炼函数   inline method 函数本体和名称一样通俗易懂，在函数调用点插入函数本体 提取函数固然好">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-03-18T13:02:04.874Z">
+<meta property="og:updated_time" content="2020-05-17T02:53:17.398Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="重构-重构手法列表">
 <meta name="twitter:description" content="重构技巧列表重新组织函数   技巧名称 说明 动机 备注     extract method 将代码放进独立的函数中，并让函数名解释该函数的用途 1.如果每个函数的粒度都很小，那么被复用的概率更大；2.高层的函数读起来像一系列注释(注释后的代码更容易提炼)；3.函数粒度小也更容易被覆写 提炼函数   inline method 函数本体和名称一样通俗易懂，在函数调用点插入函数本体 提取函数固然好">
@@ -429,7 +429,7 @@
 <tr>
 <td>split temporary variable</td>
 <td>你的程序有某个临时变量被赋值超过一次，它既不是循环变量也不是用于收集统计的，针对每次赋值创建一个独立变量</td>
-<td>1.表达式有可能非常复杂而难以阅读，临时变量可以将表达式分解为比较容易管理的形式；2.在条件语句中，可以用此重构手法将条件子句进行提炼</td>
+<td>如果一个临时变量被赋值了多次，应该拆分成多个临时变量，确保只有一个单一职责；同一个临时变量承担多个职责会令阅读者糊涂</td>
 <td>分解临时变量</td>
 </tr>
 <tr>
@@ -852,6 +852,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2020/05/05/什么是缓存击穿/" rel="prev" title="什么是缓存击穿">
+                什么是缓存击穿 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -938,7 +942,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">68</span>
+                  <span class="site-state-item-count">69</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -960,7 +964,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-count">29</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
