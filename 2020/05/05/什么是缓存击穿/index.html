@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="网络安全," />
+  <meta name="keywords" content="缓存," />
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="君埋泉下泥销骨 我寄人间朝与暮 沧海桑田 也输 一纸流年 我曾 把那 蒹葭 叹几遍 才留得 风花雪月几更天">
-<meta name="keywords" content="网络安全">
+<meta name="description" content="缓存的一般操作方式针对热点访问的数据，如果每次都从数据库取数，并发量上来了会增加DB的压力，从而影响其他业务的数据访问。所以缓存应运而生，将这些热点的数据放在内存中，并设置失效时间，在有效的时间内直接返回内存中的数据不再从DB中取数，从而减少DB的压力。 缓存引入业务的一般逻辑如下：外部传入的key是否存在缓存中，存在则直接返回，不存在则从DB中取数并放入缓存中，再返回。以上逻辑再特殊情况下存在问">
+<meta name="keywords" content="缓存">
 <meta property="og:type" content="article">
-<meta property="og:title" content="什么是缓存击穿">
+<meta property="og:title" content="什么是缓存穿透，击穿，雪崩">
 <meta property="og:url" content="http://yoursite.com/2020/05/05/什么是缓存击穿/index.html">
 <meta property="og:site_name" content="wyc-blog">
-<meta property="og:description" content="君埋泉下泥销骨 我寄人间朝与暮 沧海桑田 也输 一纸流年 我曾 把那 蒹葭 叹几遍 才留得 风花雪月几更天">
+<meta property="og:description" content="缓存的一般操作方式针对热点访问的数据，如果每次都从数据库取数，并发量上来了会增加DB的压力，从而影响其他业务的数据访问。所以缓存应运而生，将这些热点的数据放在内存中，并设置失效时间，在有效的时间内直接返回内存中的数据不再从DB中取数，从而减少DB的压力。 缓存引入业务的一般逻辑如下：外部传入的key是否存在缓存中，存在则直接返回，不存在则从DB中取数并放入缓存中，再返回。以上逻辑再特殊情况下存在问">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-05-05T14:07:40.302Z">
+<meta property="og:updated_time" content="2020-05-21T12:23:35.807Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="什么是缓存击穿">
-<meta name="twitter:description" content="君埋泉下泥销骨 我寄人间朝与暮 沧海桑田 也输 一纸流年 我曾 把那 蒹葭 叹几遍 才留得 风花雪月几更天">
+<meta name="twitter:title" content="什么是缓存穿透，击穿，雪崩">
+<meta name="twitter:description" content="缓存的一般操作方式针对热点访问的数据，如果每次都从数据库取数，并发量上来了会增加DB的压力，从而影响其他业务的数据访问。所以缓存应运而生，将这些热点的数据放在内存中，并设置失效时间，在有效的时间内直接返回内存中的数据不再从DB中取数，从而减少DB的压力。 缓存引入业务的一般逻辑如下：外部传入的key是否存在缓存中，存在则直接返回，不存在则从DB中取数并放入缓存中，再返回。以上逻辑再特殊情况下存在问">
 
 
 
@@ -126,7 +126,7 @@
 
 
 
-  <title>什么是缓存击穿 | wyc-blog</title>
+  <title>什么是缓存穿透，击穿，雪崩 | wyc-blog</title>
   
 
 
@@ -314,7 +314,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">什么是缓存击穿</h1>
+          <h1 class="post-title" itemprop="name headline">什么是缓存穿透，击穿，雪崩</h1>
         
 
         <div class="post-meta">
@@ -349,8 +349,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/网络安全/" itemprop="url" rel="index">
-                    <span itemprop="name">网络安全</span>
+                  <a href="/categories/redis/" itemprop="url" rel="index">
+                    <span itemprop="name">redis</span>
                   </a>
                 </span>
 
@@ -386,7 +386,15 @@
       
 
       
-        
+        <h2 id="缓存的一般操作方式"><a href="#缓存的一般操作方式" class="headerlink" title="缓存的一般操作方式"></a>缓存的一般操作方式</h2><p>针对热点访问的数据，如果每次都从数据库取数，并发量上来了会增加DB的压力，从而影响其他业务的数据访问。所以缓存应运而生，将这些热点的数据放在内存中，并设置失效时间，在有效的时间内直接返回内存中的数据不再从DB中取数，从而减少DB的压力。</p>
+<p>缓存引入业务的一般逻辑如下：外部传入的key是否存在缓存中，存在则直接返回，不存在则从DB中取数并放入缓存中，再返回。以上逻辑再特殊情况下存在问题。</p>
+<h2 id="缓存穿透"><a href="#缓存穿透" class="headerlink" title="缓存穿透"></a>缓存穿透</h2><p>针对检测传入的key是否存在缓存中的逻辑，如果<strong>外部传入的key一定不存在(即查询一个不存在的数据)</strong>会出现缓存穿透问题。攻击者可以拿着这个key不停的访问，进而不停访问DB影响整个系统。</p>
+<p>解决方案：1.对于key做非法的校验，例如，业务中key一定是大于0的或者以xxx开头；2.对于非法的key，既使从DB取的数据为空，也将这个空的结果放入到缓存中。</p>
+<h2 id="缓存击穿"><a href="#缓存击穿" class="headerlink" title="缓存击穿"></a>缓存击穿</h2><p>针对同一个key，过了失效时间，如果此时系统有千万级的并发同时访问这个key会出现缓存击穿问题。这个千万级的访问会同时访问DB，瞬间增大DB压力甚至导致DB崩溃，进而影响其他业务。</p>
+<p>解决方案：1.同步锁，从DB中取数增加同步锁，这样只有一个请求是访问的DB，其他访问仍然从缓存中取数，但此方式存在性能问题。2.永不过期，业务上判断这个热点数据是否真的永不变更，如果变更将变更操作异步处理(即发现缓存即将过期，异步线程访问DB取数(这边还是要设置同步)重新设置缓存)。</p>
+<h2 id="缓存雪崩"><a href="#缓存雪崩" class="headerlink" title="缓存雪崩"></a>缓存雪崩</h2><p>如果缓存数据的失效时间设置一样，过了失效时间，如果此时系统针对不同key的大量访问会出现缓存雪崩问题。不同key的请求会转到DB，同击穿一样，会在瞬时增加DB的压力。</p>
+<p>解决方案：对于不同的key，失效时间设置合理的随机值，降低key失效时间的重复率，进而减少key集体失效的事件发生。</p>
+
       
     </div>
     
@@ -403,7 +411,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/网络安全/" rel="tag"># 网络安全</a>
+            <a href="/tags/缓存/" rel="tag"># 缓存</a>
           
         </div>
       
@@ -483,8 +491,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -514,7 +531,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-count">20</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -558,6 +575,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#缓存的一般操作方式"><span class="nav-number">1.</span> <span class="nav-text">缓存的一般操作方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#缓存穿透"><span class="nav-number">2.</span> <span class="nav-text">缓存穿透</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#缓存击穿"><span class="nav-number">3.</span> <span class="nav-text">缓存击穿</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#缓存雪崩"><span class="nav-number">4.</span> <span class="nav-text">缓存雪崩</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

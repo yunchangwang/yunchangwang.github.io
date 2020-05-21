@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="wyc-blog">
 <meta property="og:description" content="重构技巧列表重新组织函数   技巧名称 说明 动机 备注     extract method 将代码放进独立的函数中，并让函数名解释该函数的用途 1.如果每个函数的粒度都很小，那么被复用的概率更大；2.高层的函数读起来像一系列注释(注释后的代码更容易提炼)；3.函数粒度小也更容易被覆写 提炼函数   inline method 函数本体和名称一样通俗易懂，在函数调用点插入函数本体 提取函数固然好">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-05-17T02:53:17.398Z">
+<meta property="og:updated_time" content="2020-05-20T01:20:17.147Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="重构-重构手法列表">
 <meta name="twitter:description" content="重构技巧列表重新组织函数   技巧名称 说明 动机 备注     extract method 将代码放进独立的函数中，并让函数名解释该函数的用途 1.如果每个函数的粒度都很小，那么被复用的概率更大；2.高层的函数读起来像一系列注释(注释后的代码更容易提炼)；3.函数粒度小也更容易被覆写 提炼函数   inline method 函数本体和名称一样通俗易懂，在函数调用点插入函数本体 提取函数固然好">
@@ -591,7 +591,7 @@
 <tr>
 <td>decompose conditional</td>
 <td>你有一个复杂的条件语句，从段落中分别提炼出独立的函数</td>
-<td>1.负责的条件语句是导致复杂度上升的原因之一；2.针对不同的条件分支，我们可以写测试来执行不同的分支行为，但是不明白为什么这样执行；3.分解出独立的函数，并根据分支行为给函数命名，这样可以大大提升可读性</td>
+<td>1.复杂的条件语句是导致复杂度上升的原因之一；2.针对不同的条件分支，我们可以写测试来执行不同的分支行为，但是不明白为什么这样执行；3.分解出独立的函数，并根据分支行为给函数命名，这样可以大大提升可读性</td>
 <td>分解条件表达式</td>
 </tr>
 <tr>
@@ -852,8 +852,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2020/05/05/什么是缓存击穿/" rel="prev" title="什么是缓存击穿">
-                什么是缓存击穿 <i class="fa fa-chevron-right"></i>
+              <a href="/2020/05/05/什么是缓存击穿/" rel="prev" title="什么是缓存穿透，击穿，雪崩">
+                什么是缓存穿透，击穿，雪崩 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -953,7 +953,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-count">20</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
