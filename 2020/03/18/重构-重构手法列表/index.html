@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="wyc-blog">
 <meta property="og:description" content="重构技巧列表重新组织函数   技巧名称 说明 动机 备注     extract method 将代码放进独立的函数中，并让函数名解释该函数的用途 1.如果每个函数的粒度都很小，那么被复用的概率更大；2.高层的函数读起来像一系列注释(注释后的代码更容易提炼)；3.函数粒度小也更容易被覆写 提炼函数   inline method 函数本体和名称一样通俗易懂，在函数调用点插入函数本体 提取函数固然好">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-05-20T01:20:17.147Z">
+<meta property="og:updated_time" content="2020-05-24T03:17:52.741Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="重构-重构手法列表">
 <meta name="twitter:description" content="重构技巧列表重新组织函数   技巧名称 说明 动机 备注     extract method 将代码放进独立的函数中，并让函数名解释该函数的用途 1.如果每个函数的粒度都很小，那么被复用的概率更大；2.高层的函数读起来像一系列注释(注释后的代码更容易提炼)；3.函数粒度小也更容易被覆写 提炼函数   inline method 函数本体和名称一样通俗易懂，在函数调用点插入函数本体 提取函数固然好">
@@ -616,7 +616,7 @@
 <td>replace nested conditional with guard clauses</td>
 <td>函数中的条件逻辑使人难以看清正常的执行路径（条件语句嵌套）</td>
 <td>条件表达有两种形式：1.条件语句所有分支都属于正常行为；2.条件中只有一种情况是正常行为，其他情况不常见；其中后者可以使用该重构</td>
-<td>移除控制标记</td>
+<td>使用卫语句处理特殊情况</td>
 </tr>
 <tr>
 <td>replace conditional with polymorphism</td>
@@ -942,7 +942,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">69</span>
+                  <span class="site-state-item-count">71</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -953,7 +953,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-count">21</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -964,7 +964,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">31</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
