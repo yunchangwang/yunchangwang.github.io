@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/favicon.ico?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="jvm," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="类的生命周期加载目的将.class文件导入到jvm中 流程 jvm读取.class文件的二进制文件 将class的文件描述存放到方法区中 同时生成一个唯一对应的java.lang.Class对象描述数据结构(jvm规范并没有明确规定该对象必须放在何处，主流的hotspot虚拟机是生成在堆上的，方法区存放的只是元数据描述)  加载方式 从本地的classpath路径下加载 从网络上下载.class文">
+<meta name="keywords" content="jvm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="jvm——类加载器">
+<meta property="og:url" content="http://yoursite.com/2020/07/05/jvm——类加载器/index.html">
+<meta property="og:site_name" content="wyc-blog">
+<meta property="og:description" content="类的生命周期加载目的将.class文件导入到jvm中 流程 jvm读取.class文件的二进制文件 将class的文件描述存放到方法区中 同时生成一个唯一对应的java.lang.Class对象描述数据结构(jvm规范并没有明确规定该对象必须放在何处，主流的hotspot虚拟机是生成在堆上的，方法区存放的只是元数据描述)  加载方式 从本地的classpath路径下加载 从网络上下载.class文">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-07-14T05:00:12.196Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="jvm——类加载器">
+<meta name="twitter:description" content="类的生命周期加载目的将.class文件导入到jvm中 流程 jvm读取.class文件的二进制文件 将class的文件描述存放到方法区中 同时生成一个唯一对应的java.lang.Class对象描述数据结构(jvm规范并没有明确规定该对象必须放在何处，主流的hotspot虚拟机是生成在堆上的，方法区存放的只是元数据描述)  加载方式 从本地的classpath路径下加载 从网络上下载.class文">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"right","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/07/05/jvm——类加载器/"/>
+
+
+
+
+
+  <title>jvm——类加载器 | wyc-blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">wyc-blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">道法自然</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/05/jvm——类加载器/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wyc">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/yunchangwang/blogs/master/admin/head.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="wyc-blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">jvm——类加载器</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-07-05T15:03:13+08:00">
+                2020-07-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/jvm/" itemprop="url" rel="index">
+                    <span itemprop="name">jvm</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="类的生命周期"><a href="#类的生命周期" class="headerlink" title="类的生命周期"></a>类的生命周期</h1><h2 id="加载"><a href="#加载" class="headerlink" title="加载"></a>加载</h2><h3 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h3><p>将.class文件导入到jvm中</p>
+<h3 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h3><ul>
+<li>jvm读取.class文件的二进制文件</li>
+<li>将class的文件描述存放到方法区中</li>
+<li>同时生成一个唯一对应的java.lang.Class对象描述数据结构(jvm规范并没有明确规定该对象必须放在何处，主流的hotspot虚拟机是生成在堆上的，<strong>方法区存放的只是元数据描述</strong>)</li>
+</ul>
+<h3 id="加载方式"><a href="#加载方式" class="headerlink" title="加载方式"></a>加载方式</h3><ul>
+<li>从本地的classpath路径下加载</li>
+<li>从网络上下载.class文件加载</li>
+<li>从.zip或.jar等压缩包中加载</li>
+<li>动态加载.class文件(动态代理)</li>
+<li>从特定的数据库加载.class文件，<strong>没有找到好的例子说明</strong></li>
+</ul>
+<h3 id="最终产品"><a href="#最终产品" class="headerlink" title="最终产品"></a>最终产品</h3><p>位于堆中的class对象，<strong>该对象封装了类在方法区的数据结构，并且为程序员提供了访问方法区数据的接口，是一切反射的入口</strong></p>
+<h2 id="连接"><a href="#连接" class="headerlink" title="连接"></a>连接</h2><h3 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h3><ul>
+<li>类文件的结构检查</li>
+<li>语义上的检查</li>
+<li>字节码检查</li>
+<li>二进制兼容性检查</li>
+</ul>
+<h3 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h3><p>为类的静态变量分配内存，并初始化为默认的值(<strong>这里不是代码中赋予的值，比如int默认是0，boolean默认是false，引用类型默认是null</strong>)<br>补充说明：jdk1.7及之前，静态变量分配内存在方法区，但是1.8之后为了配合永久代的移除，将静态变量分配在了Class对象中，即堆内存中</p>
+<h3 id="解析"><a href="#解析" class="headerlink" title="解析"></a>解析</h3><p>将代码中的符号连接转换成直接连接(地址)</p>
+<h2 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h2><h3 id="目的-1"><a href="#目的-1" class="headerlink" title="目的"></a>目的</h3><p>为类的静态变量赋予正确的初始值，即程序员代码中设置的值</p>
+<h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p>jvm规范规定，所有java虚拟机必须在每个类或接口被java程序<strong>首次主动使用</strong>时初始化</p>
+<h3 id="类的使用"><a href="#类的使用" class="headerlink" title="类的使用"></a>类的使用</h3><ul>
+<li>主动使用<blockquote>
+<p>实例化一个类，即new关键字<br>调用一个类或接口的静态字段<br>调用一个类的静态方法<br>使用反射<br>实例化一个子类，<strong>主动使用要求子类初始化时要求父类必须已初始化</strong><br>一个类是一个启动类，即含有main方法<br>jdk1.7+中支持的动态语言的调用</p>
+</blockquote>
+</li>
+<li>被动使用<br>  除以上7种以外的其他方式都属于被动使用</li>
+</ul>
+<h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h3><ul>
+<li>对于静态变量的调用，只有直接定义了该静态变量的类才会被初始化</li>
+<li>当jvm初始化一个类的时候，要求其父类已经初始化完毕，但这并不适用于接口</li>
+<li>一个接口不要求其子接口或实现类在初始化时将其初始化</li>
+<li>final修饰的常量如果是确定的值，在编译期就已经初始化并分配在了常量池，如果编译期无法确定则需要运行期初始化</li>
+<li>假如一个类存在静态变量，jvm按照文件中定义的顺序将其初始化</li>
+<li>以上证明放在文末</li>
+</ul>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>比如new一个对象</p>
+<h2 id="卸载"><a href="#卸载" class="headerlink" title="卸载"></a>卸载</h2><p>暂时缺省</p>
+<h1 id="类加载器类型"><a href="#类加载器类型" class="headerlink" title="类加载器类型"></a>类加载器类型</h1><h2 id="根加载器"><a href="#根加载器" class="headerlink" title="根加载器"></a>根加载器</h2><p>Bootstrap，属于jvm自带的加载器，无父类加载器；负责加载jvm的核心类库，如java.lang.*，Object类就是由根加载器加载进来的；实现依赖底层的操作系统，属于jvm实现的一部分，并不继承ClassLoader</p>
+<h2 id="扩展加载器"><a href="#扩展加载器" class="headerlink" title="扩展加载器"></a>扩展加载器</h2><p>Extension，父加载器是Bootstrap；加载java.ext.dirs指定目录下的类库，或者从jdk的安装目录jre/lib/ext下加载类库；ClassLoader的子类</p>
+<h2 id="系统-应用加载器"><a href="#系统-应用加载器" class="headerlink" title="系统/应用加载器"></a>系统/应用加载器</h2><p>System，父加载器是Extension；从classpath路径下加载类；是所有自定义加载器的默认父加载器</p>
+<h2 id="自定义加载器"><a href="#自定义加载器" class="headerlink" title="自定义加载器"></a>自定义加载器</h2><p>自定义加载器一定是属于ClassLoader的子类，其父类加载器默认是System</p>
+<h1 id="扩展知识"><a href="#扩展知识" class="headerlink" title="扩展知识"></a>扩展知识</h1><h3 id="类加载"><a href="#类加载" class="headerlink" title="类加载"></a>类加载</h3><p>类加载器并不需要等某个类首次主动使用时再加载它。<strong>jvm规范允许类加载器在预料某个类将要被使用的时候就预先加载它，如果在预先加载的时候遇到错误（class文件丢失），类加载器必须在程序首次主动使用的时候报错</strong>，如果这个类一直没有被使用，那么不会报错</p>
+<h3 id="vm-option"><a href="#vm-option" class="headerlink" title="vm option"></a>vm option</h3><p>jvm参数形式只有3种：</p>
+<ul>
+<li>-XX: +option 开启option选项</li>
+<li>-XX: -option 关闭option选项</li>
+<li>-XX: option=value 设置option选项的值为value<br>比如：设置-XX:+TraceClassLoading可以打印jvm加载类的情况</li>
+</ul>
+<h3 id="助记符"><a href="#助记符" class="headerlink" title="助记符"></a>助记符</h3><p>.class文件字节码中java虚拟机指令，通过javap反编译即可看到</p>
+<ul>
+<li>ldc，表示将int,float,String类型的常量值从常量池推送至栈顶</li>
+<li>bipush，表示将单字节（-128～+127）的常量值推送至栈顶</li>
+<li>sipush，表示将一个短整型（-32768～+32767）常量值推送至栈顶</li>
+<li>iconst_1，表示将int类型1推送至栈顶（iconst_m1～iconst_5）<strong>jvm表示-1～5比较常用</strong></li>
+</ul>
+<h1 id="代码证明"><a href="#代码证明" class="headerlink" title="代码证明"></a>代码证明</h1><h2 id="结论1"><a href="#结论1" class="headerlink" title="结论1"></a>结论1</h2><p><strong>对于静态变量的调用，只有直接定义了该静态变量的类才会被初始化</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">public class MyTest1 &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line"></span><br><span class="line">        System.out.println(MyChild1.STR2);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class MyParent1 &#123;</span><br><span class="line"></span><br><span class="line">    public static String STR = &quot;hello world&quot;;</span><br><span class="line"></span><br><span class="line">    static &#123;</span><br><span class="line">        System.out.println(&quot;MyParent1 static block&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class MyChild1 extends MyParent1 &#123;</span><br><span class="line"></span><br><span class="line">    public static String STR2 = &quot;welcome&quot;;</span><br><span class="line"></span><br><span class="line">    static &#123;</span><br><span class="line">        System.out.println(&quot;MyChild1 static block&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">执行结果：</span><br><span class="line">MyParent1 static block</span><br><span class="line">MyChild1 static block</span><br><span class="line">welcome</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">public class MyTest1 &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line"></span><br><span class="line">        System.out.println(MyChild1.STR);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class MyParent1 &#123;</span><br><span class="line"></span><br><span class="line">    public static String STR = &quot;hello world&quot;;</span><br><span class="line"></span><br><span class="line">    static &#123;</span><br><span class="line">        System.out.println(&quot;MyParent1 static block&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class MyChild1 extends MyParent1 &#123;</span><br><span class="line"></span><br><span class="line">    public static String STR2 = &quot;welcome&quot;;</span><br><span class="line"></span><br><span class="line">    static &#123;</span><br><span class="line">        System.out.println(&quot;MyChild1 static block&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">执行结果：</span><br><span class="line">MyParent1 static block</span><br><span class="line">hello world</span><br></pre></td></tr></table></figure>
+<h2 id="结论2"><a href="#结论2" class="headerlink" title="结论2"></a>结论2</h2><p><strong>当jvm初始化一个类的时候，要求其父类已经初始化完毕，但这并不适用于接口</strong><br>可以参考结论1当中的代码</p>
+<h2 id="结论3"><a href="#结论3" class="headerlink" title="结论3"></a>结论3</h2><p><strong>一个接口不要求其子接口或实现类在初始化时将其初始化</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">public class MyInterfaceInitTest &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        System.out.println(MyClass.b);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">interface MyParent &#123;</span><br><span class="line"></span><br><span class="line">    public static final Thread thread = new Thread() &#123;</span><br><span class="line">        &#123;</span><br><span class="line">            System.out.println(&quot;MyParent block&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">interface MyInterface extends MyParent &#123;</span><br><span class="line"></span><br><span class="line">    public static final Thread thread = new Thread() &#123;</span><br><span class="line">        &#123;</span><br><span class="line">            System.out.println(&quot;MyInterface block&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class MyClass implements MyInterface &#123;</span><br><span class="line">    public static final int b = 5;</span><br><span class="line">&#125;</span><br><span class="line">执行结果：</span><br><span class="line">5</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">public class MyInterfaceInitTest &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        System.out.println(MyInterface.thread);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">interface MyParent &#123;</span><br><span class="line"></span><br><span class="line">    public static final Thread thread = new Thread() &#123;</span><br><span class="line">        &#123;</span><br><span class="line">            System.out.println(&quot;MyParent block&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">interface MyInterface extends MyParent &#123;</span><br><span class="line"></span><br><span class="line">    public static final Thread thread = new Thread() &#123;</span><br><span class="line">        &#123;</span><br><span class="line">            System.out.println(&quot;MyInterface block&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class MyClass implements MyInterface &#123;</span><br><span class="line">    public static final int b = 5;</span><br><span class="line">&#125;</span><br><span class="line">执行结果：</span><br><span class="line">MyInterface block</span><br><span class="line">Thread[Thread-0,5,main]</span><br></pre></td></tr></table></figure>
+<h2 id="证明4"><a href="#证明4" class="headerlink" title="证明4"></a>证明4</h2><p><strong>final修饰的常量如果是确定的值，在编译期就已经初始化并分配在了常量池，如果编译期无法确定则需要运行期初始化</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">public class MyTest3 &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line"></span><br><span class="line">        System.out.println(MyParent3.STR);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class MyParent3 &#123;</span><br><span class="line"></span><br><span class="line">    public static final String STR = &quot;hello world&quot;;</span><br><span class="line"></span><br><span class="line">    static &#123;</span><br><span class="line">        System.out.println(&quot;MyParent3 static block&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">执行结果：</span><br><span class="line">hello world</span><br></pre></td></tr></table></figure></p>
+<p>执行后，删除MyParent3.class文件，再次执行结果一样。因为在编译期的时候，STR已经分配在了MyTest3类对应的java.lang.Class对象的常量池中，之后MyParent3.class文件存不存在就没有关系了。</p>
+<h2 id="证明5"><a href="#证明5" class="headerlink" title="证明5"></a>证明5</h2><p><strong>假如一个类存在静态变量，jvm按照文件中定义的顺序将其初始化</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">public class MyTest6 &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line"></span><br><span class="line">        System.out.println(&quot;count1:&quot; + Singleton.count1);</span><br><span class="line">        System.out.println(&quot;count2:&quot; + Singleton.count2);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class Singleton &#123;</span><br><span class="line">    public static int count1;</span><br><span class="line"></span><br><span class="line">    public static Singleton singleton = new Singleton();</span><br><span class="line"></span><br><span class="line">    private Singleton() &#123;</span><br><span class="line">        count1++;</span><br><span class="line">        count2++; // jvm准备阶段的意义，还没有初始化，即有了一个默认值</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static int count2 = 0;</span><br><span class="line"></span><br><span class="line">    public static Singleton getInstance() &#123;</span><br><span class="line">        return singleton;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">执行结果：</span><br><span class="line">count1:1</span><br><span class="line">count2:0</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/jvm/" rel="tag"># jvm</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/05/25/如何永久激活jetbrains产品/" rel="next" title="如何永久激活jetbrains产品">
+                <i class="fa fa-chevron-left"></i> 如何永久激活jetbrains产品
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div onclick="showGitment()" id="gitment-display-button">显示 Gitment 评论</div>
+        <div id="gitment-container" style="display:none"></div>
+      
+    </div>
+
+  
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="https://raw.githubusercontent.com/yunchangwang/blogs/master/admin/head.jpeg"
+                alt="wyc" />
+            
+              <p class="site-author-name" itemprop="name">wyc</p>
+              <p class="site-description motion-element" itemprop="description">君埋泉下泥销骨 我寄人间朝与暮 <br/>沧海桑田 也输 一纸流年 <br/>我曾 把那 蒹葭 叹几遍 <br/>才留得 风花雪月几更天</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">72</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/yunchangwang" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#类的生命周期"><span class="nav-number">1.</span> <span class="nav-text">类的生命周期</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#加载"><span class="nav-number">1.1.</span> <span class="nav-text">加载</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#目的"><span class="nav-number">1.1.1.</span> <span class="nav-text">目的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#流程"><span class="nav-number">1.1.2.</span> <span class="nav-text">流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#加载方式"><span class="nav-number">1.1.3.</span> <span class="nav-text">加载方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最终产品"><span class="nav-number">1.1.4.</span> <span class="nav-text">最终产品</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#连接"><span class="nav-number">1.2.</span> <span class="nav-text">连接</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#验证"><span class="nav-number">1.2.1.</span> <span class="nav-text">验证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#准备"><span class="nav-number">1.2.2.</span> <span class="nav-text">准备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解析"><span class="nav-number">1.2.3.</span> <span class="nav-text">解析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#初始化"><span class="nav-number">1.3.</span> <span class="nav-text">初始化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#目的-1"><span class="nav-number">1.3.1.</span> <span class="nav-text">目的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#概念"><span class="nav-number">1.3.2.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类的使用"><span class="nav-number">1.3.3.</span> <span class="nav-text">类的使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#结论"><span class="nav-number">1.3.4.</span> <span class="nav-text">结论</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用"><span class="nav-number">1.4.</span> <span class="nav-text">使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#卸载"><span class="nav-number">1.5.</span> <span class="nav-text">卸载</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#类加载器类型"><span class="nav-number">2.</span> <span class="nav-text">类加载器类型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#根加载器"><span class="nav-number">2.1.</span> <span class="nav-text">根加载器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#扩展加载器"><span class="nav-number">2.2.</span> <span class="nav-text">扩展加载器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#系统-应用加载器"><span class="nav-number">2.3.</span> <span class="nav-text">系统/应用加载器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义加载器"><span class="nav-number">2.4.</span> <span class="nav-text">自定义加载器</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#扩展知识"><span class="nav-number">3.</span> <span class="nav-text">扩展知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#类加载"><span class="nav-number">3.0.1.</span> <span class="nav-text">类加载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#vm-option"><span class="nav-number">3.0.2.</span> <span class="nav-text">vm option</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#助记符"><span class="nav-number">3.0.3.</span> <span class="nav-text">助记符</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#代码证明"><span class="nav-number">4.</span> <span class="nav-text">代码证明</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#结论1"><span class="nav-number">4.1.</span> <span class="nav-text">结论1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结论2"><span class="nav-number">4.2.</span> <span class="nav-text">结论2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结论3"><span class="nav-number">4.3.</span> <span class="nav-text">结论3</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#证明4"><span class="nav-number">4.4.</span> <span class="nav-text">证明4</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#证明5"><span class="nav-number">4.5.</span> <span class="nav-text">证明5</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wyc</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+    <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+    
+        <script type="text/javascript">
+            function showGitment(){
+                document.getElementById("gitment-display-button").style.display = "none";
+                document.getElementById("gitment-container").style.display = "block";
+                var gitment = new Gitment({
+                        id: window.location.pathname, 
+                        owner: 'yunchangwang',
+                        repo: 'yunchangwang.github.io',
+                        oauth: {
+                            client_id: '7ab6c18c70d99efab140',
+                            client_secret: '4ebabe77e3bc53810b57c8fd62ea7dda9b5ba2dd',
+                        }});
+                gitment.render('gitment-container');
+            }
+        </script>
+    
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
