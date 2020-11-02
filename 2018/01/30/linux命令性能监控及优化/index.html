@@ -87,12 +87,12 @@
 <meta property="og:site_name" content="wyc-blog">
 <meta property="og:description" content="性能监控和优化toptop freefree vmstat用来统计虚拟内存的使用情况，这边涉及到linux物理内存和虚拟内存的知识点，其实之前我们也提到过，虚拟内存即交换区 option参数-a：显示活跃和非活跃内存-f：显示从系统启动至今的fork数量-m：显示slabinfo-n：只在开始时显示一次各字段名称-s：显示内存相关统计信息及多种系统活动数量delay：刷新时间间隔。如果不指定，只显">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://raw.githubusercontent.com/yunchangwang/blogs/master/vmstat/vmstat.png">
-<meta property="og:updated_time" content="2018-01-30T10:21:04.000Z">
+<meta property="og:image" content="https://ae02.alicdn.com/kf/Ha9be7bb3319d494a83aeff833f2c3878j.jpg">
+<meta property="og:updated_time" content="2020-10-30T11:20:20.416Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="linux命令性能监控及优化">
 <meta name="twitter:description" content="性能监控和优化toptop freefree vmstat用来统计虚拟内存的使用情况，这边涉及到linux物理内存和虚拟内存的知识点，其实之前我们也提到过，虚拟内存即交换区 option参数-a：显示活跃和非活跃内存-f：显示从系统启动至今的fork数量-m：显示slabinfo-n：只在开始时显示一次各字段名称-s：显示内存相关统计信息及多种系统活动数量delay：刷新时间间隔。如果不指定，只显">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/yunchangwang/blogs/master/vmstat/vmstat.png">
+<meta name="twitter:image" content="https://ae02.alicdn.com/kf/Ha9be7bb3319d494a83aeff833f2c3878j.jpg">
 
 
 
@@ -304,7 +304,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="wyc">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/yunchangwang/blogs/master/admin/head.jpeg">
+      <meta itemprop="image" content="https://ae03.alicdn.com/kf/Hc3a908d7a7c244d7ab59aab09cca047dd.jpg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -392,7 +392,7 @@
 <h2 id="free"><a href="#free" class="headerlink" title="free"></a>free</h2><p><a href="https://yunchangwang.github.io/2018/01/28/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D%E2%80%94%E2%80%94free/" target="_blank" rel="noopener">free</a></p>
 <h2 id="vmstat"><a href="#vmstat" class="headerlink" title="vmstat"></a>vmstat</h2><p>用来统计虚拟内存的使用情况，这边涉及到linux物理内存和虚拟内存的<a href="http://www.cnblogs.com/peida/archive/2012/12/25/2833108.html" target="_blank" rel="noopener">知识点</a>，其实之前我们也提到过，虚拟内存即交换区</p>
 <h3 id="option参数"><a href="#option参数" class="headerlink" title="option参数"></a>option参数</h3><p>-a：显示活跃和非活跃内存<br><br>-f：显示从系统启动至今的fork数量<br><br>-m：显示slabinfo<br><br>-n：只在开始时显示一次各字段名称<br><br>-s：显示内存相关统计信息及多种系统活动数量<br><br>delay：刷新时间间隔。如果不指定，只显示一条结果<br><br>count：刷新次数。如果不指定刷新次数，但指定了刷新时间间隔，这时刷新次数为无穷<br><br>-d：显示磁盘相关统计信息<br><br>-p：显示指定磁盘分区统计信息<br><br>-S：使用指定单位显示。参数有 k 、K 、m 、M ，分别代表1000、1024、1000000、1048576字节（byte）默认单位为K（1024 bytes）<br><br>-V：显示vmstat版本信息</p>
-<h3 id="使用实例"><a href="#使用实例" class="headerlink" title="使用实例"></a>使用实例</h3><p>$vmstat 5 6   在docker上进行试验，在6秒内采集5次数据<br><img src="https://raw.githubusercontent.com/yunchangwang/blogs/master/vmstat/vmstat.png" alt="例图"></p>
+<h3 id="使用实例"><a href="#使用实例" class="headerlink" title="使用实例"></a>使用实例</h3><p>$vmstat 5 6   在docker上进行试验，在6秒内采集5次数据<br><img src="https://ae02.alicdn.com/kf/Ha9be7bb3319d494a83aeff833f2c3878j.jpg" alt="例图"></p>
 <h3 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h3><p>Procs（进程）：<br><br>r: 运行队列中进程数量<br><br>b: 等待IO的进程数量<br><br>Memory（内存）：<br><br>swpd: 使用虚拟内存大小<br><br>free: 可用内存大小<br><br>buff: 用作缓冲的内存大小<br><br>cache: 用作缓存的内存大小<br><br>Swap：<br><br>si: 每秒从交换区写到内存的大小<br><br>so: 每秒写入交换区的内存大小<br><br>IO：（现在的Linux版本块的大小为1024bytes）<br><br>bi: 每秒读取的块数<br><br>bo: 每秒写入的块数<br><br>系统：<br><br>in: 每秒中断数，包括时钟中断<br><br>cs: 每秒上下文切换数<br><br>CPU（以百分比表示）：<br><br>us: 用户进程执行时间(user time)<br><br>sy: 系统进程执行时间(system time)<br><br>id: 空闲时间(包括IO等待时间),中央处理器的空闲时间  以百分比表示<br><br>wa: 等待IO时间</p>
 <h3 id="需要关注的指标"><a href="#需要关注的指标" class="headerlink" title="需要关注的指标"></a>需要关注的指标</h3><p>如果 r经常大于 4 ，且id经常少于40，表示cpu的负荷很重<br><br>如果bi，bo 长期不等于0，表示内存不足<br><br>如果disk 经常不等于0， 且在 b中的队列 大于3， 表示 io性能不好<br></p>
 
@@ -511,7 +511,7 @@
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
               <img class="site-author-image" itemprop="image"
-                src="https://raw.githubusercontent.com/yunchangwang/blogs/master/admin/head.jpeg"
+                src="https://ae03.alicdn.com/kf/Hc3a908d7a7c244d7ab59aab09cca047dd.jpg"
                 alt="wyc" />
             
               <p class="site-author-name" itemprop="name">wyc</p>
@@ -525,7 +525,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">74</span>
+                  <span class="site-state-item-count">76</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -536,7 +536,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-count">22</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -547,7 +547,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-count">32</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

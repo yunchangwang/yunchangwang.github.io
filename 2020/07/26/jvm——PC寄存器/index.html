@@ -87,13 +87,13 @@
 <meta property="og:site_name" content="wyc-blog">
 <meta property="og:description" content="jvm运行时数据区jvm区域划分，主要分为5个重要组成部分  堆 java虚拟机栈 元空间(jdk7以前叫方法区) 本地方法栈 pc寄存器这边重点讲解pc寄存器  pc寄存器 概念jvm中pc寄存器，又叫程序计数器。不同于cpu中的寄存器用于存储计算的中间结果，pc寄存器用来存储下一条指令的地址。  生命周期pc寄存器是线程私有的，每个线程在创建时都会分配一个pc寄存器，所以pc寄存器的生命周期与">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://raw.githubusercontent.com/yunchangwang/blogs/master/jvm/pc%E5%AF%84%E5%AD%98%E5%99%A8.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/yunchangwang/blogs/master/jvm/pc%E5%AF%84%E5%AD%98%E5%99%A8%E5%AD%97%E8%8A%82%E7%A0%81.png">
-<meta property="og:updated_time" content="2020-07-26T14:38:26.563Z">
+<meta property="og:image" content="https://sc03.alicdn.com/kf/Hb935a22005bc4b2983f999785193e80el.jpg">
+<meta property="og:image" content="https://ae04.alicdn.com/kf/H7e4e748953b246379d487ec22f412b7di.jpg">
+<meta property="og:updated_time" content="2020-10-30T11:10:46.207Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="jvm——PC寄存器">
 <meta name="twitter:description" content="jvm运行时数据区jvm区域划分，主要分为5个重要组成部分  堆 java虚拟机栈 元空间(jdk7以前叫方法区) 本地方法栈 pc寄存器这边重点讲解pc寄存器  pc寄存器 概念jvm中pc寄存器，又叫程序计数器。不同于cpu中的寄存器用于存储计算的中间结果，pc寄存器用来存储下一条指令的地址。  生命周期pc寄存器是线程私有的，每个线程在创建时都会分配一个pc寄存器，所以pc寄存器的生命周期与">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/yunchangwang/blogs/master/jvm/pc%E5%AF%84%E5%AD%98%E5%99%A8.png">
+<meta name="twitter:image" content="https://sc03.alicdn.com/kf/Hb935a22005bc4b2983f999785193e80el.jpg">
 
 
 
@@ -305,7 +305,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="wyc">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/yunchangwang/blogs/master/admin/head.jpeg">
+      <meta itemprop="image" content="https://ae03.alicdn.com/kf/Hc3a908d7a7c244d7ab59aab09cca047dd.jpg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -407,8 +407,8 @@
 <li><p>异常规定<br>由于pc寄存器只是存储下一行指令的地址，所以pc寄存器的内存空间可以忽略不计，所以pc寄存器是唯一没有指定oom异常的区域，并且不会被垃圾回收。</p>
 </li>
 </ul>
-<h2 id="代码说明"><a href="#代码说明" class="headerlink" title="代码说明"></a>代码说明</h2><p>代码如下，定义了i和j，并相加赋给了k<br><img src="https://raw.githubusercontent.com/yunchangwang/blogs/master/jvm/pc%E5%AF%84%E5%AD%98%E5%99%A8.png" alt=""></p>
-<p>命令行执行javap -v PcRegisterTest.class 查看字节码。其中左边序号是pc寄存器存储的地址，右边是jvm的指令，执行引擎会读pc寄存器中的地址(即下一个指令)翻译成机器语言，并交给cpu执行。<br><img src="https://raw.githubusercontent.com/yunchangwang/blogs/master/jvm/pc%E5%AF%84%E5%AD%98%E5%99%A8%E5%AD%97%E8%8A%82%E7%A0%81.png" alt=""></p>
+<h2 id="代码说明"><a href="#代码说明" class="headerlink" title="代码说明"></a>代码说明</h2><p>代码如下，定义了i和j，并相加赋给了k<br><img src="https://sc03.alicdn.com/kf/Hb935a22005bc4b2983f999785193e80el.jpg" alt=""></p>
+<p>命令行执行javap -v PcRegisterTest.class 查看字节码。其中左边序号是pc寄存器存储的地址，右边是jvm的指令，执行引擎会读pc寄存器中的地址(即下一个指令)翻译成机器语言，并交给cpu执行。<br><img src="https://ae04.alicdn.com/kf/H7e4e748953b246379d487ec22f412b7di.jpg" alt=""></p>
 
       
     </div>
@@ -525,7 +525,7 @@
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
               <img class="site-author-image" itemprop="image"
-                src="https://raw.githubusercontent.com/yunchangwang/blogs/master/admin/head.jpeg"
+                src="https://ae03.alicdn.com/kf/Hc3a908d7a7c244d7ab59aab09cca047dd.jpg"
                 alt="wyc" />
             
               <p class="site-author-name" itemprop="name">wyc</p>
@@ -539,7 +539,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">74</span>
+                  <span class="site-state-item-count">76</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -550,7 +550,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-count">22</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -561,7 +561,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-count">32</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

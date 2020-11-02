@@ -87,17 +87,17 @@
 <meta property="og:site_name" content="wyc-blog">
 <meta property="og:description" content="背景web工程中，数据交互是不可避免的，相比xml，json是现在流行的数据交互。在调试接口中，发现返回字段的大小写不是我所期望的，原本应该返回的nNum字段变成了nnum，这样就导致和前端约定的有出入了。 jacksonweb工程中，比较流行的框架是springMVC+spring+mybatis。数据交互由springMVC完成，但是springMVC也不是自己序列化json的，它将这个工作交">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://raw.githubusercontent.com/yunchangwang/blogs/master/jaskson/default.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/yunchangwang/blogs/master/jaskson/res1.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/yunchangwang/blogs/master/jaskson/res2.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/yunchangwang/blogs/master/jaskson/res3.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/yunchangwang/blogs/master/jaskson/res4.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/yunchangwang/blogs/master/jaskson/ignore.png">
-<meta property="og:updated_time" content="2018-04-11T05:13:43.000Z">
+<meta property="og:image" content="https://sc01.alicdn.com/kf/Hcd6fdcb2c79f4a7fa635f53ecf21e096v.jpg">
+<meta property="og:image" content="https://sc04.alicdn.com/kf/Hde840d70fe314b359bc33697632631abp.jpg">
+<meta property="og:image" content="https://ae03.alicdn.com/kf/Hc05a21fc6fc4482985255ed82d042ea3l.jpg">
+<meta property="og:image" content="https://ae02.alicdn.com/kf/H975a8e4930b1493b9b9332b3b978e1d4F.jpg">
+<meta property="og:image" content="https://ae02.alicdn.com/kf/H9d20541890414609b80c030b072853760.jpg">
+<meta property="og:image" content="https://ae02.alicdn.com/kf/H77d0cf24376546ea8309ea07bb23aa1aR.jpg">
+<meta property="og:updated_time" content="2020-10-30T09:42:11.221Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="关于jackson转化json的原理">
 <meta name="twitter:description" content="背景web工程中，数据交互是不可避免的，相比xml，json是现在流行的数据交互。在调试接口中，发现返回字段的大小写不是我所期望的，原本应该返回的nNum字段变成了nnum，这样就导致和前端约定的有出入了。 jacksonweb工程中，比较流行的框架是springMVC+spring+mybatis。数据交互由springMVC完成，但是springMVC也不是自己序列化json的，它将这个工作交">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/yunchangwang/blogs/master/jaskson/default.jpg">
+<meta name="twitter:image" content="https://sc01.alicdn.com/kf/Hcd6fdcb2c79f4a7fa635f53ecf21e096v.jpg">
 
 
 
@@ -309,7 +309,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="wyc">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/yunchangwang/blogs/master/admin/head.jpeg">
+      <meta itemprop="image" content="https://ae03.alicdn.com/kf/Hc3a908d7a7c244d7ab59aab09cca047dd.jpg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -395,11 +395,11 @@
       
         <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>web工程中，数据交互是不可避免的，相比xml，json是现在流行的数据交互。<br>在调试接口中，发现返回字段的大小写不是我所期望的，<strong>原本应该返回的nNum字段变成了nnum</strong>，这样就导致和前端约定的有出入了。</p>
 <h2 id="jackson"><a href="#jackson" class="headerlink" title="jackson"></a>jackson</h2><p>web工程中，比较流行的框架是springMVC+spring+mybatis。数据交互由springMVC完成，但是springMVC也不是自己序列化json的，它将这个工作交给了jackson。<br>jackson对object进行序列化的过程中确实存在key大写变小写的问题。看我娓娓道来。</p>
-<h2 id="序列化原理"><a href="#序列化原理" class="headerlink" title="序列化原理"></a>序列化原理</h2><p>这里只对jackson的序列化原理做阐述，其他的序列化工具不一定是相同的原理，不可套用。<br>众所周知，json的数据格式是，key:value的形式，现在的问题就出现在key的大小写这边。<br>下面我们对其进行一定的测试：<br>object中的field都有其对应的get,set方法，一般都会选择是IDE自动生成。如下图所示：<br><img src="https://raw.githubusercontent.com/yunchangwang/blogs/master/jaskson/default.jpg" alt="图片1"><br>其运行的结果当然没有问题：<br><img src="https://raw.githubusercontent.com/yunchangwang/blogs/master/jaskson/res1.png" alt="图片2"></p>
+<h2 id="序列化原理"><a href="#序列化原理" class="headerlink" title="序列化原理"></a>序列化原理</h2><p>这里只对jackson的序列化原理做阐述，其他的序列化工具不一定是相同的原理，不可套用。<br>众所周知，json的数据格式是，key:value的形式，现在的问题就出现在key的大小写这边。<br>下面我们对其进行一定的测试：<br>object中的field都有其对应的get,set方法，一般都会选择是IDE自动生成。如下图所示：<br><img src="https://sc01.alicdn.com/kf/Hcd6fdcb2c79f4a7fa635f53ecf21e096v.jpg" alt="图片1"><br>其运行的结果当然没有问题：<br><img src="https://sc04.alicdn.com/kf/Hde840d70fe314b359bc33697632631abp.jpg" alt="图片2"></p>
 <p>jackson在序列化的时候如何定义key呢？<br>jackson会获取field对应的get方法方法名，比如getXxx，然后进行将get进行截断，变成Xxx，最后将其小写，变成xxx。</p>
-<p>如果我们将xxx改成xXx，但是没有更改其get方法，key仍然是xxx，并不是我们期望的xXx：<br><img src="https://raw.githubusercontent.com/yunchangwang/blogs/master/jaskson/res2.png" alt="图片3"></p>
-<p>网上的很多博客基本都只提及大写转小写，其实不然，jackson只会将连续的大写转换成小写，如果中间断了，之后的大写字符也不会处理了，并且jackson是从开头检测的，如果开头就是小写，那么之后的大写字符也不会处理了。测试如下：<br><img src="https://raw.githubusercontent.com/yunchangwang/blogs/master/jaskson/res3.png" alt="图片4"><br><img src="https://raw.githubusercontent.com/yunchangwang/blogs/master/jaskson/res4.png" alt="图片5"></p>
-<h2 id="如何避免"><a href="#如何避免" class="headerlink" title="如何避免"></a>如何避免</h2><p>正如网上的博客所说，你需要在field和其对应的get方法上加上对应的标签，然后jackson在序列化的时候就会以你的field名称为key：<br><img src="https://raw.githubusercontent.com/yunchangwang/blogs/master/jaskson/ignore.png" alt="图片5"></p>
+<p>如果我们将xxx改成xXx，但是没有更改其get方法，key仍然是xxx，并不是我们期望的xXx：<br><img src="https://ae03.alicdn.com/kf/Hc05a21fc6fc4482985255ed82d042ea3l.jpg" alt="图片3"></p>
+<p>网上的很多博客基本都只提及大写转小写，其实不然，jackson只会将连续的大写转换成小写，如果中间断了，之后的大写字符也不会处理了，并且jackson是从开头检测的，如果开头就是小写，那么之后的大写字符也不会处理了。测试如下：<br><img src="https://ae02.alicdn.com/kf/H975a8e4930b1493b9b9332b3b978e1d4F.jpg" alt="图片4"><br><img src="https://ae02.alicdn.com/kf/H9d20541890414609b80c030b072853760.jpg" alt="图片5"></p>
+<h2 id="如何避免"><a href="#如何避免" class="headerlink" title="如何避免"></a>如何避免</h2><p>正如网上的博客所说，你需要在field和其对应的get方法上加上对应的标签，然后jackson在序列化的时候就会以你的field名称为key：<br><img src="https://ae02.alicdn.com/kf/H77d0cf24376546ea8309ea07bb23aa1aR.jpg" alt="图片5"></p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
 <li>spring的序列化工作是由jackson完成(你也可以配置其他的序列化工具)</li>
 <li>jackson序列化的key定义与field名称无关，反而和其get方法名称有关</li>
@@ -522,7 +522,7 @@
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
               <img class="site-author-image" itemprop="image"
-                src="https://raw.githubusercontent.com/yunchangwang/blogs/master/admin/head.jpeg"
+                src="https://ae03.alicdn.com/kf/Hc3a908d7a7c244d7ab59aab09cca047dd.jpg"
                 alt="wyc" />
             
               <p class="site-author-name" itemprop="name">wyc</p>
@@ -536,7 +536,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">74</span>
+                  <span class="site-state-item-count">76</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -547,7 +547,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-count">22</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -558,7 +558,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-count">32</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
