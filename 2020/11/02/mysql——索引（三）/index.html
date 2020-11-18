@@ -91,13 +91,13 @@
 <meta property="og:image" content="https://sc01.alicdn.com/kf/H1206ccdaa178409e99cea450a01c0977k.jpg">
 <meta property="og:image" content="https://ae02.alicdn.com/kf/H3f055abf3ba04c6899a858bfaf85f9dbK.jpg">
 <meta property="og:image" content="https://ae02.alicdn.com/kf/He15372aac2964d0ca35f54a1d9751b1cP.jpg">
-<meta property="og:image" content="https://sc02.alicdn.com/kf/H07bbad23860f40a5a86839f2b97d6631C.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/11/08/CDklwimejpBNOX5.png">
 <meta property="og:image" content="https://ae04.alicdn.com/kf/H1bb92aae5ab243e39cdb18a70ac3f70b1.jpg">
 <meta property="og:image" content="https://sc02.alicdn.com/kf/Hcccc0b4b6b0543d0bd3ff331175371fe8.jpg">
 <meta property="og:image" content="https://sc02.alicdn.com/kf/Hbd3d0f609ecb4963b540433d705a7c14k.jpg">
 <meta property="og:image" content="https://ae02.alicdn.com/kf/Hebc3f15ef11146ae9923adec6a39f526t.jpg">
 <meta property="og:image" content="https://sc01.alicdn.com/kf/H491a1914a68d44b5bca019a3c03c29a6F.jpg">
-<meta property="og:updated_time" content="2020-11-08T06:48:03.902Z">
+<meta property="og:updated_time" content="2020-11-08T09:00:24.292Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="mysql——索引（三）">
 <meta name="twitter:description" content="mysql为什么有时候选错索引在mysql中一张表可以支持多个索引，但是你在写sql的时候并没有主动选择使用哪个索引，那是因为mysql的优化器帮你选择了。竟然这样，mysql的优化器在选择时是否会出错呢？答案是 —— 会。 选错索引的例子1让我们一起来看一下以下的例子，假如有一个简单的表，表里有a、b两个字段，并分别建上索引：12345678CREATE TABLE `t` (  `id` in">
@@ -406,7 +406,7 @@
 <p>以上的说明都是基于你已经复现出了mysql选错索引这个例子1的场景。</p>
 <h3 id="优化器逻辑"><a href="#优化器逻辑" class="headerlink" title="优化器逻辑"></a>优化器逻辑</h3><p>选择索引是优化器的工作，优化器选择索引的目的，是为了找到一个最优的执行方案，并用最小的代价去执行语句。其中扫描行数是影响选择的因素之一。<br><br>那么扫描行数是如何得到的呢？<br><br>mysql在执行sql的时候，并不能<strong>精确地知道具体有多少行</strong>，只能根据统计的信息来估计记录数。这个统计的信息就是<strong>索引的区分度</strong>：一个索引上不同的值越多，这个索引的区分度就越好，而索引上不同值的个数称为基数，即基数越大区分度越好。</p>
 <p>到此就可以解释另一个问题：模拟不断地删除历史数据和新增数据后，索引统计的基数为何增加了？<br><br>mysql是使用<strong>标记删除来删除记录的</strong>,并不从索引和数据文件中真正的删除。<br>在REPEATABLE-READ（可重复读）事务隔离级别下，session B要支持session A的可重复读，所以不能占用之前被删除的数据的空间，新插入的数据只能重新申请数据页空间，所以导致索引页面数的增加，导致统计的基数增大。</p>
-<p>执行：show index from t; 可以显示表所有索引的基数：<br><img src="https://sc02.alicdn.com/kf/H07bbad23860f40a5a86839f2b97d6631C.jpg" alt=""></p>
+<p>执行：show index from t; 可以显示表所有索引的基数：<br><img src="https://i.loli.net/2020/11/08/CDklwimejpBNOX5.png" alt="image.png"></p>
 <p>mysql如何统计索引基数：<br><br>如果将表一行行读取出来进行统计，虽然能获得精确的数据，但是这代价太大了，所以mysql使用的是采用统计。<br><br>采样统计时，InnoDB会选取N个数据页，统计这些页上的不同值，获得一个平均值，然后乘以这个索引的页面数，就得到了这个索引的基数。</p>
 <p>当然，扫描行数并不是唯一的判断标准，优化器还会结合是否使用临时表、是否排序等因素进行综合判断，这里不再展开。</p>
 <h3 id="选错索引的例子2"><a href="#选错索引的例子2" class="headerlink" title="选错索引的例子2"></a>选错索引的例子2</h3><p>这里再补充一个因为排序引起的选错索引的场景：explain select * from t where (a between 1 and 1000) and (b between 50000 and 100000) order by b limit 1;<br><img src="https://ae04.alicdn.com/kf/H1bb92aae5ab243e39cdb18a70ac3f70b1.jpg" alt=""><br>从你的角度看，优化器应该选择索引a，这样只需要扫描1000行就能查出结果了。但是上图说明了优化器偏偏选择了索引b，这里就是因为后面要对b进行排序，优化器认为选择索引b可以避免排序。</p>
