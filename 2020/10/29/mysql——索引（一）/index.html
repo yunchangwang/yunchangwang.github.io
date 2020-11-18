@@ -79,24 +79,24 @@
 
 
 
-<meta name="description" content="InnoDB引擎下索引的数据结构当你给一张表创建索引的时候，mysql究竟在做什么？创建索引时，为什么表数据越大，执行时间越长？想要知道以上答案，必须了解mysql中索引的数据结构。 InnoDB引擎下，索引其实是一棵B+树（这里明确指出是InnoDB，因为mysql不止支持一种存储引擎，比如还有MYISAM，Memory等，索引的数据结构也是不同的。）那么B+树到底是怎样的数据结构呢？如下图:">
+<meta name="description" content="InnoDB引擎下索引的数据结构给一张表创建索引的时候，mysql究竟在做什么？创建索引时，为什么表数据越大，执行时间越长？想要知道答案，就必须了解mysql中索引的数据结构。 InnoDB引擎下，索引其实是一棵B+树（这里明确指出是InnoDB，因为mysql支持多种存储引擎，比如还有MYISAM，Memory等。不同的存储引擎，索引的数据结构也是不同的。）那么B+树到底是怎样的数据结构呢？如下">
 <meta name="keywords" content="索引">
 <meta property="og:type" content="article">
 <meta property="og:title" content="mysql——索引（一）">
 <meta property="og:url" content="http://yoursite.com/2020/10/29/mysql——索引（一）/index.html">
 <meta property="og:site_name" content="wyc-blog">
-<meta property="og:description" content="InnoDB引擎下索引的数据结构当你给一张表创建索引的时候，mysql究竟在做什么？创建索引时，为什么表数据越大，执行时间越长？想要知道以上答案，必须了解mysql中索引的数据结构。 InnoDB引擎下，索引其实是一棵B+树（这里明确指出是InnoDB，因为mysql不止支持一种存储引擎，比如还有MYISAM，Memory等，索引的数据结构也是不同的。）那么B+树到底是怎样的数据结构呢？如下图:">
+<meta property="og:description" content="InnoDB引擎下索引的数据结构给一张表创建索引的时候，mysql究竟在做什么？创建索引时，为什么表数据越大，执行时间越长？想要知道答案，就必须了解mysql中索引的数据结构。 InnoDB引擎下，索引其实是一棵B+树（这里明确指出是InnoDB，因为mysql支持多种存储引擎，比如还有MYISAM，Memory等。不同的存储引擎，索引的数据结构也是不同的。）那么B+树到底是怎样的数据结构呢？如下">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://sc02.alicdn.com/kf/Hf584f2a4541142ff90087ae9235ec58dN.jpg">
-<meta property="og:image" content="https://ae02.alicdn.com/kf/H31e4e44bd61e45fbb7105a6a4e1bbca3F.jpg">
-<meta property="og:image" content="https://ae03.alicdn.com/kf/H082e84937505407db401f040f898260aA.jpg">
-<meta property="og:image" content="https://ae03.alicdn.com/kf/Hf3ee44db098a46839018c9e85907f21fS.jpg">
-<meta property="og:image" content="https://sc03.alicdn.com/kf/Ha4c0b397227d4172bb580a9101cb480ak.jpg">
-<meta property="og:updated_time" content="2020-11-02T09:09:56.877Z">
+<meta property="og:image" content="https://i.loli.net/2020/11/08/rmisgv4aT8xL9lj.png">
+<meta property="og:image" content="https://i.loli.net/2020/11/08/dgtbm2nvfUKI8sN.png">
+<meta property="og:image" content="https://i.loli.net/2020/11/08/c5OEhlKS6QJBMft.png">
+<meta property="og:image" content="https://i.loli.net/2020/11/08/4q3NhQBA5imd6VY.png">
+<meta property="og:image" content="https://i.loli.net/2020/11/08/PcDs8mjtV6ZAJGq.png">
+<meta property="og:updated_time" content="2020-11-18T15:16:28.238Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="mysql——索引（一）">
-<meta name="twitter:description" content="InnoDB引擎下索引的数据结构当你给一张表创建索引的时候，mysql究竟在做什么？创建索引时，为什么表数据越大，执行时间越长？想要知道以上答案，必须了解mysql中索引的数据结构。 InnoDB引擎下，索引其实是一棵B+树（这里明确指出是InnoDB，因为mysql不止支持一种存储引擎，比如还有MYISAM，Memory等，索引的数据结构也是不同的。）那么B+树到底是怎样的数据结构呢？如下图:">
-<meta name="twitter:image" content="https://sc02.alicdn.com/kf/Hf584f2a4541142ff90087ae9235ec58dN.jpg">
+<meta name="twitter:description" content="InnoDB引擎下索引的数据结构给一张表创建索引的时候，mysql究竟在做什么？创建索引时，为什么表数据越大，执行时间越长？想要知道答案，就必须了解mysql中索引的数据结构。 InnoDB引擎下，索引其实是一棵B+树（这里明确指出是InnoDB，因为mysql支持多种存储引擎，比如还有MYISAM，Memory等。不同的存储引擎，索引的数据结构也是不同的。）那么B+树到底是怎样的数据结构呢？如下">
+<meta name="twitter:image" content="https://i.loli.net/2020/11/08/rmisgv4aT8xL9lj.png">
 
 
 
@@ -392,31 +392,31 @@
       
 
       
-        <h2 id="InnoDB引擎下索引的数据结构"><a href="#InnoDB引擎下索引的数据结构" class="headerlink" title="InnoDB引擎下索引的数据结构"></a>InnoDB引擎下索引的数据结构</h2><p>当你给一张表创建索引的时候，mysql究竟在做什么？<br><br>创建索引时，为什么表数据越大，执行时间越长？<br><br>想要知道以上答案，必须了解mysql中索引的数据结构。</p>
-<p>InnoDB引擎下，索引其实是一棵B+树（这里明确指出是InnoDB，因为mysql不止支持一种存储引擎，比如还有MYISAM，Memory等，索引的数据结构也是不同的。）<br><br>那么B+树到底是怎样的数据结构呢？如下图:<br></p>
+        <h2 id="InnoDB引擎下索引的数据结构"><a href="#InnoDB引擎下索引的数据结构" class="headerlink" title="InnoDB引擎下索引的数据结构"></a>InnoDB引擎下索引的数据结构</h2><p>给一张表创建索引的时候，mysql究竟在做什么？<br><br>创建索引时，为什么表数据越大，执行时间越长？<br><br>想要知道答案，就必须了解mysql中索引的数据结构。</p>
+<p>InnoDB引擎下，索引其实是一棵B+树（这里明确指出是InnoDB，因为mysql支持多种存储引擎，比如还有MYISAM，Memory等。不同的存储引擎，索引的数据结构也是不同的。）<br><br>那么B+树到底是怎样的数据结构呢？如下图:<br></p>
 <ul>
 <li>一个节点中可以包含多个元素，所有的叶子节点位于同一层</li>
 <li>每个父节点的元素都出现在子节点中，是子节点的最大或最小元素</li>
 <li>其他上层节点不存储数据，只作索引，只在叶子节点存储数据</li>
-<li>节点和节点之间通过指针依次按从小到大顺序连接<br><img src="https://sc02.alicdn.com/kf/Hf584f2a4541142ff90087ae9235ec58dN.jpg" alt=""></li>
+<li>叶子节点和节点之间通过指针依次按从小到大顺序连接<br><img src="https://i.loli.net/2020/11/08/rmisgv4aT8xL9lj.png" alt="索引_B+树.png"></li>
 </ul>
-<h3 id="InnoDB为何选择B-树"><a href="#InnoDB为何选择B-树" class="headerlink" title="InnoDB为何选择B+树"></a>InnoDB为何选择B+树</h3><p>想要解释这个问题，可以将B+树和其他的数据结构进行比较，阐述其他数据结构的缺点。<br><br>索引的出现无非是为了提高查找的效率，比如哈希表，数组，二叉树，B树等等，都可以提高查找的效率。<br></p>
-<p>假设，你现在维护着一个身份证信息和姓名的表，需要根据身份证号查找对应的名字<br><br><strong>哈希表</strong></p>
+<h3 id="InnoDB为何选择B-树"><a href="#InnoDB为何选择B-树" class="headerlink" title="InnoDB为何选择B+树"></a>InnoDB为何选择B+树</h3><p>存储引擎无非要提供存储和查询的功能，有很多的数据结构都具备这样的功能，为何选择B+树。<br><br>想要解释这个问题，可以将B+树和其他的数据结构进行比较，阐述其他数据结构的缺点。<br></p>
+<p>假设，你现在维护着一个身份证信息和姓名的表，需要根据身份证号查找对应的名字<br><strong>哈希表</strong></p>
 <ul>
 <li>通过hash算法得到不同的下标进行存储</li>
 <li>hash出来的key可能相同，所以相同key值的value用链表串起来</li>
-<li>链表中的value值是无序的<br><img src="https://ae02.alicdn.com/kf/H31e4e44bd61e45fbb7105a6a4e1bbca3F.jpg" alt=""><br>从图中可以了解：哈希表对于数据的存储是很快的，但对于范围查找，因为存储是无序的，所以要扫描链表中全部的值。所以，<strong>哈希表这种结构适用于只有等值查询的场景。</strong></li>
+<li>链表中的value值是无序的<br><img src="https://i.loli.net/2020/11/08/dgtbm2nvfUKI8sN.png" alt="索引_哈希表.png"><br>哈希表对于数据存储是很快的（因为只要将前一个节点next指针指向插入节点，插入节点next指向前一个节点next先前指向的节点即可。），但对于范围查找，范围中的每一个值，哈希表都要扫描对应key的链表中全部的值（因为是无序的，即使查找到第一个不符合范围的value，也无法保证后面的value是否在范围内）。所以，<strong>哈希表这种结构适用于只有等值查询的场景。</strong></li>
 </ul>
-<p><strong>有序数组</strong><br>相比于哈希表，有序数组对于等值查找或者范围查找的支持更加优秀。<br><img src="https://ae03.alicdn.com/kf/H082e84937505407db401f040f898260aA.jpg" alt=""><br>从图中可以了解：这里是假设身份证不会重复的情况下，如果数据有重复，有序数组难以支持；有序数组在中间插入数据时，需要移动所有后面的数组，所以对于存储，效率很差。</p>
-<p><strong>平衡二叉树</strong><br>二叉树无论是查询还是存储效率都是非常高的，时间复杂度都是O(log(N))。mysql为何没有选择二叉树作为索引的数据结构？这里涉及到IO访问次数的问题。（索引不止在内存中，要持久化到磁盘上。）<br><br><img src="https://ae03.alicdn.com/kf/Hf3ee44db098a46839018c9e85907f21fS.jpg" alt=""><br>因为二叉树每个节点下只能有两个元素的限制，导致数据量大时树会非常高（这样导致存储的数据块也比较多），这就导致查询一个值时可能需要进行多处IO访问。</p>
-<p><strong>B树</strong><br>B树没有二叉树这样树会很高的问题，因为和B+树一样，B树也是支持一个节点下有多个元素。不同的是：B树可以在非叶结点中存储数据，这就导致在搜索中可能要多次加载父节点，无端增加IO的访问次数。</p>
-<p>到此，我们可以回答上面的第一个问题了：<br><br>当你给一张表创建索引的时候，mysql实际上在给这个表创建一棵B+树。</p>
+<p><strong>有序数组</strong><br>相比于哈希表，有序数组对于等值查找或者范围查找的支持更加优秀。<br><img src="https://i.loli.net/2020/11/08/c5OEhlKS6QJBMft.png" alt="索引_有序数组.png"><br>这里是假设身份证不会重复的情况下（即索引值不重复），如果索引值是可重复的，有序数组难以支持；为了维护索引有序性，有序数组在数据存储时要付出很大代价，比如在中间插入数据，需要移动所有后面的数组，效率很差。</p>
+<p><strong>平衡二叉树</strong><br>二叉树无论是查询还是存储效率都是非常高的，时间复杂度都是O(log(N))。mysql为何没有选择二叉树作为索引的数据结构？这里主要涉及到IO访问次数的问题。（索引不止在内存中，要持久化到磁盘上。）<br><br><img src="https://i.loli.net/2020/11/08/4q3NhQBA5imd6VY.png" alt="索引_二叉树.png"><br>申请磁盘空间时都是以块申请的，所以平衡二叉树每多增加一层，就要开辟一块磁盘空间。<br><br>由于二叉树每个节点下只能有两个元素的限制，导致数据量大时树会非常高（这样导致存储的数据块也比较多），这就导致在查询一个值时可能需要进行多次的IO访问（磁盘相比与内存，访问速度可是要慢的多）。</p>
+<p><strong>B树</strong><br>B树没有二叉树这样树会很高的问题，因为和B+树一样，B树也是支持一个节点下有多个元素。但是，B树可以在非叶子节点中存储数据，导致每个节点的大小就增大了，由于每次从磁盘读的数据量固定，所以IO的交互会增多；并且由于数据并非都在叶子节点上，无法用指针将所有数据都串起来，这样每次搜索都得从root树根开始。</p>
+<p>到此，我们可以回答上面的第一个问题了：当你给一张表创建索引的时候，mysql实际上在给这个表创建一棵B+树。</p>
 <h2 id="索引的维护"><a href="#索引的维护" class="headerlink" title="索引的维护"></a>索引的维护</h2><p>索引分为主键索引(聚簇索引)和非主键索引(二级索引)：主键索引的叶子节点存储的是整行的数据；非主键索引的叶子节点存储的是主键的值。<br><br>假设，我们有一个主键列为id的表，表中有字段k，并且在k上有索引：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create table T(</span><br><span class="line">id int primary key, </span><br><span class="line">k int not null, </span><br><span class="line">name varchar(16),</span><br><span class="line">index (k))engine=InnoDB;</span><br></pre></td></tr></table></figure></p>
-<p>表中row1~row5的(id,k)值分别为(100,1)、(200,2)、(300,3)、(500,5)和(600,6)，两棵树的示例示意图如下：<br><img src="https://sc03.alicdn.com/kf/Ha4c0b397227d4172bb580a9101cb480ak.jpg" alt=""></p>
-<h3 id="建表规范中为何一定要有自增主键"><a href="#建表规范中为何一定要有自增主键" class="headerlink" title="建表规范中为何一定要有自增主键"></a>建表规范中为何一定要有自增主键</h3><p>B+树为了索引的有序性，在插入新数据的时候需要做必要的维护。以上面这个图为例，如果新插入的ID值为400，相对麻烦，需要逻辑上挪动后面的数据，空出位置；更糟的，如果R5所在的数据页已经满了，根据B+树的算法，这时候需要申请一个新的数据页，然后挪动部分数据过去（页分裂）。这种情况下，性能自然会受到影响。<br><br>除了性能外，页的分裂还会影响空间的利用率，原本一页的数据被分成了两页，整体空间利用率降低大约50%。<br><br>当然有分裂就有合并。当相邻两个页由于删除了数据，利用率很低之后，会将数据页做合并。合并的过程，可以认为是分裂过程的逆过程。<br></p>
-<p>基于索引维护的过程，我们不难猜到：<strong>如果新增进去的数据主键都是单调递增的，就不会出现页分裂的情况，既提高了插入的效率，又让数据紧凑（即提高空间利用率）</strong>。而有业务逻辑的字段做主键，则往往不容易保证有序插入，这样写数据成本相对较高。</p>
-<p>再看另一个业务场景：假设你的表中确实有一个唯一字段，比如字符串类型的身份证号，那应该用身份证号做主键，还是用自增字段做主键呢？<br><br>因为非主键索引叶子节点存储的是主键的值，如果使用身份证号作为主键，会增加非主键索引的存储（因为无论整型-int 还是长整型-bigint字节都比身份证号字符串小）。</p>
-<p>所以建表时要使用自增主键，既是从性能考虑，也是从存储成本考虑。</p>
+<p>表中row1~row5的(id,k)值分别为(100,1)、(200,2)、(300,3)、(500,5)和(600,6)，两棵树的示例示意图如下：<br><img src="https://i.loli.net/2020/11/08/PcDs8mjtV6ZAJGq.png" alt="索引_索引结构.png"></p>
+<h3 id="建表规范中为何一定要有自增主键"><a href="#建表规范中为何一定要有自增主键" class="headerlink" title="建表规范中为何一定要有自增主键"></a>建表规范中为何一定要有自增主键</h3><p>B+树为了索引的有序性，在插入新数据的时候需要做必要的维护。以上面这个图为例，如果新插入的ID值为400，相对麻烦，需要逻辑上挪动后面的数据，空出位置；更糟的，如果R5所在的数据页已经满了，根据B+树的算法，这时候需要申请一个新的数据页，然后挪动部分数据过去（页分裂）。这种情况下，性能自然会受到影响。<br>除了性能外，页的分裂还会<strong>影响空间的利用率</strong>，原本一页的数据被分成了两页，整体空间利用率降低大约50%。<br><br>当然有分裂就有合并。当相邻两个页由于删除了数据，利用率很低之后，会将数据页做合并。合并的过程，可以认为是分裂过程的逆过程。<br></p>
+<p>基于索引维护的过程，我们不难猜到：<strong>如果新增进去的数据主键都是单调递增的，就不会出现页分裂的情况，既提高了插入的效率，又让数据紧凑（即提高空间利用率）</strong>。而用业务上的字段做主键（比如身份证），则往往不容易保证有序插入（谁能保证在业务上后插入的身份证一定排在后面），但是自增的主键id就能保证。</p>
+<p>再看另一个业务场景：假设你的表中确实有一个唯一字段，比如字符串类型的身份证号，那应该用身份证号做主键，还是用自增字段做主键呢？<br>因为非主键索引叶子节点存储的是主键的值，如果使用身份证号作为主键，会增加非主键索引的存储（因为无论整型-int 还是长整型-bigint字节都比身份证号字符串小）。</p>
+<p>所以建表时要使用自增主键，既是从性能出发，也是从存储成本出发。</p>
 <h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>今天主要讲了数据库索引的数据结构，介绍了InnoDB采用了B+树结构，然后从搜索，更新，IO访问等角度阐明了InnoDB为什么要这样选择。<br><br>由于InnoDB是索引组织表（表都是根据主键顺序以索引的形式存放的），所以建议在创建表时一定要有自增主键。<br><br>当你给一张表创建索引的时候，mysql实际上在给这个表创建一棵B+树；并且表的数据量越大，要创建的叶子节点就越多，申请的空间也越大，所以执行的也越慢。</p>
 
       

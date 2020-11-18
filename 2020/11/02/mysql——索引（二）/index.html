@@ -87,17 +87,17 @@
 <meta property="og:site_name" content="wyc-blog">
 <meta property="og:description" content="什么是回表在mysql——索引（一）中我们知道了索引的数据结构是B+树，要描述回表的过程，还得提前了解索引的数据结构。还是以索引(一)中的例子为例，假设，我们有一个主键列为id的表，表中有字段k，并且在k上有索引，建表语句如下：12345mysql&amp;gt; create table t(id int primary key, k int not null, name varchar(16),ind">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://sc03.alicdn.com/kf/Ha4c0b397227d4172bb580a9101cb480ak.jpg">
-<meta property="og:image" content="https://ae02.alicdn.com/kf/H32bfe7ef595446c9965c4ec826fadd8di.jpg">
-<meta property="og:image" content="https://sc03.alicdn.com/kf/H4488a56385804c3183f770cd86757edcy.jpg">
-<meta property="og:image" content="https://ae04.alicdn.com/kf/Hd12377cba99146ecbf71be739299f41ca.jpg">
-<meta property="og:image" content="https://sc02.alicdn.com/kf/H8858dbcc52454156af3dac21a4531d00G.jpg">
-<meta property="og:image" content="https://sc01.alicdn.com/kf/H0243f92ac7f740ff866ba4dc57554074L.jpg">
-<meta property="og:updated_time" content="2020-11-02T09:30:05.999Z">
+<meta property="og:image" content="https://i.loli.net/2020/11/08/PcDs8mjtV6ZAJGq.png">
+<meta property="og:image" content="https://i.loli.net/2020/11/08/nxHVI5GYhENzOys.png">
+<meta property="og:image" content="https://i.loli.net/2020/11/08/qpOSVxtDGTnLFHU.png">
+<meta property="og:image" content="https://i.loli.net/2020/11/08/miLd3YzDVSKJXRG.png">
+<meta property="og:image" content="https://i.loli.net/2020/11/08/2yLrmlgofzxPEGB.png">
+<meta property="og:image" content="https://i.loli.net/2020/11/08/STlE24dKPGa5Usp.png">
+<meta property="og:updated_time" content="2020-11-08T09:41:26.001Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="mysql——索引（二）">
 <meta name="twitter:description" content="什么是回表在mysql——索引（一）中我们知道了索引的数据结构是B+树，要描述回表的过程，还得提前了解索引的数据结构。还是以索引(一)中的例子为例，假设，我们有一个主键列为id的表，表中有字段k，并且在k上有索引，建表语句如下：12345mysql&amp;gt; create table t(id int primary key, k int not null, name varchar(16),ind">
-<meta name="twitter:image" content="https://sc03.alicdn.com/kf/Ha4c0b397227d4172bb580a9101cb480ak.jpg">
+<meta name="twitter:image" content="https://i.loli.net/2020/11/08/PcDs8mjtV6ZAJGq.png">
 
 
 
@@ -394,11 +394,12 @@
 
       
         <h2 id="什么是回表"><a href="#什么是回表" class="headerlink" title="什么是回表"></a>什么是回表</h2><p>在<a href="https://yunchangwang.github.io/2020/10/29/mysql%E2%80%94%E2%80%94%E7%B4%A2%E5%BC%95%EF%BC%88%E4%B8%80%EF%BC%89/" target="_blank" rel="noopener">mysql——索引（一）</a>中我们知道了索引的数据结构是B+树，要描述回表的过程，还得提前了解索引的数据结构。还是以索引(一)中的例子为例，假设，我们有一个主键列为id的表，表中有字段k，并且在k上有索引，建表语句如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create table t(</span><br><span class="line">id int primary key, </span><br><span class="line">k int not null, </span><br><span class="line">name varchar(16),</span><br><span class="line">index (k))engine=InnoDB;</span><br></pre></td></tr></table></figure></p>
-<p>表中row1~row5的(id,k)值仍然为(100,1)、(200,2)、(300,3)、(500,5)和(600,6)<br>则基于主键索引和k值索引的结构图如下：<br><img src="https://sc03.alicdn.com/kf/Ha4c0b397227d4172bb580a9101cb480ak.jpg" alt=""><br>回答什么是回表之前，我们来讨论一个问题：基于主键索引的查询和普通索引（此处是k值索引）的查询有什么区别？<br></p>
+<p>表中row1~row5的(id,k)值仍然为(100,1)、(200,2)、(300,3)、(500,5)和(600,6)<br>则基于主键索引和k值索引的结构图如下：<br><img src="https://i.loli.net/2020/11/08/PcDs8mjtV6ZAJGq.png" alt="索引_索引结构.png"><br>回答什么是回表之前，我们来讨论一个问题：基于主键索引的查询和普通索引（此处是k值索引）的查询有什么区别？<br></p>
 <ul>
 <li>方式一：执行select * from t where id = 500，即为主键查询，则只需要搜索主键id这棵B+树。</li>
-<li>方式二：执行select <em> from t where k = 5，即为普通所以呢查询，则先需要搜索k值B+树，得到id=500，再搜索主键id这颗B+树。<br>方式二中先到普通索引进行搜索获取主键id后，仍需要回到主键id这棵B+树进行搜索获取数据的行为就是<em>*回表</em></em>。<br></li>
+<li>方式二：执行select * from t where k = 5，即为普通所以呢查询，则先需要搜索k值B+树，得到id=500，再搜索主键id这颗B+树。<br></li>
 </ul>
+<p>方式二中先到普通索引进行搜索获取主键id后，仍需要回到主键id这棵B+树进行搜索获取数据的行为就是<strong>回表</strong>。<br></p>
 <p>为什么搜索完k值树后还要回主键id树呢？因为前面我们已经知道了：<strong>只有主键索引的叶子节点上存储了全量的数据，普通索引叶子节点上存储的是主键id</strong>。所以一般建议使用主键id查询效率会更高一些，毕竟少了一次搜索过程。</p>
 <h2 id="索引覆盖"><a href="#索引覆盖" class="headerlink" title="索引覆盖"></a>索引覆盖</h2><p>从上面描述我们知道：回表会影响查询的性能。<br><br>如果将方式二的语句改写成：select id from t where k = 5，还需要进行回表吗？<br><br>这里的答案是：不需要进行回表。因为k值搜索树中存储的是主键id，已经符合了查询所需的数据。<br><br>我们再将上面的sql改写成以下3中方式，判断一下是否需要回表？<br></p>
 <ul>
@@ -411,11 +412,11 @@
 <p>这里我们使用explain命令来分析不同的条件查询是否有使用到索引。<br></p>
 <p>下面贴出explain执行的5种条件查询以及分析结果：<br></p>
 <ul>
-<li>使用a和b联合查询<br><img src="https://ae02.alicdn.com/kf/H32bfe7ef595446c9965c4ec826fadd8di.jpg" alt=""></li>
-<li>使用a等值查询<br><img src="https://sc03.alicdn.com/kf/H4488a56385804c3183f770cd86757edcy.jpg" alt=""></li>
-<li>使用b等值查询<br><img src="https://ae04.alicdn.com/kf/Hd12377cba99146ecbf71be739299f41ca.jpg" alt=""></li>
-<li>使用c等值查询<br><img src="https://sc02.alicdn.com/kf/H8858dbcc52454156af3dac21a4531d00G.jpg" alt=""></li>
-<li>使用a模糊查询<br><img src="https://sc01.alicdn.com/kf/H0243f92ac7f740ff866ba4dc57554074L.jpg" alt=""><br>从以上的结果可知：最左前缀原则，既可以作用于联合索引的最左N个字段，也可以作用于字符串索引的最左M个字符。</li>
+<li>使用a和b联合查询<br><img src="https://i.loli.net/2020/11/08/nxHVI5GYhENzOys.png" alt="索引_a和b联合查询.png"></li>
+<li>使用a等值查询<br><img src="https://i.loli.net/2020/11/08/qpOSVxtDGTnLFHU.png" alt="索引_a单独查询.png"></li>
+<li>使用b等值查询<br><img src="https://i.loli.net/2020/11/08/miLd3YzDVSKJXRG.png" alt="索引_b单独查询.png"></li>
+<li>使用c等值查询<br><img src="https://i.loli.net/2020/11/08/2yLrmlgofzxPEGB.png" alt="索引_c单独查询.png"></li>
+<li>使用a模糊查询<br><img src="https://i.loli.net/2020/11/08/STlE24dKPGa5Usp.png" alt="索引_a模糊查询.png"><br>从以上的结果可知：最左前缀原则，既可以作用于联合索引的最左N个字段，也可以作用于字符串索引的最左M个字符。</li>
 </ul>
 <p>如果将t1表看作一张业务表，那么很明显，根据字段a和b的联合查询以及单独根据字段a的查询一定是高频业务。这里就涉及到一个问题：在建立联合索引的时候，如何安排索引内的字段顺序？<br><br>利用索引的最左前缀原则，我们可以制定如下标准：根据业务优先考虑索引的复用，<strong>如果通过调整顺序，可以少维护一个索引，那么这个顺序往往就是需要优先考虑采用的</strong>。比如上面的例子，在得知字段a查询比字段b高频，所以将a放在联合索引前面，这样不用在给字段a单独建立索引。</p>
 <h2 id="索引下推"><a href="#索引下推" class="headerlink" title="索引下推"></a>索引下推</h2><p>对于联合索引的查询，mysql还引入了索引下推的优化，减少回表。（这里版本要&gt;=MySQL 5.6）<br><br>还是以表t1举例，有这样的业务查询：<strong>select * from t1 where a like ‘a%’ and b = ‘b’;</strong><br><br>如果是小于MySQL 5.6的版本是这样处理的：<br><br>1.从ab联合搜索树中找到第一个以a开头的元素存储的id的值。<br><br>2.拿这个id去主键id搜索树中获取数据，并再根据后续条件进行筛选。<br><br>3.重复第一步，直到不符合 a like ‘a%’为止。</p>
