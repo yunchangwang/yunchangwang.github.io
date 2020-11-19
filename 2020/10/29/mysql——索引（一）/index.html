@@ -92,7 +92,7 @@
 <meta property="og:image" content="https://i.loli.net/2020/11/08/c5OEhlKS6QJBMft.png">
 <meta property="og:image" content="https://i.loli.net/2020/11/08/4q3NhQBA5imd6VY.png">
 <meta property="og:image" content="https://i.loli.net/2020/11/08/PcDs8mjtV6ZAJGq.png">
-<meta property="og:updated_time" content="2020-11-18T15:16:28.238Z">
+<meta property="og:updated_time" content="2020-11-18T15:23:35.035Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="mysql——索引（一）">
 <meta name="twitter:description" content="InnoDB引擎下索引的数据结构给一张表创建索引的时候，mysql究竟在做什么？创建索引时，为什么表数据越大，执行时间越长？想要知道答案，就必须了解mysql中索引的数据结构。 InnoDB引擎下，索引其实是一棵B+树（这里明确指出是InnoDB，因为mysql支持多种存储引擎，比如还有MYISAM，Memory等。不同的存储引擎，索引的数据结构也是不同的。）那么B+树到底是怎样的数据结构呢？如下">
@@ -400,7 +400,7 @@
 <li>其他上层节点不存储数据，只作索引，只在叶子节点存储数据</li>
 <li>叶子节点和节点之间通过指针依次按从小到大顺序连接<br><img src="https://i.loli.net/2020/11/08/rmisgv4aT8xL9lj.png" alt="索引_B+树.png"></li>
 </ul>
-<h3 id="InnoDB为何选择B-树"><a href="#InnoDB为何选择B-树" class="headerlink" title="InnoDB为何选择B+树"></a>InnoDB为何选择B+树</h3><p>存储引擎无非要提供存储和查询的功能，有很多的数据结构都具备这样的功能，为何选择B+树。<br><br>想要解释这个问题，可以将B+树和其他的数据结构进行比较，阐述其他数据结构的缺点。<br></p>
+<h3 id="InnoDB为何选择B-树"><a href="#InnoDB为何选择B-树" class="headerlink" title="InnoDB为何选择B+树"></a>InnoDB为何选择B+树</h3><p>存储引擎无非要提供存储和查询的功能，有很多的数据结构都具备这样的功能，为何选择B+树。<br>想要解释这个问题，可以将B+树和其他的数据结构进行比较，阐述其他数据结构的缺点。<br></p>
 <p>假设，你现在维护着一个身份证信息和姓名的表，需要根据身份证号查找对应的名字<br><strong>哈希表</strong></p>
 <ul>
 <li>通过hash算法得到不同的下标进行存储</li>
