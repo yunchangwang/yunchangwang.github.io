@@ -88,7 +88,7 @@
 <meta property="og:description" content="平时的sql执行中，偶尔会遇到这样的情况：一条sql正常执行会非常快，但是不知道为什么，会变得特别慢。并且这种情况难以复现。 为什么sql变慢了在前面的章节mysql日志——更新sql如何执行中，你已经知道了mysql的WAL机制，一条更新语句只需要做一次顺序写redo log日志这个磁盘操作即可，然后直接返回给客户端更新成功。这种快速的更新方式就对应了——平时一条sql正常执行会非常快。虽然返回">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://i.loli.net/2020/11/26/gD9WCyt6pxFAHnG.png">
-<meta property="og:updated_time" content="2020-11-26T06:55:01.079Z">
+<meta property="og:updated_time" content="2020-11-26T07:01:03.797Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="mysql日志——mysql偶尔抖了一下">
 <meta name="twitter:description" content="平时的sql执行中，偶尔会遇到这样的情况：一条sql正常执行会非常快，但是不知道为什么，会变得特别慢。并且这种情况难以复现。 为什么sql变慢了在前面的章节mysql日志——更新sql如何执行中，你已经知道了mysql的WAL机制，一条更新语句只需要做一次顺序写redo log日志这个磁盘操作即可，然后直接返回给客户端更新成功。这种快速的更新方式就对应了——平时一条sql正常执行会非常快。虽然返回">
@@ -389,9 +389,9 @@
 
       
         <p>平时的sql执行中，偶尔会遇到这样的情况：一条sql正常执行会非常快，但是不知道为什么，会变得特别慢。并且这种情况难以复现。</p>
-<h2 id="为什么sql变慢了"><a href="#为什么sql变慢了" class="headerlink" title="为什么sql变慢了"></a>为什么sql变慢了</h2><p>在前面的章节<a href="">mysql日志——更新sql如何执行</a>中，你已经知道了mysql的WAL机制，一条更新语句只需要做一次顺序写redo log日志这个磁盘操作即可，然后直接返回给客户端更新成功。这种快速的更新方式就对应了——平时一条sql正常执行会非常快。<br>虽然返回给客户端更新成功，但是实际上sql只应用在了内存中，并记录了redo log，并没有将磁盘上的数据修改掉。我们将内存和磁盘上数据不一致的页称为<strong>脏页</strong>，内存数据写入到磁盘后，内存和磁盘上的数据就一致了，这样的页称为<strong>干净页</strong>。有时候sql执行之所以会慢，可能是遇到mysql要刷脏页——flush。</p>
+<h2 id="为什么sql变慢了"><a href="#为什么sql变慢了" class="headerlink" title="为什么sql变慢了"></a>为什么sql变慢了</h2><p>在前面的章节<a href="https://yunchangwang.github.io/2020/11/21/mysql%E6%97%A5%E5%BF%97%E2%80%94%E2%80%94%E6%9B%B4%E6%96%B0sql%E5%A6%82%E4%BD%95%E6%89%A7%E8%A1%8C/" target="_blank" rel="noopener">mysql日志——更新sql如何执行</a>中，你已经知道了mysql的WAL机制，一条更新语句只需要做一次顺序写redo log日志这个磁盘操作即可，然后直接返回给客户端更新成功。这种快速的更新方式就对应了——平时一条sql正常执行会非常快。<br>虽然返回给客户端更新成功，但是实际上sql只应用在了内存中，并记录了redo log，并没有将磁盘上的数据修改掉。我们将内存和磁盘上数据不一致的页称为<strong>脏页</strong>，内存数据写入到磁盘后，内存和磁盘上的数据就一致了，这样的页称为<strong>干净页</strong>。有时候sql执行之所以会慢，可能是遇到mysql要刷脏页——flush。</p>
 <h2 id="哪些场景会flush"><a href="#哪些场景会flush" class="headerlink" title="哪些场景会flush"></a>哪些场景会flush</h2><ul>
-<li>redo log写不下了。在<a href="">mysql日志——更新sql如何执行</a>中提到过，如果write pos超过了checkpoint，这个时候mysql会停止一切更新，将checkpoint往前推进一点。此时，mysql会将redo log对应所在的脏页都flush到磁盘上。</li>
+<li>redo log写不下了。在<a href="https://yunchangwang.github.io/2020/11/21/mysql%E6%97%A5%E5%BF%97%E2%80%94%E2%80%94%E6%9B%B4%E6%96%B0sql%E5%A6%82%E4%BD%95%E6%89%A7%E8%A1%8C/" target="_blank" rel="noopener">mysql日志——更新sql如何执行</a>中提到过，如果write pos超过了checkpoint，这个时候mysql会停止一切更新，将checkpoint往前推进一点。此时，mysql会将redo log对应所在的脏页都flush到磁盘上。</li>
 <li>内存不够用了，即buffer pool不够使用了。一条查询sql发现要查询的内容不在内存中，需要到buffer pool申请新的内存页，buffer pool没有多余的空间，就会淘汰最久未使用的页供新页使用，如果淘汰的刚好是脏页，就要先flush到磁盘上，再释放空间。</li>
 <li>mysql后台线程默默地刷脏页。</li>
 <li>mysql正常关闭，会将内存中所有的脏页flush。</li>
